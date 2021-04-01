@@ -7,13 +7,14 @@ class TeamPlusPlusLexer(Lexer):
 
         ID,
         PROGRAM,
-        PRINCIPAL,
+        MAIN,
 
         #For variables
         VAR,
         INT,
         FLOAT,
         CHAR,
+        STRING,
 
         #For functions
         FUNC,
@@ -21,8 +22,8 @@ class TeamPlusPlusLexer(Lexer):
         VOID,
 
         #For Actions
-        READ,
-        WRITE,
+        INPUT,
+        PRINT,
 
         #For conditionals
         IF,
@@ -52,8 +53,9 @@ class TeamPlusPlusLexer(Lexer):
                 '/'}
 
     ID = r'[a-zA-Z_][a-zA-Z0-9_]*'
-    PROGRAM = r'programa'
-    PRINCIPAL = r'principal\(\)'
+    STRING = r'[a-zA-Z_][a-zA-Z0-9_]*'
+    PROGRAM = r'program'
+    MAIN = r'main\(\)'
     VAR = r'var'
     INT = r'int'
     FLOAT = r'float'
@@ -61,8 +63,8 @@ class TeamPlusPlusLexer(Lexer):
     FUNC = r'func'
     RETURN = r'return'
     VOID = r'void'
-    READ = r'read'
-    WRITE = r'write'
+    INPUT = r'input'
+    PRINT = r'print'
     IF = r'if'
     ELSE = r'else'
     WHILE = r'while'
