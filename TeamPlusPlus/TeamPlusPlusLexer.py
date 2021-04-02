@@ -72,6 +72,16 @@ class TeamPlusPlusLexer(Lexer):
                 '/'}
 
     ID = r'[a-zA-Z_][a-zA-Z0-9_]*'
+
+    ID['if'] = IF
+    ID['else'] = ELSE
+    ID['print'] = PRINT
+    ID['program'] = PROGRAM
+    ID['var'] = VAR
+    ID['int'] = INT_TYPE
+    ID['float'] = FLOAT_TYPE
+
+
     STRING = r'[a-zA-Z_][a-zA-Z0-9_]*'
     INTEGER = r'\d+'
     FLOAT = r'((\d*\.\d+)(E[\+-]?\d+)?|([1-9]\d*E[\+-]?\d+))'
@@ -127,7 +137,7 @@ class TeamPlusPlusLexer(Lexer):
         self.lineno += t.value.count('\n')
 
     def error(self, t):
-        print("Lexical error. Illegal character '%s'" % (self.lineno, t.value[0]))
+        print("Lexical error. Illegal character \" " + str(t.value[0]) + " \". Line #" + str(self.lineno) )
         self.index += 1
 
 Tokens = TeamPlusPlusLexer.tokens
