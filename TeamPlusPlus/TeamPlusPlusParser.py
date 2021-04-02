@@ -60,9 +60,26 @@ class TeamPlusPlusParser(Parser):
     def funciones(self, p):
         pass
 
-    @_('FUNC ID LPAR RPAR ARROW tipo LBRACKET RBRACKET')
+    @_('FUNC ID LPAR parametros RPAR ARROW tipo LBRACKET RBRACKET')
     def funcion(self, p):
         pass
+
+    @_('ID tipo')
+    def parametros(self, p):
+        pass
+
+    @_('ID tipo COMMA parametros')
+    def parametros(self, p):
+        pass
+
+    @_('epsilon')
+    def parametros(self, p):
+        pass
+
+    @_('')
+    def epsilon(self, p):
+        pass
+
 
     def error(self, p):
         if p:
