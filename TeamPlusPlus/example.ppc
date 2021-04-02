@@ -1,6 +1,6 @@
 program test;
 
-globals g1 int, g2, g3 float;
+globals g1 int; g2, g3 float;
 
 func foo(x int, y int) -> void {
     

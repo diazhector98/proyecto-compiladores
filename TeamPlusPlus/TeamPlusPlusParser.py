@@ -20,11 +20,42 @@ class TeamPlusPlusParser(Parser):
     def program(self, p):
         pass
 
+    @_('PROGRAM ID SEMICOLON globals')
+    def program(self, p):
+        pass
+
+    @_('GLOBALS declaraciones')
+    def globals(self, p):
+        pass
+
+    @_('identificadores tipo SEMICOLON')
+    def declaraciones(self, p):
+        pass
+
+    @_('identificadores tipo SEMICOLON declaraciones')
+    def declaraciones(self, p):
+        pass
+
+    @_('ID')
+    def identificadores(self, p):
+        pass
+
+    @_('ID COMMA identificadores')
+    def identificadores(self, p):
+        pass
+
+    @_('INT_TYPE')
+    def tipo(self, p):
+        pass
+
+    @_('FLOAT_TYPE')
+    def tipo(self, p):
+        pass
+
     def error(self, p):
         if p:
             print("Syntax error at token", p.type, p.value)
             self.contains_error = True
-            self.errok()
 
 if __name__ == '__main__':
     parser = TeamPlusPlusParser()

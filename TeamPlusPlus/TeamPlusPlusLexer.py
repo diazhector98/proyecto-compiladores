@@ -8,6 +8,7 @@ class TeamPlusPlusLexer(Lexer):
         ID,
         PROGRAM,
         MAIN,
+        GLOBALS,
 
         #For variables
         VAR,
@@ -77,6 +78,7 @@ class TeamPlusPlusLexer(Lexer):
     ID['else'] = ELSE
     ID['print'] = PRINT
     ID['program'] = PROGRAM
+    ID['globals'] = GLOBALS
     ID['var'] = VAR
     ID['int'] = INT_TYPE
     ID['float'] = FLOAT_TYPE
@@ -86,6 +88,7 @@ class TeamPlusPlusLexer(Lexer):
     INTEGER = r'\d+'
     FLOAT = r'((\d*\.\d+)(E[\+-]?\d+)?|([1-9]\d*E[\+-]?\d+))'
     PROGRAM = r'program'
+    GLOBALS = r'globals'
     MAIN = r'main\(\)'
     VAR = r'var'
     INT_TYPE = r'int'
