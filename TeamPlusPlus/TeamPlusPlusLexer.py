@@ -40,6 +40,7 @@ class TeamPlusPlusLexer(Lexer):
         FUNC,
         RETURN,
         VOID,
+        ARROW,
 
         #For Actions
         INPUT,
@@ -82,6 +83,7 @@ class TeamPlusPlusLexer(Lexer):
     ID['var'] = VAR
     ID['int'] = INT_TYPE
     ID['float'] = FLOAT_TYPE
+    ID['func'] = FUNC
 
 
     STRING = r'[a-zA-Z_][a-zA-Z0-9_]*'
@@ -114,6 +116,7 @@ class TeamPlusPlusLexer(Lexer):
     GTEQUAL = r'>='
     LT = r'<'
     GT = r'>'
+    ARROW = r'->'
 
     # Check This (literals...)
     PLUS = r'\+'

@@ -16,11 +16,11 @@ class TeamPlusPlusParser(Parser):
     def __init__(self):
         self.names = { }
 
-    @_('PROGRAM ID SEMICOLON')
+    @_('PROGRAM ID SEMICOLON funciones')
     def program(self, p):
         pass
 
-    @_('PROGRAM ID SEMICOLON globals')
+    @_('PROGRAM ID SEMICOLON globals funciones')
     def program(self, p):
         pass
 
@@ -50,6 +50,18 @@ class TeamPlusPlusParser(Parser):
 
     @_('FLOAT_TYPE')
     def tipo(self, p):
+        pass
+
+    @_('funcion')
+    def funciones(self, p):
+        pass
+
+    @_('funcion funciones')
+    def funciones(self, p):
+        pass
+
+    @_('FUNC ID LPAR RPAR ARROW tipo LBRACKET RBRACKET')
+    def funcion(self, p):
         pass
 
     def error(self, p):
