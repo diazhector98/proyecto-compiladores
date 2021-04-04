@@ -24,17 +24,17 @@ class TeamPlusPlusLexer(Lexer):
         FLOAT,
 
         # Literals
-        LPAR,
-        RPAR,
-        LBRACKET,
-        RBRACKET,
-        PLUS,
-        MINUS,
-        MULTIPLY,
-        DIVIDE,
-        COLON,
-        SEMICOLON,
-        COMMA,
+        # LPAR,
+        # RPAR,
+        # LBRACKET,
+        # RBRACKET,
+        # PLUS,
+        # MINUS,
+        # MULTIPLY,
+        # DIVIDE,
+        # COLON,
+        # SEMICOLON,
+        # COMMA,
 
         #For functions
         FUNC,
@@ -74,6 +74,9 @@ class TeamPlusPlusLexer(Lexer):
                 '/'}
 
     ID = r'[a-zA-Z_][a-zA-Z0-9_]*'
+    STRING = r'[a-zA-Z_][a-zA-Z0-9_]*'
+    INTEGER = r'\d+'
+    FLOAT = r'((\d*\.\d+)(E[\+-]?\d+)?|([1-9]\d*E[\+-]?\d+))'
 
     ID['if'] = IF
     ID['else'] = ELSE
@@ -83,29 +86,15 @@ class TeamPlusPlusLexer(Lexer):
     ID['var'] = VAR
     ID['int'] = INT_TYPE
     ID['float'] = FLOAT_TYPE
+    ID['char'] = CHAR_TYPE
     ID['func'] = FUNC
-
-
-    STRING = r'[a-zA-Z_][a-zA-Z0-9_]*'
-    INTEGER = r'\d+'
-    FLOAT = r'((\d*\.\d+)(E[\+-]?\d+)?|([1-9]\d*E[\+-]?\d+))'
-    PROGRAM = r'program'
-    GLOBALS = r'globals'
-    MAIN = r'main\(\)'
-    VAR = r'var'
-    INT_TYPE = r'int'
-    FLOAT_TYPE = r'float'
-    CHAR_TYPE = r'char'
-    FUNC = r'func'
-    RETURN = r'return'
-    VOID = r'void'
-    INPUT = r'input'
-    PRINT = r'print'
-    IF = r'if'
-    ELSE = r'else'
-    WHILE = r'while'
-    FOR = r'for'
-    TO = r'to'
+    ID['main'] = MAIN
+    ID['while'] = WHILE
+    ID['for'] = FOR
+    ID['to'] = TO
+    ID['input'] = INPUT
+    ID['return'] = RETURN
+    ID['void'] = VOID
 
     AND = r'&&'
     OR = r'\|\|'
@@ -118,20 +107,21 @@ class TeamPlusPlusLexer(Lexer):
     GT = r'>'
     ARROW = r'->'
 
+    
+    """Creo que podriamos poner en el parser algo asi @_('"+"') y omitirlos, ambas deben de funcionar
+    #para que el parser sea más sencillo de leer """
     # Check This (literals...)
-    PLUS = r'\+'
-    MINUS = r'-'
-    MULTIPLY = r'\*'
-    DIVIDE = r'/'
-    LPAR = r'\('
-    RPAR = r'\)'
-    LBRACKET = r'{'
-    RBRACKET = r'}'
-    COLON = r':'
-    SEMICOLON = r';'
-    COMMA = r'\,'
-
-
+    # PLUS = r'\+'
+    # MINUS = r'-'
+    # MULTIPLY = r'\*'
+    # DIVIDE = r'/'
+    # LPAR = r'\('
+    # RPAR = r'\)'
+    # LBRACKET = r'{'
+    # RBRACKET = r'}'
+    # COLON = r':'
+    # SEMICOLON = r';'
+    # COMMA = r'\,'
 
     @_(r'[a-zA-Z_][a-zA-Z0-9_]*')
     def ID(self, t):
