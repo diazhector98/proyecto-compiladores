@@ -165,6 +165,9 @@ class TeamPlusPlusParser(Parser):
     #While
 
     #For
+    @_('FOR asignacion ";" condicion ";" expresion bloque')
+    def for_loop(self, p):
+        pass
 
 
     def error(self, p):
