@@ -129,7 +129,7 @@ class TeamPlusPlusParser(Parser):
         pass
 
     #Asignacion
-    @_('ID ASSIGN expresion')
+    @_('ID ASSIGN expresion ";"')
     def asignacion(self, p):
         pass
 
@@ -160,15 +160,17 @@ class TeamPlusPlusParser(Parser):
     def condicion2(self, p):
         pass
 
-    
-
     #While
 
     #For
-    @_('FOR asignacion ";" condicion ";" expresion bloque')
+    @_('FOR asignacion expresion ";" operacion_unaria bloque')
     def for_loop(self, p):
         pass
 
+    # i++ y i--
+    @_('ID UNARY_PLUS', 'ID UNARY_MINUS')
+    def operacion_unaria(self, p):
+        pass
 
     def error(self, p):
         if p:

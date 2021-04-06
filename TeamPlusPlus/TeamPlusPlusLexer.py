@@ -63,7 +63,11 @@ class TeamPlusPlusLexer(Lexer):
         LTEQUAL,
         GTEQUAL,
         LT,
-        GT
+        GT,
+
+        # For unary operands
+        UNARY_PLUS,
+        UNARY_MINUS
     }
 
     ignore = ' \t'
@@ -106,6 +110,8 @@ class TeamPlusPlusLexer(Lexer):
     LT = r'<'
     GT = r'>'
     ARROW = r'->'
+    UNARY_PLUS = r'\+\+'
+    UNARY_MINUS = r'--'
 
     
     """Creo que podriamos poner en el parser algo asi @_('"+"') y omitirlos, ambas deben de funcionar
