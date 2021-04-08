@@ -78,8 +78,28 @@ class TeamPlusPlusParser(Parser):
         pass
 
     #Estatuto
-    @_('asignacion', 'escritura', 'lectura', 'condicion')
+    @_('escritura', 'lectura', 'asignacion', 'condicion')
     def estatuto(self, p):
+        pass
+
+    #Escritura
+    @_('PRINT "(" ID ")"')
+    def escritura(self, p):
+        pass
+
+    #Lectura
+    @_('INPUT "(" ID ")"')
+    def lectura(self, p):
+        pass
+
+    #Asignacion
+    @_('ID ASSIGN expresion')
+    def asignacion(self, p):
+        pass
+
+    #Condicion
+    @_('IF expresionesCond bloque condicion2')
+    def condicion(self, p):
         pass
     
     #Expresion
@@ -126,26 +146,6 @@ class TeamPlusPlusParser(Parser):
 
     @_('"(" expresion ")"', 'epsilon')
     def factor(self, p):
-        pass
-
-    #Asignacion
-    @_('ID ASSIGN expresion')
-    def asignacion(self, p):
-        pass
-
-    #Escritura
-    @_('PRINT "(" ID ")"')
-    def escritura(self, p):
-        pass
-
-    #Lectura
-    @_('INPUT "(" ID ")"')
-    def lectura(self, p):
-        pass
-
-    #Condicion
-    @_('IF expresionesCond bloque condicion2')
-    def condicion(self, p):
         pass
 
     @_('expresion expresionesCond2')
