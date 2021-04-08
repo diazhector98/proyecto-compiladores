@@ -73,12 +73,12 @@ class TeamPlusPlusParser(Parser):
     def bloque(self, p):
         pass
 
-    @_("estatuto", "estatuto estatutos")
+    @_('estatuto', 'estatuto estatutos')
     def estatutos(self, p):
         pass
 
     #Estatuto
-    @_('escritura', 'lectura', 'asignacion', 'condicion')
+    @_('escritura', 'lectura', 'asignacion')
     def estatuto(self, p):
         pass
 
@@ -93,74 +93,44 @@ class TeamPlusPlusParser(Parser):
         pass
 
     #Asignacion
-    @_('ID ASSIGN expresion')
+    @_('ID ASSIGN expresion ";"')
     def asignacion(self, p):
         pass
 
-    #Condicion
-    @_('IF expresionesCond bloque condicion2')
-    def condicion(self, p):
-        pass
-    
     #Expresion
-    @_('exp expresion2')
+    @_('exp', 'exp operador_comparativo exp')
     def expresion(self, p):
         pass
 
-    @_('expresion3 exp', 'epsilon')
-    def expresion2(self, p):
-        pass
-
-    @_('LT', 'GT', 'LTEQUAL', 'GTEQUAL', 'NOTEQUAL', 'EQUAL')
-    def expresion3(self, p):
-        pass
-
-    #Exp
-    @_('termino exp2')
+    @_('termino', 'termino operador_termino exp')
     def exp(self, p):
         pass
 
-    @_('exp3 exp', 'epsilon')
-    def exp2(self, p):
-        pass
-    
-    @_('"+"', '"-"')
-    def exp3(self, p):
-        pass
-
-    #Termino
-    @_('factor termino2')
+    @_('factor', 'factor operador_factor termino')
     def termino(self, p):
         pass
 
-    @_('termino3 termino', 'epsilon')
-    def termino2(self, p):
-        pass
-    
-    @_('"*"', '"/"')
-    def termino3(self, p):
-        pass
-
-    #Factor
-    """Incomplete"""
-
-    @_('"(" expresion ")"', 'epsilon')
+    @_('"(" expresion ")"', 'operador_termino constante', 'constante', 'ID')
     def factor(self, p):
         pass
 
-    @_('expresion expresionesCond2')
-    def expresionesCond(self, p):
+    @_('INTEGER', 'FLOAT')
+    def constante(self, p):
         pass
 
-    @_('AND expresionesCond', 'OR expresionesCond', 'epsilon')
-    def expresionesCond2(self, p):
+    @_('LT', 'GT', 'LTEQUAL', 'GTEQUAL', 'NOTEQUAL', 'EQUAL')
+    def operador_comparativo(self, p):
         pass
-
-    @_('ELSE bloque', 'epsilon')
-    def condicion2(self, p):
-        pass
-
     
+    @_('"+"', '"-"')
+    def operador_termino(self, p):
+        pass
+    
+    @_('"*"', '"/"')
+    def operador_factor(self, p):
+        pass
+
+    #If
 
     #While
 

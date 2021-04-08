@@ -12,7 +12,12 @@ func bar() -> float {
 }
 
 main () {
-
+    x = 5;
+    b = 6 + 10;
+    c = 90 * 10 + 76;
+    d = (70 + 10) * 90 + 60 + (80);
+    z = c;
+    f = b * c + d;
     print(hola)
     input(adios)
 }
