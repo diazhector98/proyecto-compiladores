@@ -69,12 +69,17 @@ class TeamPlusPlusParser(Parser):
         pass
 
     #Bloque
-    @_('"{" bloque2 "}"')
+    @_('"{" estatutos "}"', '"{" "}"')
     def bloque(self, p):
         pass
 
-    @_('epsilon', 'estatuto', 'estatuto bloque2')
-    def bloque2(self, p):
+    @_("estatuto", "estatuto estatutos")
+    def estatutos(self, p):
+        pass
+
+    #Estatuto
+    @_('asignacion', 'escritura', 'lectura', 'condicion')
+    def estatuto(self, p):
         pass
     
     #Expresion
@@ -121,11 +126,6 @@ class TeamPlusPlusParser(Parser):
 
     @_('"(" expresion ")"', 'epsilon')
     def factor(self, p):
-        pass
-
-    #Estatuto
-    @_('asignacion', 'escritura', 'lectura', 'condicion')
-    def estatuto(self, p):
         pass
 
     #Asignacion
