@@ -46,7 +46,7 @@ class TeamPlusPlusParser(Parser):
     def funciones(self, p):
         pass
 
-    @_('FUNC ID "(" parametros ")" ARROW tipo "{" "}"')
+    @_('FUNC ID "(" parametros ")" ARROW tipo bloque')
     def funcion(self, p):
         pass
 
