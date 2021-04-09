@@ -83,12 +83,12 @@ class TeamPlusPlusParser(Parser):
         pass
 
     #Escritura
-    @_('PRINT "(" ID ")"')
+    @_('PRINT "(" ID ")" ";"')
     def escritura(self, p):
         pass
 
     #Lectura
-    @_('INPUT "(" ID ")"')
+    @_('INPUT "(" ID ")" ";"')
     def lectura(self, p):
         pass
 

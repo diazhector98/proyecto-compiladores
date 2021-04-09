@@ -5,9 +5,9 @@ globals g1, g2, g3 int; t1, t3 float;
 
 func foo(cat int, dog float) -> int {
     if x == 7 {
-        print(cat)
+        print(cat);
     } else {
-        print(dog)
+        print(dog);
     }
 }
 
@@ -29,8 +29,8 @@ main () {
     d = (70 + 10) * 90 + 60 + (80);
     z = c;
     f = b * c + d;
-    print(hola)
-    input(adios)
+    print(hola);
+    input(adios);
     if 2 < 5 { }
     if 2 < 5 {
 
