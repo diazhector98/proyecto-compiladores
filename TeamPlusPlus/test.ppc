@@ -12,7 +12,7 @@ func foo(cat int, dog float) -> int {
 }
 
 func bar() -> void {
-    x = 9;
+    var x = 9;
     while x < 20 || x > 15 {
         x = x + 1;
     }
@@ -23,12 +23,12 @@ func bar(g1 int, g2 int) -> float {
 }
 
 main () {
-    x = 5;
-    b = 6 + 10;
-    c = 90 * 10 + 76;
-    d = (70 + 10) * 90 + 60 + (80);
-    z = c;
-    f = b * c + d;
+    var x = 5;
+    var b = 6 + 10;
+    var c = 90 * 10 + 76;
+    var d = (70 + 10) * 90 + 60 + (80);
+    var z = c;
+    var f = b * c + d;
     print(hola);
     input(adios);
     if 2 < 5 { }
