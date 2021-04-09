@@ -39,8 +39,6 @@ class TeamPlusPlusLexer(Lexer):
 
         #For cycles
         WHILE,
-        FOR,
-        TO,
 
         AND,
         OR,
@@ -77,8 +75,6 @@ class TeamPlusPlusLexer(Lexer):
     ID['func'] = FUNC
     ID['main'] = MAIN
     ID['while'] = WHILE
-    ID['for'] = FOR
-    ID['to'] = TO
     ID['input'] = INPUT
     ID['return'] = RETURN
     ID['void'] = VOID
