@@ -142,6 +142,11 @@ class TeamPlusPlusParser(Parser):
     def condicion(self, p):
         pass
 
+    #While
+    @_('WHILE condiciones bloque')
+    def ciclo_while(self, p):
+        pass
+
     @_('expresion', 'expresion operador_condicional condiciones')
     def condiciones(self, p):
         pass
@@ -150,10 +155,6 @@ class TeamPlusPlusParser(Parser):
     def operador_condicional(self, p):
         pass
 
-    #While
-    @_('WHILE expresion bloque')
-    def ciclo_while(self, p):
-        pass
 
     #For
 
