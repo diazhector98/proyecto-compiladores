@@ -78,7 +78,7 @@ class TeamPlusPlusParser(Parser):
         pass
 
     #Estatuto
-    @_('escritura', 'lectura', 'asignacion', 'ciclo_while', 'condicion')
+    @_('escritura', 'lectura', 'retorno', 'asignacion', 'ciclo_while', 'condicion')
     def estatuto(self, p):
         pass
 
@@ -90,6 +90,11 @@ class TeamPlusPlusParser(Parser):
     #Lectura
     @_('INPUT "(" ID ")" ";"')
     def lectura(self, p):
+        pass
+
+    #Retorno
+    @_('RETURN expresion ";"')
+    def retorno(self, p):
         pass
 
     #Asignacion

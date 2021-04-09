@@ -19,7 +19,7 @@ func bar() -> float {
 }
 
 func bar(g1 int, g2 int) -> float {
-    
+    return 10;
 }
 
 main () {
