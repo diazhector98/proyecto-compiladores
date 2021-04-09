@@ -23,19 +23,6 @@ class TeamPlusPlusLexer(Lexer):
         INTEGER,
         FLOAT,
 
-        # Literals
-        # LPAR,
-        # RPAR,
-        # LBRACKET,
-        # RBRACKET,
-        # PLUS,
-        # MINUS,
-        # MULTIPLY,
-        # DIVIDE,
-        # COLON,
-        # SEMICOLON,
-        # COMMA,
-
         #For functions
         FUNC,
         RETURN,
@@ -107,21 +94,6 @@ class TeamPlusPlusLexer(Lexer):
     GT = r'>'
     ARROW = r'->'
 
-    
-    """Creo que podriamos poner en el parser algo asi @_('"+"') y omitirlos, ambas deben de funcionar
-    #para que el parser sea más sencillo de leer """
-    # Check This (literals...)
-    # PLUS = r'\+'
-    # MINUS = r'-'
-    # MULTIPLY = r'\*'
-    # DIVIDE = r'/'
-    # LPAR = r'\('
-    # RPAR = r'\)'
-    # LBRACKET = r'{'
-    # RBRACKET = r'}'
-    # COLON = r':'
-    # SEMICOLON = r';'
-    # COMMA = r'\,'
 
     @_(r'[a-zA-Z_][a-zA-Z0-9_]*')
     def ID(self, t):
