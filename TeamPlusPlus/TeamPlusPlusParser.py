@@ -100,7 +100,12 @@ class TeamPlusPlusParser(Parser):
         pass
 
     #Asignacion
-    @_('VAR ID ASSIGN expresion ";"', 'ID ASSIGN expresion ";"')
+    @_('ID ASSIGN expresion ";"')
+    def asignacion(self, p):
+        pass
+
+    #Declaracion y Asignacion
+    @_('VAR ID ASSIGN expresion ";"', 'VAR ID tipo ";"', 'VAR ID tipo ASSIGN expresion ";"')
     def asignacion(self, p):
         pass
 
