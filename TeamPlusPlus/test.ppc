@@ -20,5 +20,13 @@ main () {
     f = b * c + d;
     print(hola)
     input(adios)
+    if 2 < 5 { }
+    if 2 < 5 {
+
+    } else {
+
+    }
+
+    while 2 < 5 { }
 }
 

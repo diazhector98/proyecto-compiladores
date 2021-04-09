@@ -78,7 +78,7 @@ class TeamPlusPlusParser(Parser):
         pass
 
     #Estatuto
-    @_('escritura', 'lectura', 'asignacion')
+    @_('escritura', 'lectura', 'asignacion', 'ciclo_while', 'condicion')
     def estatuto(self, p):
         pass
 
@@ -131,11 +131,16 @@ class TeamPlusPlusParser(Parser):
         pass
 
     #If
+    @_('IF expresion bloque', 'IF expresion bloque ELSE bloque')
+    def condicion(self, p):
+        pass
 
     #While
+    @_('WHILE expresion bloque')
+    def ciclo_while(self, p):
+        pass
 
     #For
-
 
     def error(self, p):
         if p:
