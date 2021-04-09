@@ -11,6 +11,10 @@ func bar() -> float {
     
 }
 
+func bar(g1 int, g2 int) -> float {
+    
+}
+
 main () {
     x = 5;
     b = 6 + 10;
