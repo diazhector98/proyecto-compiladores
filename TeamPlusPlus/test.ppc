@@ -32,7 +32,7 @@ main () {
     print(hola);
     input(adios);
     if 2 < 5 { }
-    if 2 < 5 {
+    if 2 < 5 && d > 10 {
 
     } else {
 

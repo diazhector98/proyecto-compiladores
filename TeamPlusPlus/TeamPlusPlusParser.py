@@ -138,8 +138,16 @@ class TeamPlusPlusParser(Parser):
         pass
 
     #If
-    @_('IF expresion bloque', 'IF expresion bloque ELSE bloque')
+    @_('IF condiciones bloque', 'IF condiciones bloque ELSE bloque')
     def condicion(self, p):
+        pass
+
+    @_('expresion', 'expresion operador_condicional condiciones')
+    def condiciones(self, p):
+        pass
+
+    @_('AND', 'OR')
+    def operador_condicional(self, p):
         pass
 
     #While
