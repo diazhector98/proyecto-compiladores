@@ -19,7 +19,6 @@ class TeamPlusPlusLexer(Lexer):
         CHAR_TYPE,
 
         # For variable values
-        STRING,
         INTEGER,
         FLOAT,
 
@@ -59,7 +58,6 @@ class TeamPlusPlusLexer(Lexer):
                 '/'}
 
     ID = r'[a-zA-Z_][a-zA-Z0-9_]*'
-    STRING = r'[a-zA-Z_][a-zA-Z0-9_]*'
     INTEGER = r'\d+'
     FLOAT = r'((\d*\.\d+)(E[\+-]?\d+)?|([1-9]\d*E[\+-]?\d+))'
 
