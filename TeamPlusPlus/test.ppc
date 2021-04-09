@@ -11,7 +11,7 @@ func foo(cat int, dog float) -> int {
     }
 }
 
-func bar() -> float {
+func bar() -> void {
     x = 9;
     while x < 20 {
         x = x + 1;
