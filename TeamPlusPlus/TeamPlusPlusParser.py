@@ -80,7 +80,7 @@ class TeamPlusPlusParser(Parser):
         pass
 
     #Estatuto
-    @_('escritura', 'lectura', 'retorno', 'asignacion', 'ciclo_while', 'condicion')
+    @_('escritura', 'lectura', 'retorno', 'asignacion', 'ciclo_while', 'condicion', 'declaracion_asignacion')
     def estatuto(self, p):
         pass
 
@@ -106,7 +106,7 @@ class TeamPlusPlusParser(Parser):
 
     #Declaracion y Asignacion
     @_('VAR ID ASSIGN expresion ";"', 'VAR ID tipo ";"', 'VAR ID tipo ASSIGN expresion ";"')
-    def asignacion(self, p):
+    def declaracion_asignacion(self, p):
         pass
 
     #Expresion
