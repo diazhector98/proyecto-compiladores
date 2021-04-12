@@ -110,7 +110,7 @@ class TeamPlusPlusParser(Parser):
         pass
 
     #Expresion
-    @_('exp', 'exp operador_comparativo exp')
+    @_('exp', 'exp operador_comparativo exp', 'llamada_funcion')
     def expresion(self, p):
         pass
 

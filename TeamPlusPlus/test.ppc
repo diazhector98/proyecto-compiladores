@@ -29,7 +29,7 @@ func bar(g1 int, g2 int) -> float {
 main () {
     x = 5;
     b = 6 + 10;
-    c = 90 * 10 + 76;
+    c = foo(x, b);
     d = (70 + 10) * 90 + 60 + (80);
     z = c;
     f = b * c + d;
