@@ -80,7 +80,7 @@ class TeamPlusPlusParser(Parser):
         pass
 
     #Estatuto
-    @_('escritura', 'lectura', 'retorno', 'asignacion', 'ciclo_while', 'condicion', 'declaracion_asignacion')
+    @_('escritura', 'lectura', 'retorno', 'asignacion', 'ciclo_while', 'condicion', 'declaracion_asignacion', 'llamada_funcion ";"')
     def estatuto(self, p):
         pass
 
@@ -161,7 +161,18 @@ class TeamPlusPlusParser(Parser):
         pass
 
 
-    #For
+    #Llamadas a funciones
+    @_('ID "(" argumentos_funcion ")"')
+    def llamada_funcion(self, p):
+        pass
+
+    @_('argumento_funcion', 'argumento_funcion "," argumentos_funcion', 'epsilon')
+    def argumentos_funcion(self, p):
+        pass
+
+    @_('ID', 'constante', 'llamada_funcion')
+    def argumento_funcion(self, p):
+        pass
 
     def error(self, p):
         if p:

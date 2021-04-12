@@ -43,5 +43,9 @@ main () {
     }
 
     while 2 < 5 { }
+
+    foo(5,7);
+    bar();
+    bar(b, foo(7,8));
 }
 
