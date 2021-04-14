@@ -12,3 +12,10 @@ class SemanticHandler:
             name = func_name,
             type = type
         )
+
+    def set_parametros(self, parametros):
+        for (param_name, param_var_type) in params:
+            self.current_var_table[param_name] = VariableTableRecord(
+                name=param_name,
+                type=param_var_type
+                )
