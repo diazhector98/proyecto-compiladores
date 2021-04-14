@@ -4,7 +4,7 @@ sys.path.insert(0, '.')
 from sly import Parser
 from TeamPlusPlusLexer import TeamPlusPlusLexer
 from TeamPlusPlus.semantic_logic import SemanticHandler
-from TeamPlusPlus.DirectorioFunciones import FuncReturnType
+from TeamPlusPlus.DirectorioFunciones import FuncReturnType, VarType
 
 """ Falta while, for, hacer pruebas, eliminar recursividad """
 
@@ -54,11 +54,13 @@ class TeamPlusPlusParser(Parser):
     )
     def funcion(self, p):
         self.semantic_actions.set_init_func(p.ID, FuncReturnType(p.tipo))
+        self.semantic_actions.set_parametros(parametros)
         pass
 
     @_('ID tipo', 'ID tipo "," parametros')
     def parametros(self, p):
-        pass
+        p.parametros.append((p.ID, VarType(p.tipo)))
+        return parametros
 
     @_('epsilon')
     def parametros(self, p):
