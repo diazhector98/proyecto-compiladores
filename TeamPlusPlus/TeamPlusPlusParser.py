@@ -3,8 +3,8 @@ sys.path.insert(0, '.')
 
 from sly import Parser
 from TeamPlusPlusLexer import TeamPlusPlusLexer
-from TeamPlusPlus.semantic_logic import SemanticHandler
-from TeamPlusPlus.DirectorioFunciones import FuncReturnType, VarType
+from semantic_logic import SemanticHandler
+from DirectorioFunciones import FuncReturnType, VarType
 
 """ Falta while, for, hacer pruebas, eliminar recursividad """
 

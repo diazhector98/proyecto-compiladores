@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from enum import Enum
 
 class VarType(Enum):
     INT = 'int'

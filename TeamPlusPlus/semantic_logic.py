@@ -1,4 +1,4 @@
-from TeamPlusPlus.DirectorioFunciones import VariableTableRecord, VarType, FunctionDirectoryRecord
+from DirectorioFunciones import VariableTableRecord, VarType, FunctionDirectoryRecord
 
 class SemanticHandler:
     
