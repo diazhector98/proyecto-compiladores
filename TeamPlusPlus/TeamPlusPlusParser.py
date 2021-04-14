@@ -60,7 +60,7 @@ class TeamPlusPlusParser(Parser):
     @_('ID tipo', 'ID tipo "," parametros')
     def parametros(self, p):
         p.parametros.append((p.ID, VarType(p.tipo)))
-        return parametros
+        return p.parametros
 
     @_('epsilon')
     def parametros(self, p):
