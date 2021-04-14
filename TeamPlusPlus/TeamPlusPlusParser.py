@@ -3,6 +3,8 @@ sys.path.insert(0, '.')
 
 from sly import Parser
 from TeamPlusPlusLexer import TeamPlusPlusLexer
+from TeamPlusPlus.semantic_logic import SemanticHandler
+from TeamPlusPlus.DirectorioFunciones import FuncReturnType
 
 """ Falta while, for, hacer pruebas, eliminar recursividad """
 
@@ -11,6 +13,7 @@ class TeamPlusPlusParser(Parser):
     tokens = TeamPlusPlusLexer.tokens
 
     start = 'program'
+    semantic_actions = SemanticHandler()
 
     precedence = (
         ('left', '+', '-'),
@@ -50,6 +53,7 @@ class TeamPlusPlusParser(Parser):
     'FUNC ID "(" parametros ")" ARROW VOID bloque'
     )
     def funcion(self, p):
+        self.semantic_actions.set_init_func(p.ID, FuncReturnType(p.tipo))
         pass
 
     @_('ID tipo', 'ID tipo "," parametros')
