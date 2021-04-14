@@ -54,7 +54,7 @@ class TeamPlusPlusParser(Parser):
     )
     def funcion(self, p):
         self.semantic_actions.set_init_func(p.ID, FuncReturnType(p.tipo))
-        self.semantic_actions.set_parametros(parametros)
+        self.semantic_actions.set_parametros(p.parametros)
         pass
 
     @_('ID tipo', 'ID tipo "," parametros')
