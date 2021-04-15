@@ -25,7 +25,7 @@ param_types: Lista de los tipos de parametros esperados
 class FunctionDirectoryRecord:
     name: str
     return_type: FuncReturnType
-    param_types: [str]
+    param_types: [str] = None
 
 """
 Clase para guardar datos de una registro de variable.

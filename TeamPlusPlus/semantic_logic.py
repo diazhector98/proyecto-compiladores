@@ -7,10 +7,10 @@ class SemanticHandler:
     functions_directory = dict()
 
 
-    def set_init_func(self, func_name, type):
+    def set_init_func(self, func_name, t):
         self.functions_directory[func_name] = FunctionDirectoryRecord(
             name = func_name,
-            type = type
+            return_type= t
         )
 
     def set_parametros(self, parametros):

@@ -43,28 +43,37 @@ class TeamPlusPlusParser(Parser):
 
     @_('INT_TYPE', 'FLOAT_TYPE', 'CHAR_TYPE')
     def tipo(self, p):
-        pass
+        return p[0]
 
     @_('funcion', 'funcion funciones')
     def funciones(self, p):
         pass
 
-    @_('FUNC ID "(" parametros ")" ARROW tipo bloque',
-    'FUNC ID "(" parametros ")" ARROW VOID bloque'
+    @_('FUNC ID "(" parametros ")" ARROW tipo bloque'
     )
     def funcion(self, p):
         self.semantic_actions.set_init_func(p.ID, FuncReturnType(p.tipo))
         self.semantic_actions.set_parametros(p.parametros)
-        pass
 
-    @_('ID tipo', 'ID tipo "," parametros')
+    @_(
+    'FUNC ID "(" parametros ")" ARROW VOID bloque'
+    )
+    def funcion(self, p):
+        self.semantic_actions.set_init_func(p.ID, FuncReturnType.VOID)
+        self.semantic_actions.set_parametros(p.parametros)
+
+    @_('ID tipo')
     def parametros(self, p):
-        p.parametros.append((p.ID, VarType(p.tipo)))
+        return [(p[0], VarType(p.tipo))]
+
+    @_('ID tipo "," parametros')
+    def parametros(self, p):
+        p.parametros.append((p[0], VarType(p.tipo)))
         return p.parametros
 
     @_('epsilon')
     def parametros(self, p):
-        pass
+        return []
 
     #Epsilon
     @_('')
