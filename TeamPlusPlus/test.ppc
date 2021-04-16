@@ -1,6 +1,7 @@
 program Main;
 
-globals g1, g2, g3 int; t1, t3 float;
+globals global1 float;
+globals global2 int;
 
 
 func foo(cat int, dog float) -> int {
@@ -10,8 +11,8 @@ func foo(cat int, dog float) -> int {
         print(dog);
     }
 
-    var x int;
-    var x int = 7 + 10;
+    var varLocal1 int;
+    var varLocal2 int = 7 + 10;
     x = 19 + 10;
 }
 

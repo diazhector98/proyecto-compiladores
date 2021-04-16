@@ -3,6 +3,8 @@ sys.path.insert(0, '.')
 
 from sly import Parser
 from TeamPlusPlusLexer import TeamPlusPlusLexer
+from semantic_logic import SemanticHandler
+from DirectorioFunciones import FuncReturnType, VarType
 
 """ Falta while, for, hacer pruebas, eliminar recursividad """
 
@@ -11,6 +13,7 @@ class TeamPlusPlusParser(Parser):
     tokens = TeamPlusPlusLexer.tokens
 
     start = 'program'
+    semantic_actions = SemanticHandler()
 
     precedence = (
         ('left', '+', '-'),
@@ -20,45 +23,65 @@ class TeamPlusPlusParser(Parser):
     def __init__(self):
         self.names = { }
 
-    @_('PROGRAM ID ";" funciones', 
-      'PROGRAM ID ";" globals funciones main')
+    @_('PROGRAM ID ";" globals funciones main')
     def program(self, p):
         pass
 
-    @_('GLOBALS declaraciones')
+    @_('global_aux globals', 'epsilon')
     def globals(self, p):
         pass
 
-    @_('identificadores tipo ";"', 
-      'identificadores tipo ";" declaraciones')
-    def declaraciones(self, p):
+    @_('GLOBALS ID tipo ";"')
+    def global_aux(self, p):
+        self.semantic_actions.set_variable(p.ID, VarType(p.tipo))
         pass
+    
+    # @_('GLOBALS declaraciones')
+    # def globals(self, p):
+    #     pass
 
-    @_('ID', 'ID "," identificadores')
-    def identificadores(self, p):
-        pass
+    # @_('identificadores tipo ";"', 
+    #   'identificadores tipo ";" declaraciones')
+    # def declaraciones(self, p):
+    #     pass
+
+    # @_('ID', 'ID "," identificadores')
+    # def identificadores(self, p):
+    #     pass
 
     @_('INT_TYPE', 'FLOAT_TYPE', 'CHAR_TYPE')
     def tipo(self, p):
-        pass
+        return p[0]
 
     @_('funcion', 'funcion funciones')
     def funciones(self, p):
         pass
 
-    @_('FUNC ID "(" parametros ")" ARROW tipo bloque',
+    @_('FUNC ID "(" parametros ")" ARROW tipo bloque'
+    )
+    def funcion(self, p):
+        self.semantic_actions.set_init_func(p.ID, FuncReturnType(p.tipo))
+        self.semantic_actions.set_parametros(p.parametros)
+
+    @_(
     'FUNC ID "(" parametros ")" ARROW VOID bloque'
     )
     def funcion(self, p):
-        pass
+        self.semantic_actions.set_init_func(p.ID, FuncReturnType.VOID)
+        self.semantic_actions.set_parametros(p.parametros)
 
-    @_('ID tipo', 'ID tipo "," parametros')
+    @_('ID tipo')
     def parametros(self, p):
-        pass
+        return [(p[0], VarType(p.tipo))]
+
+    @_('ID tipo "," parametros')
+    def parametros(self, p):
+        p.parametros.append((p[0], VarType(p.tipo)))
+        return p.parametros
 
     @_('epsilon')
     def parametros(self, p):
-        pass
+        return []
 
     #Epsilon
     @_('')
@@ -105,8 +128,9 @@ class TeamPlusPlusParser(Parser):
         pass
 
     #Declaracion y Asignacion
-    @_('VAR ID ASSIGN expresion ";"', 'VAR ID tipo ";"', 'VAR ID tipo ASSIGN expresion ";"')
+    @_('VAR ID tipo ";"', 'VAR ID tipo ASSIGN expresion ";"')
     def declaracion_asignacion(self, p):
+        self.semantic_actions.set_variable(p.ID, VarType(p.tipo))
         pass
 
     #Expresion
@@ -159,7 +183,6 @@ class TeamPlusPlusParser(Parser):
     @_('AND', 'OR')
     def operador_condicional(self, p):
         pass
-
 
     #Llamadas a funciones
     @_('ID "(" argumentos_funcion ")"')
