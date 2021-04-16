@@ -1,6 +1,7 @@
 program Main;
 
-globals g1, g2, g3 int; t1, t3 float;
+globals global1 float;
+globals global2 int;
 
 
 func foo(cat int, dog float) -> int {

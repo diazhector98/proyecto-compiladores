@@ -12,6 +12,8 @@ class SemanticHandler:
             name = func_name,
             return_type= t
         )
+        print("dir func")
+        print(self.functions_directory)
 
     def set_parametros(self, parametros):
         for (param_name, param_var_type) in parametros:
@@ -19,3 +21,11 @@ class SemanticHandler:
                 name = param_name,
                 type = param_var_type
                 )
+        print("dir de var locales")
+        print(self.current_var_table)
+
+    def set_variable(self, var_name, var_type):
+        self.current_var_table[var_name] = VariableTableRecord(
+            name = var_name,
+            type = var_type
+            )

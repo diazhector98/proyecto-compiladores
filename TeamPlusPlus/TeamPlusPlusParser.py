@@ -28,8 +28,13 @@ class TeamPlusPlusParser(Parser):
     def program(self, p):
         pass
 
-    @_('GLOBALS declaraciones')
+    @_('global_aux globals', 'epsilon')
     def globals(self, p):
+        pass
+
+    @_('GLOBALS ID tipo ";"')
+    def global_aux(self, p):
+        self.semantic_actions.set_variable(p.ID, VarType(p.tipo))
         pass
 
     @_('identificadores tipo ";"', 
