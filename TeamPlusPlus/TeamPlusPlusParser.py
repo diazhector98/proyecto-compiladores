@@ -23,8 +23,7 @@ class TeamPlusPlusParser(Parser):
     def __init__(self):
         self.names = { }
 
-    @_('PROGRAM ID ";" funciones', 
-      'PROGRAM ID ";" globals funciones main')
+    @_('PROGRAM ID ";" globals funciones main')
     def program(self, p):
         pass
 
@@ -36,15 +35,19 @@ class TeamPlusPlusParser(Parser):
     def global_aux(self, p):
         self.semantic_actions.set_variable(p.ID, VarType(p.tipo))
         pass
+    
+    # @_('GLOBALS declaraciones')
+    # def globals(self, p):
+    #     pass
 
-    @_('identificadores tipo ";"', 
-      'identificadores tipo ";" declaraciones')
-    def declaraciones(self, p):
-        pass
+    # @_('identificadores tipo ";"', 
+    #   'identificadores tipo ";" declaraciones')
+    # def declaraciones(self, p):
+    #     pass
 
-    @_('ID', 'ID "," identificadores')
-    def identificadores(self, p):
-        pass
+    # @_('ID', 'ID "," identificadores')
+    # def identificadores(self, p):
+    #     pass
 
     @_('INT_TYPE', 'FLOAT_TYPE', 'CHAR_TYPE')
     def tipo(self, p):
