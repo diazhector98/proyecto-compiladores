@@ -11,8 +11,8 @@ func foo(cat int, dog float) -> int {
         print(dog);
     }
 
-    var x int;
-    var x int = 7 + 10;
+    var varLocal1 int;
+    var varLocal2 int = 7 + 10;
     x = 19 + 10;
 }
 
