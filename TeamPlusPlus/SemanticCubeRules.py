@@ -126,3 +126,58 @@ FLOAT_RULES = {
         Operator.OR: ERROR
     },
 }
+
+CHAR_RULES = {
+    VarType.INT: {
+        Operator.SUM: ERROR,
+        Operator.MINUS: ERROR,
+        Operator.MULTIPLY: ERROR,
+        Operator.DIVIDE: ERROR,
+        Operator.LT: ERROR,
+        Operator.GT: ERROR,
+        Operator.LTE: ERROR,
+        Operator.GTE: ERROR,
+        Operator.EQUAL: ERROR,
+        Operator.AND: ERROR,
+        Operator.OR: ERROR
+    },
+    VarType.FLOAT: {
+        Operator.SUM: ERROR,
+        Operator.MINUS: ERROR,
+        Operator.MULTIPLY: ERROR,
+        Operator.DIVIDE: ERROR,
+        Operator.LT: ERROR,
+        Operator.GT: ERROR,
+        Operator.LTE: ERROR,
+        Operator.GTE: ERROR,
+        Operator.EQUAL: ERROR,
+        Operator.AND: ERROR,
+        Operator.OR: ERROR
+    },
+    VarType.CHAR: {
+        Operator.SUM: VarType.CHAR,
+        Operator.MINUS: ERROR,
+        Operator.MULTIPLY: ERROR,
+        Operator.DIVIDE: ERROR,
+        Operator.LT: ERROR,
+        Operator.GT: ERROR,
+        Operator.LTE: ERROR,
+        Operator.GTE: ERROR,
+        Operator.EQUAL: VarType.BOOL,
+        Operator.AND: ERROR,
+        Operator.OR: ERROR
+    },
+    VarType.BOOL: {
+        Operator.SUM: ERROR,
+        Operator.MINUS: ERROR,
+        Operator.MULTIPLY: ERROR,
+        Operator.DIVIDE: ERROR,
+        Operator.LT: ERROR,
+        Operator.GT: ERROR,
+        Operator.LTE: ERROR,
+        Operator.GTE: ERROR,
+        Operator.EQUAL: ERROR,
+        Operator.AND: ERROR,
+        Operator.OR: ERROR
+    },
+}
