@@ -71,3 +71,58 @@ INTEGER_RULES = {
         Operator.OR: ERROR
     },
 }
+
+FLOAT_RULES = {
+    VarType.INT: {
+        Operator.SUM: VarType.FLOAT,
+        Operator.MINUS: VarType.FLOAT,
+        Operator.MULTIPLY: VarType.FLOAT,
+        Operator.DIVIDE: VarType.FLOAT,
+        Operator.LT: VarType.BOOL,
+        Operator.GT: VarType.BOOL,
+        Operator.LTE: VarType.BOOL,
+        Operator.GTE: VarType.BOOL,
+        Operator.EQUAL: VarType.BOOL,
+        Operator.AND: ERROR,
+        Operator.OR: ERROR
+    },
+    VarType.FLOAT: {
+        Operator.SUM: VarType.FLOAT,
+        Operator.MINUS: VarType.FLOAT,
+        Operator.MULTIPLY: VarType.FLOAT,
+        Operator.DIVIDE: VarType.FLOAT,
+        Operator.LT: VarType.BOOL,
+        Operator.GT: VarType.BOOL,
+        Operator.LTE: VarType.BOOL,
+        Operator.GTE: VarType.BOOL,
+        Operator.EQUAL: VarType.BOOL,
+        Operator.AND: ERROR,
+        Operator.OR: ERROR
+    },
+    VarType.CHAR: {
+        Operator.SUM: ERROR,
+        Operator.MINUS: ERROR,
+        Operator.MULTIPLY: ERROR,
+        Operator.DIVIDE: ERROR,
+        Operator.LT: ERROR,
+        Operator.GT: ERROR,
+        Operator.LTE: ERROR,
+        Operator.GTE: ERROR,
+        Operator.EQUAL: ERROR,
+        Operator.AND: ERROR,
+        Operator.OR: ERROR
+    },
+    VarType.BOOL: {
+        Operator.SUM: ERROR,
+        Operator.MINUS: ERROR,
+        Operator.MULTIPLY: ERROR,
+        Operator.DIVIDE: ERROR,
+        Operator.LT: ERROR,
+        Operator.GT: ERROR,
+        Operator.LTE: ERROR,
+        Operator.GTE: ERROR,
+        Operator.EQUAL: ERROR,
+        Operator.AND: ERROR,
+        Operator.OR: ERROR
+    },
+}
