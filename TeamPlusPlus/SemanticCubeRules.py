@@ -181,3 +181,58 @@ CHAR_RULES = {
         Operator.OR: ERROR
     },
 }
+
+BOOL_RULES = {
+    VarType.INT: {
+        Operator.SUM: ERROR,
+        Operator.MINUS: ERROR,
+        Operator.MULTIPLY: ERROR,
+        Operator.DIVIDE: ERROR,
+        Operator.LT: ERROR,
+        Operator.GT: ERROR,
+        Operator.LTE: ERROR,
+        Operator.GTE: ERROR,
+        Operator.EQUAL: ERROR,
+        Operator.AND: ERROR,
+        Operator.OR: ERROR
+    },
+    VarType.FLOAT: {
+        Operator.SUM: ERROR,
+        Operator.MINUS: ERROR,
+        Operator.MULTIPLY: ERROR,
+        Operator.DIVIDE: ERROR,
+        Operator.LT: ERROR,
+        Operator.GT: ERROR,
+        Operator.LTE: ERROR,
+        Operator.GTE: ERROR,
+        Operator.EQUAL: ERROR,
+        Operator.AND: ERROR,
+        Operator.OR: ERROR
+    },
+    VarType.CHAR: {
+        Operator.SUM: ERROR,
+        Operator.MINUS: ERROR,
+        Operator.MULTIPLY: ERROR,
+        Operator.DIVIDE: ERROR,
+        Operator.LT: ERROR,
+        Operator.GT: ERROR,
+        Operator.LTE: ERROR,
+        Operator.GTE: ERROR,
+        Operator.EQUAL: ERROR,
+        Operator.AND: ERROR,
+        Operator.OR: ERROR
+    },
+    VarType.BOOL: {
+        Operator.SUM: ERROR,
+        Operator.MINUS: ERROR,
+        Operator.MULTIPLY: ERROR,
+        Operator.DIVIDE: ERROR,
+        Operator.LT: ERROR,
+        Operator.GT: ERROR,
+        Operator.LTE: ERROR,
+        Operator.GTE: ERROR,
+        Operator.EQUAL: VarType.BOOL,
+        Operator.AND: VarType.BOOL,
+        Operator.OR: VarType.BOOL
+    },
+}
