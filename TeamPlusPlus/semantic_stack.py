@@ -15,4 +15,4 @@ class SemanticStack:
         self.types.append(type)
     
     def push_operator(self, operator):
-        self.operator.append(operator)
+        self.operators.append(operator)

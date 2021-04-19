@@ -160,11 +160,11 @@ class TeamPlusPlusParser(Parser):
     
     @_('"+"', '"-"')
     def operador_termino(self, p):
-        pass
+        self.semantic_actions.consume_operator(p[0])
     
     @_('"*"', '"/"')
     def operador_factor(self, p):
-        pass
+        self.semantic_actions.consume_operator(p[0])
 
     #If
     @_('IF condiciones bloque', 'IF condiciones bloque ELSE bloque')

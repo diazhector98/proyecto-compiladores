@@ -1,6 +1,7 @@
 from DirectorioFunciones import VariableTableRecord, VarType, FunctionDirectoryRecord
 from SemanticCube import SemanticCube
 from SemanticCubeRules import Operator
+from semantic_stack import SemanticStack
 
 class SemanticHandler:
     
@@ -9,7 +10,8 @@ class SemanticHandler:
     functions_directory = dict()
 
     def __init__(self):
-        cube = SemanticCube()
+        self.cube = SemanticCube()
+        self.stack = SemanticStack()
 
     def set_init_func(self, func_name, t):
         self.functions_directory[func_name] = FunctionDirectoryRecord(
@@ -29,3 +31,6 @@ class SemanticHandler:
             name = var_name,
             type = var_type
             )
+    
+    def consume_operator(self, operator):
+        self.stack.push_operator(operator)
