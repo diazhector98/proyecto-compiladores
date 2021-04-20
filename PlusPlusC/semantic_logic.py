@@ -2,12 +2,14 @@ from DirectorioFunciones import VariableTableRecord, VarType, FunctionDirectoryR
 from SemanticCube import SemanticCube
 from SemanticCubeRules import Operator
 from semantic_stack import SemanticStack
+from quadruple import Quadruple
 
 class SemanticHandler:
     
     global_var_table = dict()   
     current_var_table = dict()
     functions_directory = dict()
+    quadruples = []
 
     def __init__(self):
         self.cube = SemanticCube()
@@ -34,3 +36,9 @@ class SemanticHandler:
     
     def consume_operator(self, operator):
         self.stack.push_operator(operator)
+    
+    # Por lo pronto, solo guardamos el cuadruplo con el nombre de la variable
+    def handle_read(self, id):
+        var = current_var_table[id]
+        quadruple = Quadruple(Operator.READ, None, None, var.name)
+        self.quadruples.append(quadruple)

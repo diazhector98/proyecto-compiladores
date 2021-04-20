@@ -14,6 +14,7 @@ class Operator(Enum):
     NE = "!="
     AND = "&&"
     OR = "||"
+    READ = "read"
 
 ERROR = "err"
 
