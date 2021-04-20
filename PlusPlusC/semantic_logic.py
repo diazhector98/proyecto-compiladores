@@ -1,6 +1,6 @@
 from DirectorioFunciones import VariableTableRecord, VarType, FunctionDirectoryRecord
+from operators import Operator
 from SemanticCube import SemanticCube
-from SemanticCubeRules import Operator
 from semantic_stack import SemanticStack
 from quadruple import Quadruple
 

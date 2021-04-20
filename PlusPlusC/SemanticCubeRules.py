@@ -1,20 +1,5 @@
-from enum import Enum
 from DirectorioFunciones import VarType
-
-class Operator(Enum):
-    SUM = "+"
-    MINUS = "-"
-    DIVIDE = "/"
-    MULTIPLY = "*"
-    LT = "<"
-    GT = ">"
-    LTE = "<="
-    GTE = ">="
-    EQUAL = "=="
-    NE = "!="
-    AND = "&&"
-    OR = "||"
-    READ = "read"
+from operators import Operator
 
 ERROR = "err"
 
