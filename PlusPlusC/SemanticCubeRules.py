@@ -16,7 +16,8 @@ INTEGER_RULES = {
         Operator.EQUAL: VarType.BOOL,
         Operator.NE: VarType.BOOL,
         Operator.AND: ERROR,
-        Operator.OR: ERROR
+        Operator.OR: ERROR,
+        Operator.ASSIGN: VarType.INT
     },
     VarType.FLOAT: {
         Operator.SUM: VarType.FLOAT,
@@ -30,7 +31,8 @@ INTEGER_RULES = {
         Operator.EQUAL: VarType.BOOL,
         Operator.NE: VarType.BOOL,
         Operator.AND: ERROR,
-        Operator.OR: ERROR
+        Operator.OR: ERROR,
+        Operator.ASSIGN: VarType.INT
     },
     VarType.CHAR: {
         Operator.SUM: ERROR,
@@ -44,7 +46,8 @@ INTEGER_RULES = {
         Operator.EQUAL: ERROR,
         Operator.NE: ERROR,
         Operator.AND: ERROR,
-        Operator.OR: ERROR
+        Operator.OR: ERROR,
+        Operator.ASSIGN: ERROR
     },
     VarType.BOOL: {
         Operator.SUM: ERROR,
@@ -58,7 +61,8 @@ INTEGER_RULES = {
         Operator.EQUAL: ERROR,
         Operator.NE: ERROR,
         Operator.AND: ERROR,
-        Operator.OR: ERROR
+        Operator.OR: ERROR,
+        Operator.ASSIGN: ERROR
     },
 }
 
@@ -75,7 +79,8 @@ FLOAT_RULES = {
         Operator.EQUAL: VarType.BOOL,
         Operator.NE: VarType.BOOL,
         Operator.AND: ERROR,
-        Operator.OR: ERROR
+        Operator.OR: ERROR,
+        Operator.ASSIGN: VarType.FLOAT
     },
     VarType.FLOAT: {
         Operator.SUM: VarType.FLOAT,
@@ -89,7 +94,8 @@ FLOAT_RULES = {
         Operator.EQUAL: VarType.BOOL,
         Operator.NE: VarType.BOOL,
         Operator.AND: ERROR,
-        Operator.OR: ERROR
+        Operator.OR: ERROR,
+        Operator.ASSIGN: VarType.FLOAT
     },
     VarType.CHAR: {
         Operator.SUM: ERROR,
@@ -103,7 +109,8 @@ FLOAT_RULES = {
         Operator.EQUAL: ERROR,
         Operator.NE: ERROR,
         Operator.AND: ERROR,
-        Operator.OR: ERROR
+        Operator.OR: ERROR,
+        Operator.ASSIGN: ERROR
     },
     VarType.BOOL: {
         Operator.SUM: ERROR,
@@ -117,7 +124,8 @@ FLOAT_RULES = {
         Operator.EQUAL: ERROR,
         Operator.NE: ERROR,
         Operator.AND: ERROR,
-        Operator.OR: ERROR
+        Operator.OR: ERROR, 
+        Operator.ASSIGN: ERROR
     },
 }
 
@@ -134,7 +142,8 @@ CHAR_RULES = {
         Operator.EQUAL: ERROR,
         Operator.NE: ERROR,
         Operator.AND: ERROR,
-        Operator.OR: ERROR
+        Operator.OR: ERROR,
+        Operator.ASSIGN: ERROR
     },
     VarType.FLOAT: {
         Operator.SUM: ERROR,
@@ -148,7 +157,8 @@ CHAR_RULES = {
         Operator.EQUAL: ERROR,
         Operator.NE: ERROR,
         Operator.AND: ERROR,
-        Operator.OR: ERROR
+        Operator.OR: ERROR,
+        Operator.ASSIGN: ERROR
     },
     VarType.CHAR: {
         Operator.SUM: VarType.CHAR,
@@ -162,7 +172,8 @@ CHAR_RULES = {
         Operator.EQUAL: VarType.BOOL,
         Operator.NE: VarType.BOOL,
         Operator.AND: ERROR,
-        Operator.OR: ERROR
+        Operator.OR: ERROR, 
+        Operator.ASSIGN: VarType.CHAR
     },
     VarType.BOOL: {
         Operator.SUM: ERROR,
@@ -176,7 +187,8 @@ CHAR_RULES = {
         Operator.EQUAL: ERROR,
         Operator.NE: ERROR,
         Operator.AND: ERROR,
-        Operator.OR: ERROR
+        Operator.OR: ERROR,
+        Operator.ASSIGN: ERROR
     },
 }
 
@@ -193,7 +205,8 @@ BOOL_RULES = {
         Operator.EQUAL: ERROR,
         Operator.NE: ERROR,
         Operator.AND: ERROR,
-        Operator.OR: ERROR
+        Operator.OR: ERROR,
+        Operator.ASSIGN: ERROR
     },
     VarType.FLOAT: {
         Operator.SUM: ERROR,
@@ -207,7 +220,8 @@ BOOL_RULES = {
         Operator.EQUAL: ERROR,
         Operator.NE: ERROR,
         Operator.AND: ERROR,
-        Operator.OR: ERROR
+        Operator.OR: ERROR,
+        Operator.ASSIGN: ERROR
     },
     VarType.CHAR: {
         Operator.SUM: ERROR,
@@ -221,7 +235,8 @@ BOOL_RULES = {
         Operator.EQUAL: ERROR,
         Operator.NE: ERROR,
         Operator.AND: ERROR,
-        Operator.OR: ERROR
+        Operator.OR: ERROR,
+        Operator.ASSIGN: ERROR
     },
     VarType.BOOL: {
         Operator.SUM: ERROR,
@@ -235,6 +250,7 @@ BOOL_RULES = {
         Operator.EQUAL: VarType.BOOL,
         Operator.NE: VarType.BOOL,
         Operator.AND: VarType.BOOL,
-        Operator.OR: VarType.BOOL
+        Operator.OR: VarType.BOOL,
+        Operator.ASSIGN: VarType.BOOL
     },
 }
