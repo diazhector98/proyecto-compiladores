@@ -108,8 +108,9 @@ class PlusPlusCParser(Parser):
         pass
 
     #Escritura
-    @_('PRINT "(" ID ")" ";"')
+    @_('PRINT "(" constante ")" ";"')
     def escritura(self, p):
+        self.semantic_actions.handle_print()
         pass
 
     #Lectura
@@ -150,8 +151,14 @@ class PlusPlusCParser(Parser):
     def factor(self, p):
         pass
 
-    @_('INTEGER', 'FLOAT')
+    @_('C_INTEGER')
     def constante(self, p):
+        self.semantic_actions.consume_operand(p[0], VarType.INT)
+        pass
+
+    @_('C_FLOAT')
+    def constante(self, p):
+        self.semantic_actions.consume_operand(p[0], VarType.FLOAT)
         pass
 
     @_('LT', 'GT', 'LTEQUAL', 'GTEQUAL', 'NOTEQUAL', 'EQUAL')
