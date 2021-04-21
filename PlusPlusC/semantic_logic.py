@@ -5,7 +5,7 @@ from semantic_stack import SemanticStack
 from quadruple import Quadruple
 
 class SemanticHandler:
-    
+    temp_index = 0
     global_var_table = dict()   
     current_var_table = dict()
     functions_directory = dict()
@@ -53,6 +53,14 @@ class SemanticHandler:
             quadruple = Quadruple(Operator.PRINT, None, None, var_name)
             self.quadruples.append(quadruple)
 
+    def create_temp_var(self, vtype):
+        name = "temp_" + str(self.temp_index)
+        self.current_var_table[name] = VariableTableRecord(
+            name = name,
+            type = vtype
+        )
+        return name
+
     def set_quadruple(self):
         if len(self.stack.operands) >= 2 and len(self.stack.operators) >= 1:
             right_operand = self.stack.operands.pop()
@@ -62,8 +70,11 @@ class SemanticHandler:
             left_operand_type = self.stack.types.pop()
             cube_result = self.cube[right_operand_type][left_operand_type][operator]
             if cube_result != "err":
-                quadruple = Quadruple(Operator(operator), left_operand, right_operand, cube_result)
+                temp = self.create_temp_var(cube_result)
+                quadruple = Quadruple(Operator(operator), left_operand, right_operand, temp)
                 self.quadruples.append(quadruple)
+                self.consume_operand(temp, cube_result)
+
                 #print a los quadruplos actuales
                 print(self.quadruples)
             else:
