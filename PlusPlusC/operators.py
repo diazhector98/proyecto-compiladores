@@ -15,3 +15,4 @@ class Operator(Enum):
     OR = "||"
     READ = "read"
     PRINT = "print" 
+    ASSIGN = "="
