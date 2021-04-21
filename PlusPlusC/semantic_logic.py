@@ -37,8 +37,22 @@ class SemanticHandler:
     def consume_operator(self, operator):
         self.stack.push_operator(operator)
     
+
+    def consume_operand(self, operand, type):
+        self.stack.push_operand(operand, type)
+
     # Por lo pronto, solo guardamos el cuadruplo con el nombre de la variable
     def handle_read(self, id):
         var = current_var_table[id]
         quadruple = Quadruple(Operator.READ, None, None, var.name)
         self.quadruples.append(quadruple)
+
+    def handle_print(self):
+        if self.stack.operands:
+            var_name = self.stack.operands.pop()
+            print("var_name:")
+            print(var_name)
+            quadruple = Quadruple(Operator.PRINT, None, None, var_name)
+            self.quadruples.append(quadruple)
+
+            
