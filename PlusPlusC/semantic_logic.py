@@ -53,4 +53,20 @@ class SemanticHandler:
             quadruple = Quadruple(Operator.PRINT, None, None, var_name)
             self.quadruples.append(quadruple)
 
-            
+    def set_quadruple(self):
+        if len(self.stack.operands) >= 2 and len(self.stack.operators) >= 1:
+            right_operand = self.stack.operands.pop()
+            left_operand = self.stack.operands.pop()
+            operator = Operator(self.stack.operators.pop())
+            right_operand_type = self.stack.types.pop()
+            left_operand_type = self.stack.types.pop()
+            cube_result = self.cube[right_operand_type][left_operand_type][operator]
+            if cube_result != "err":
+                quadruple = Quadruple(Operator(operator), left_operand, right_operand, cube_result)
+                self.quadruples.append(quadruple)
+                #print a los quadruplos actuales
+                print(self.quadruples)
+            else:
+                print("type mismatch")
+        else:
+            print("Error: Not enough operands")

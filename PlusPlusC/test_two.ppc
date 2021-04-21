@@ -1,0 +1,23 @@
+program Main;
+
+globals global1 float;
+globals global2 int;
+
+
+func foo(cat int, dog float) -> int {
+    var varLocal1 int;
+    x = 5 * 9;
+}
+
+func bar() -> void {
+    
+}
+
+func bar(g1 int, g2 int) -> float {
+   
+}
+
+main () {
+    
+}
+
