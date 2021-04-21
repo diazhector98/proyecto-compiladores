@@ -14,3 +14,4 @@ class Operator(Enum):
     AND = "&&"
     OR = "||"
     READ = "read"
+    PRINT = "print" 
