@@ -77,7 +77,10 @@ class SemanticHandler:
                 self.consume_operand(temp, cube_result)
 
                 #print a los quadruplos actuales
-                print(self.quadruples)
+                print("Cuadruplos")
+                print("---------")
+                for quad in self.quadruples:
+                    print(quad)
             else:
                 print("type mismatch")
         else:
