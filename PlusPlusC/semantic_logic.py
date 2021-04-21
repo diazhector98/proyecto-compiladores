@@ -50,8 +50,6 @@ class SemanticHandler:
     def handle_print(self):
         if self.stack.operands:
             var_name = self.stack.operands.pop()
-            print("var_name:")
-            print(var_name)
             quadruple = Quadruple(Operator.PRINT, None, None, var_name)
             self.quadruples.append(quadruple)
 
