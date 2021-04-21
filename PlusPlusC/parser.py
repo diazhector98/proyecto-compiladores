@@ -128,8 +128,8 @@ class PlusPlusCParser(Parser):
     def asignacion(self, p):
         pass
 
-    #Declaracion y Asignacion
-    @_('VAR ID tipo ";"', 'VAR ID tipo ASSIGN expresion ";"')
+    #Declaracion
+    @_('VAR ID tipo ";"')
     def declaracion_asignacion(self, p):
         self.semantic_actions.set_variable(p.ID, VarType(p.tipo))
         pass
