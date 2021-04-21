@@ -59,6 +59,7 @@ class SemanticHandler:
             name = name,
             type = vtype
         )
+        self.temp_index = self.temp_index + 1
         return name
 
     def set_quadruple(self):
