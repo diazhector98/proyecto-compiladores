@@ -18,9 +18,9 @@ class PlusPlusCLexer(Lexer):
         FLOAT_TYPE,
         CHAR_TYPE,
 
-        # For variable values
-        INTEGER,
-        FLOAT,
+        # For constant variable values
+        C_INTEGER,
+        C_FLOAT,
 
         #For functions
         FUNC,
@@ -58,8 +58,8 @@ class PlusPlusCLexer(Lexer):
                 '/'}
 
     ID = r'[a-zA-Z_][a-zA-Z0-9_]*'
-    INTEGER = r'\d+'
-    FLOAT = r'((\d*\.\d+)(E[\+-]?\d+)?|([1-9]\d*E[\+-]?\d+))'
+    C_INTEGER = r'\d+'
+    C_FLOAT = r'((\d*\.\d+)(E[\+-]?\d+)?|([1-9]\d*E[\+-]?\d+))'
 
     ID['if'] = IF
     ID['else'] = ELSE
