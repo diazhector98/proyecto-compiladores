@@ -6,9 +6,9 @@ globals global2 int;
 
 func foo(cat int, dog float) -> int {
     if x == 7 {
-        print(cat);
+        print(2);
     } else {
-        print(dog);
+        print(3);
     }
 
     var varLocal1 int;
@@ -34,7 +34,7 @@ main () {
     d = (70 + 10) * 90 + 60 + (80);
     z = c;
     f = b * c + d;
-    print(hola);
+    print(3);
     input(adios);
     if 2 < 5 { }
     if 2 < 5 && d > 10 {
