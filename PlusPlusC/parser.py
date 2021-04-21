@@ -139,17 +139,25 @@ class PlusPlusCParser(Parser):
     def expresion(self, p):
         pass
 
-    @_('termino', 'termino operador_termino exp')
+    @_('termino')
+    def exp(self, p):
+        pass
+
+    @_('termino operador_termino exp')
     def exp(self, p):
         self.semantic_actions.set_quadruple()
         pass
 
-    @_('factor', 'factor operador_factor termino')
+    @_('factor')
+    def termino(self, p):
+        pass
+
+    @_('factor operador_factor termino')
     def termino(self, p):
         self.semantic_actions.set_quadruple()
         pass
 
-    @_('"(" expresion ")"', 'operador_termino constante', 'constante', 'ID')
+    @_('"(" expresion ")"', 'operador_termino constante', 'ID', 'constante')
     def factor(self, p):
         pass
 
