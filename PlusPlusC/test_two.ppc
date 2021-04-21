@@ -6,7 +6,7 @@ globals global2 int;
 
 func foo(cat int, dog float) -> int {
     var varLocal1 int;
-    x = 5 * 9;
+    x = 5 * 9.2;
 }
 
 func bar() -> void {

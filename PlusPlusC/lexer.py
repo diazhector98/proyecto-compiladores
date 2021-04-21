@@ -58,8 +58,6 @@ class PlusPlusCLexer(Lexer):
                 '/'}
 
     ID = r'[a-zA-Z_][a-zA-Z0-9_]*'
-    C_INTEGER = r'\d+'
-    C_FLOAT = r'((\d*\.\d+)(E[\+-]?\d+)?|([1-9]\d*E[\+-]?\d+))'
 
     ID['if'] = IF
     ID['else'] = ELSE
@@ -88,12 +86,21 @@ class PlusPlusCLexer(Lexer):
     GT = r'>'
     ARROW = r'->'
 
-
     @_(r'[a-zA-Z_][a-zA-Z0-9_]*')
     def ID(self, t):
       t.value = t.value
       return t
     
+    @_(r'\d+')
+    def C_INTEGER(self, t):
+        t.value = int(t.value)
+        return t
+
+    @_(r'\d+\.\d+')
+    def C_FLOAT(self, t):
+        t.value = float(t.value)
+        return t
+
     @_(r'\n+')
     def count_newline(self, t):
         self.lineno += t.value.count('\n')
