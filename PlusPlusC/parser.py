@@ -2,15 +2,15 @@ import sys
 sys.path.insert(0, '.')
 
 from sly import Parser
-from TeamPlusPlusLexer import TeamPlusPlusLexer
+from lexer import PlusPlusCLexer
 from semantic_logic import SemanticHandler
 from DirectorioFunciones import FuncReturnType, VarType
 
 """ Falta while, for, hacer pruebas, eliminar recursividad """
 
-class TeamPlusPlusParser(Parser):
+class PlusPlusCParser(Parser):
     contains_error = False
-    tokens = TeamPlusPlusLexer.tokens
+    tokens = PlusPlusCLexer.tokens
 
     start = 'program'
     semantic_actions = SemanticHandler()
@@ -49,7 +49,7 @@ class TeamPlusPlusParser(Parser):
     # def identificadores(self, p):
     #     pass
 
-    @_('INT_TYPE', 'FLOAT_TYPE', 'CHAR_TYPE')
+    @_('INT_TYPE', 'FLOAT_TYPE', 'CHAR_TYPE', 'BOOL_TYPE')
     def tipo(self, p):
         return p[0]
 
@@ -108,8 +108,15 @@ class TeamPlusPlusParser(Parser):
         pass
 
     #Escritura
+    @_('PRINT "(" constante ")" ";"')
+    def escritura(self, p):
+        self.semantic_actions.handle_print()
+        pass
+
     @_('PRINT "(" ID ")" ";"')
     def escritura(self, p):
+        self.semantic_actions.consume_operand(p.ID)
+        self.semantic_actions.handle_print()
         pass
 
     #Lectura
@@ -125,46 +132,75 @@ class TeamPlusPlusParser(Parser):
     #Asignacion
     @_('ID ASSIGN expresion ";"')
     def asignacion(self, p):
+        self.semantic_actions.add_var_operand(p[0])
         pass
 
-    #Declaracion y Asignacion
-    @_('VAR ID tipo ";"', 'VAR ID tipo ASSIGN expresion ";"')
+    #Declaracion
+    @_('VAR ID tipo ";"')
     def declaracion_asignacion(self, p):
         self.semantic_actions.set_variable(p.ID, VarType(p.tipo))
         pass
 
     #Expresion
-    @_('exp', 'exp operador_comparativo exp', 'llamada_funcion')
+    @_('exp', 'llamada_funcion')
     def expresion(self, p):
         pass
 
-    @_('termino', 'termino operador_termino exp')
+    @_('exp operador_comparativo exp')
+    def expresion(self, p):
+        self.semantic_actions.set_quadruple()
+
+    @_('termino')
     def exp(self, p):
         pass
 
-    @_('factor', 'factor operador_factor termino')
+    @_('termino operador_termino exp')
+    def exp(self, p):
+        self.semantic_actions.set_quadruple()
+
+    @_('factor')
     def termino(self, p):
         pass
 
-    @_('"(" expresion ")"', 'operador_termino constante', 'constante', 'ID')
+    @_('factor operador_factor termino')
+    def termino(self, p):
+        self.semantic_actions.set_quadruple()
+
+    @_('"(" expresion ")"', 'operador_termino constante', 'constante')
     def factor(self, p):
         pass
 
-    @_('INTEGER', 'FLOAT')
+    @_('ID')
+    def factor(self, p):
+        self.semantic_actions.consume_operand(p[0])
+
+    @_('C_INTEGER')
     def constante(self, p):
+        self.semantic_actions.consume_operand(p[0], VarType.INT)
         pass
+
+    @_('C_FLOAT')
+    def constante(self, p):
+        self.semantic_actions.consume_operand(p[0], VarType.FLOAT)
+        pass
+
+    @_('C_CHAR')
+    def constante(self, p):
+        self.semantic_actions.consume_operand(p[0], VarType.CHAR)
+        pass    
 
     @_('LT', 'GT', 'LTEQUAL', 'GTEQUAL', 'NOTEQUAL', 'EQUAL')
     def operador_comparativo(self, p):
+        self.semantic_actions.consume_operator(p[0])
         pass
     
     @_('"+"', '"-"')
     def operador_termino(self, p):
-        pass
+        self.semantic_actions.consume_operator(p[0])
     
     @_('"*"', '"/"')
     def operador_factor(self, p):
-        pass
+        self.semantic_actions.consume_operator(p[0])
 
     #If
     @_('IF condiciones bloque', 'IF condiciones bloque ELSE bloque')
@@ -203,4 +239,4 @@ class TeamPlusPlusParser(Parser):
             self.contains_error = True
 
 if __name__ == '__main__':
-    parser = TeamPlusPlusParser()
+    parser = PlusPlusCParser()

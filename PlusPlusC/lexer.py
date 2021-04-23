@@ -1,6 +1,6 @@
 from sly import Lexer
 
-class TeamPlusPlusLexer(Lexer):
+class PlusPlusCLexer(Lexer):
     
     #Lenguage tokens
     tokens = {
@@ -17,10 +17,12 @@ class TeamPlusPlusLexer(Lexer):
         INT_TYPE,
         FLOAT_TYPE,
         CHAR_TYPE,
+        BOOL_TYPE,
 
-        # For variable values
-        INTEGER,
-        FLOAT,
+        # For constant variable values
+        C_INTEGER,
+        C_FLOAT,
+        C_CHAR,
 
         #For functions
         FUNC,
@@ -58,8 +60,6 @@ class TeamPlusPlusLexer(Lexer):
                 '/'}
 
     ID = r'[a-zA-Z_][a-zA-Z0-9_]*'
-    INTEGER = r'\d+'
-    FLOAT = r'((\d*\.\d+)(E[\+-]?\d+)?|([1-9]\d*E[\+-]?\d+))'
 
     ID['if'] = IF
     ID['else'] = ELSE
@@ -70,6 +70,7 @@ class TeamPlusPlusLexer(Lexer):
     ID['int'] = INT_TYPE
     ID['float'] = FLOAT_TYPE
     ID['char'] = CHAR_TYPE
+    ID['bool'] = BOOL_TYPE
     ID['func'] = FUNC
     ID['main'] = MAIN
     ID['while'] = WHILE
@@ -88,12 +89,26 @@ class TeamPlusPlusLexer(Lexer):
     GT = r'>'
     ARROW = r'->'
 
-
     @_(r'[a-zA-Z_][a-zA-Z0-9_]*')
     def ID(self, t):
       t.value = t.value
       return t
     
+    @_(r'\d+')
+    def C_INTEGER(self, t):
+        t.value = int(t.value)
+        return t
+
+    @_(r'\d+\.\d+')
+    def C_FLOAT(self, t):
+        t.value = float(t.value)
+        return t
+
+    @_(r'\'.\'')
+    def C_CHAR(self, t):
+        t.value = t.value[1]
+        return t
+
     @_(r'\n+')
     def count_newline(self, t):
         self.lineno += t.value.count('\n')
@@ -102,6 +117,6 @@ class TeamPlusPlusLexer(Lexer):
         print("Lexical error. Illegal character \" " + str(t.value[0]) + " \". Line #" + str(self.lineno) )
         self.index += 1
 
-Tokens = TeamPlusPlusLexer.tokens
+Tokens = PlusPlusCLexer.tokens
 
             
