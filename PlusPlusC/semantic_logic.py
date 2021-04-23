@@ -63,6 +63,7 @@ class SemanticHandler:
         return name
 
     def set_quadruple(self):
+        print(self.stack.operands)
         if len(self.stack.operands) >= 2 and len(self.stack.operators) >= 1:
             right_operand = self.stack.operands.pop()
             left_operand = self.stack.operands.pop()
@@ -75,7 +76,7 @@ class SemanticHandler:
                 quadruple = Quadruple(Operator(operator), left_operand, right_operand, temp)
                 self.quadruples.append(quadruple)
                 self.consume_operand(temp, cube_result)
-
+                
                 #print a los quadruplos actuales
                 print("Cuadruplos")
                 print("---------")
@@ -85,3 +86,43 @@ class SemanticHandler:
                 print("type mismatch")
         else:
             print("Error: Not enough operands")
+    
+    
+    def get_variable(self, var_name):
+        var = self.current_var_table[var_name]
+        if var is None:
+            print("var is not declared")
+        return var
+
+
+    def add_var_operand(self, var_name):
+        var = self.current_var_table[var_name]
+        if var is None:
+            print("var is not declared")
+        else:
+            self.consume_operand(var.name, var.type)
+            self.stack.operators.append(Operator.ASSIGN)
+
+            self.stack.operands.reverse()
+            self.stack.operators.reverse()
+
+            right_operand = self.stack.operands.pop()
+            left_operand = self.stack.operands.pop()
+            operator = Operator(self.stack.operators.pop())
+            right_operand_type = self.stack.types.pop()
+            left_operand_type = self.stack.types.pop()
+            cube_result = self.cube[right_operand_type][left_operand_type][operator]
+            if cube_result != "err":
+                quadruple = Quadruple(Operator(operator), right_operand, None, left_operand)
+                self.quadruples.append(quadruple)
+                
+                #print a los quadruplos actuales
+                print("Cuadruplos")
+                print("---------")
+                for quad in self.quadruples:
+                    print(quad)
+            else:
+                print("type mismatch")
+
+
+            

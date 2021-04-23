@@ -126,6 +126,7 @@ class PlusPlusCParser(Parser):
     #Asignacion
     @_('ID ASSIGN expresion ";"')
     def asignacion(self, p):
+        self.semantic_actions.add_var_operand(p[0])
         pass
 
     #Declaracion
