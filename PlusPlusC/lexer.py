@@ -21,6 +21,7 @@ class PlusPlusCLexer(Lexer):
         # For constant variable values
         C_INTEGER,
         C_FLOAT,
+        C_CHAR,
 
         #For functions
         FUNC,
@@ -99,6 +100,11 @@ class PlusPlusCLexer(Lexer):
     @_(r'\d+\.\d+')
     def C_FLOAT(self, t):
         t.value = float(t.value)
+        return t
+
+    @_(r'\'.\'')
+    def C_CHAR(self, t):
+        t.value = t.value[1]
         return t
 
     @_(r'\n+')

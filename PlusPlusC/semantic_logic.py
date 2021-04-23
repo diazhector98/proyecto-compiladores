@@ -76,14 +76,8 @@ class SemanticHandler:
                 quadruple = Quadruple(Operator(operator), left_operand, right_operand, temp)
                 self.quadruples.append(quadruple)
                 self.consume_operand(temp, cube_result)
-                
-                #print a los quadruplos actuales
-                print("Cuadruplos")
-                print("---------")
-                for quad in self.quadruples:
-                    print(quad)
             else:
-                print("type mismatch")
+                print("type mismatch between operand", left_operand, "and", right_operand)
         else:
             print("Error: Not enough operands")
     

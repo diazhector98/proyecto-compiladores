@@ -147,7 +147,6 @@ class PlusPlusCParser(Parser):
     @_('termino operador_termino exp')
     def exp(self, p):
         self.semantic_actions.set_quadruple()
-        pass
 
     @_('factor')
     def termino(self, p):
@@ -156,7 +155,6 @@ class PlusPlusCParser(Parser):
     @_('factor operador_factor termino')
     def termino(self, p):
         self.semantic_actions.set_quadruple()
-        pass
 
     @_('"(" expresion ")"', 'operador_termino constante', 'ID', 'constante')
     def factor(self, p):
@@ -170,6 +168,11 @@ class PlusPlusCParser(Parser):
     @_('C_FLOAT')
     def constante(self, p):
         self.semantic_actions.consume_operand(p[0], VarType.FLOAT)
+        pass
+
+    @_('C_CHAR')
+    def constante(self, p):
+        self.semantic_actions.consume_operand(p[0], VarType.CHAR)
         pass
 
     @_('LT', 'GT', 'LTEQUAL', 'GTEQUAL', 'NOTEQUAL', 'EQUAL')
