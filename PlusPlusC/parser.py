@@ -113,6 +113,12 @@ class PlusPlusCParser(Parser):
         self.semantic_actions.handle_print()
         pass
 
+    @_('PRINT "(" ID ")" ";"')
+    def escritura(self, p):
+        self.semantic_actions.consume_operand(p.ID)
+        self.semantic_actions.handle_print()
+        pass
+
     #Lectura
     @_('INPUT "(" ID ")" ";"')
     def lectura(self, p):
@@ -181,7 +187,7 @@ class PlusPlusCParser(Parser):
     @_('C_CHAR')
     def constante(self, p):
         self.semantic_actions.consume_operand(p[0], VarType.CHAR)
-        pass
+        pass    
 
     @_('LT', 'GT', 'LTEQUAL', 'GTEQUAL', 'NOTEQUAL', 'EQUAL')
     def operador_comparativo(self, p):

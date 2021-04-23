@@ -36,7 +36,6 @@ class SemanticHandler:
     
     def consume_operator(self, operator):
         self.stack.push_operator(operator)
-    
 
     def consume_operand(self, operand, var_type=None):
         if var_type == None:
@@ -59,6 +58,9 @@ class SemanticHandler:
             var_name = self.stack.operands.pop()
             quadruple = Quadruple(Operator.PRINT, None, None, var_name)
             self.quadruples.append(quadruple)
+            print("Cuadruplos al añadir el print")
+            print("---------")
+            print(self.quadruples)
 
     def create_temp_var(self, vtype):
         name = "temp_" + str(self.temp_index)

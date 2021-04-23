@@ -8,6 +8,7 @@ func foo(cat int, dog float) -> int {
     var varLocal1 bool;
     var A int;
     varLocal1 = 5 * A > 76 + 2;
+    print(varLocal1);
 }
 
 func bar() -> void {
