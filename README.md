@@ -1,9 +1,8 @@
 # proyecto-compiladores
 
-## 2ndo Avance
+## 3er Avance
 
-- Se crearon las clases correspondientes para el directorio de funciones y la tabla de variables
-- Se creo una clase en donde se maneja la lógica semántica (para probar el funcionamiento del directorio y la tabla)
--  Se diseño el cubo semántico y se empezó a implementar usando un diccionario de diccionarios.
-
-
+- Se creó la clase de cuadruplos
+- Se creó una clase que maneja las pilas de la semantica.
+- Se generaron los cuádruplos de la escritura, lectura y se hizo la generación de cuádruplos de expresiones sencillas.
+- Se trabajó en considerar los operadores de comparación (>,<, etc.) y también en el uso de variables en las expresiones.
