@@ -156,9 +156,13 @@ class PlusPlusCParser(Parser):
     def termino(self, p):
         self.semantic_actions.set_quadruple()
 
-    @_('"(" expresion ")"', 'operador_termino constante', 'ID', 'constante')
+    @_('"(" expresion ")"', 'operador_termino constante', 'constante')
     def factor(self, p):
         pass
+
+    @_('ID')
+    def factor(self, p):
+        self.semantic_actions.consume_operand(p[0])
 
     @_('C_INTEGER')
     def constante(self, p):

@@ -38,8 +38,15 @@ class SemanticHandler:
         self.stack.push_operator(operator)
     
 
-    def consume_operand(self, operand, type):
-        self.stack.push_operand(operand, type)
+    def consume_operand(self, operand, var_type=None):
+        if var_type == None:
+            try:
+                t = self.current_var_table[operand]
+                self.stack.push_operand(t.name, t.type)
+            except KeyError:
+                print("varibale", operand, "does not exist")
+        else:
+            self.stack.push_operand(operand, var_type)
 
     # Por lo pronto, solo guardamos el cuadruplo con el nombre de la variable
     def handle_read(self, id):
