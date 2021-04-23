@@ -70,7 +70,6 @@ class SemanticHandler:
         return name
 
     def set_quadruple(self):
-        print(self.stack.operands)
         if len(self.stack.operands) >= 2 and len(self.stack.operators) >= 1:
             right_operand = self.stack.operands.pop()
             left_operand = self.stack.operands.pop()
@@ -122,8 +121,10 @@ class SemanticHandler:
                 print("---------")
                 for quad in self.quadruples:
                     print(quad)
+                print(cube_result)
             else:
-                print("type mismatch")
+                print("type mismatch between operand", left_operand, left_operand_type,  "and", right_operand, right_operand_type)
+
 
 
             

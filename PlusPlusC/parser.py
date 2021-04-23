@@ -49,7 +49,7 @@ class PlusPlusCParser(Parser):
     # def identificadores(self, p):
     #     pass
 
-    @_('INT_TYPE', 'FLOAT_TYPE', 'CHAR_TYPE')
+    @_('INT_TYPE', 'FLOAT_TYPE', 'CHAR_TYPE', 'BOOL_TYPE')
     def tipo(self, p):
         return p[0]
 
@@ -136,9 +136,13 @@ class PlusPlusCParser(Parser):
         pass
 
     #Expresion
-    @_('exp', 'exp operador_comparativo exp', 'llamada_funcion')
+    @_('exp', 'llamada_funcion')
     def expresion(self, p):
         pass
+
+    @_('exp operador_comparativo exp')
+    def expresion(self, p):
+        self.semantic_actions.set_quadruple()
 
     @_('termino')
     def exp(self, p):
@@ -181,6 +185,7 @@ class PlusPlusCParser(Parser):
 
     @_('LT', 'GT', 'LTEQUAL', 'GTEQUAL', 'NOTEQUAL', 'EQUAL')
     def operador_comparativo(self, p):
+        self.semantic_actions.consume_operator(p[0])
         pass
     
     @_('"+"', '"-"')

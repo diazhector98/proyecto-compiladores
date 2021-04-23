@@ -17,6 +17,7 @@ class PlusPlusCLexer(Lexer):
         INT_TYPE,
         FLOAT_TYPE,
         CHAR_TYPE,
+        BOOL_TYPE,
 
         # For constant variable values
         C_INTEGER,
@@ -69,6 +70,7 @@ class PlusPlusCLexer(Lexer):
     ID['int'] = INT_TYPE
     ID['float'] = FLOAT_TYPE
     ID['char'] = CHAR_TYPE
+    ID['bool'] = BOOL_TYPE
     ID['func'] = FUNC
     ID['main'] = MAIN
     ID['while'] = WHILE
