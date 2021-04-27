@@ -10,6 +10,7 @@ class SemanticHandler:
     current_var_table = dict()
     functions_directory = dict()
     quadruples = []
+    jumps_stack = []
 
     def __init__(self):
         self.cube = SemanticCube()

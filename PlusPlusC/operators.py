@@ -16,3 +16,5 @@ class Operator(Enum):
     READ = "read"
     PRINT = "print" 
     ASSIGN = "="
+    GOTO = 'goto'
+    GOTOF = 'gotof'
