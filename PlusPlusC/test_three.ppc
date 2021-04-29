@@ -1,0 +1,15 @@
+program Main;
+
+
+func foo() -> int {
+
+    if 1 < 2 {
+        var A int;
+        A = 1;
+    }
+    
+}
+
+main () {
+    
+}
