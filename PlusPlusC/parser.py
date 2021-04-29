@@ -203,8 +203,18 @@ class PlusPlusCParser(Parser):
         self.semantic_actions.consume_operator(p[0])
 
     #If
-    @_('IF condiciones bloque', 'IF condiciones bloque ELSE bloque')
+    @_('if_inicial bloque condicion_aux')
     def condicion(self, p):
+        self.semantic_actions.set_end_of_if()
+        pass
+
+    @_('IF condiciones')
+    def if_inicial(self, p):
+        self.semantic_actions.set_initial_if()
+        pass
+    
+    @_('ELSE bloque', 'epsilon')
+    def condicion_aux(self, p):
         pass
 
     #While
