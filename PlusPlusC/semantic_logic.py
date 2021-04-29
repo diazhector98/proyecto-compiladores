@@ -89,8 +89,17 @@ class SemanticHandler:
                 print("type mismatch between operand", left_operand, "and", right_operand)
         else:
             print("Error: Not enough operands")
-    
-    
+
+        #print a los quadruplos actuales
+        # print("Cuadruplos")
+        # print("---------")
+        # for quad in self.quadruples:
+        #     print(quad)
+
+        # print(self.stack.operands)
+        # print(self.stack.types)
+
+
     def get_variable(self, var_name):
         var = self.current_var_table[var_name]
         if var is None:
@@ -129,5 +138,34 @@ class SemanticHandler:
                 print("type mismatch between operand", left_operand, left_operand_type,  "and", right_operand, right_operand_type)
 
 
+    def set_initial_if(self):
+        if self.stack.operands:
+            result = self.stack.operands.pop()
+            if self.stack.types.pop() == VarType.BOOL:
+                quadruple = Quadruple(Operator.GOTOF, result, None, None)
+                self.quadruples.append(quadruple)
+                jump = len(self.quadruples) - 1
+                self.jumps_stack.append(jump)
+            else:
+                raise TypeError("Error: Type of operation must be of type BOOL")
+        else:
+            raise Exception("Error: Not enough operands")
 
-            
+    def set_end_of_if(self):
+        
+        if self.jumps_stack:
+            quadruple_index_to_set = self.jumps_stack.pop()
+            final_jump_index = len(self.quadruples) + 1
+            self.set_final_jump(quadruple_index_to_set, final_jump_index)
+        else:
+            raise Exception("Error: Jump stack is empty")
+
+    def set_final_jump(self, quadruple_index_to_set, final_jump_index):
+        self.quadruples[quadruple_index_to_set].temp_result = final_jump_index
+
+        print("Cuadruplos")
+        print("---------")
+        for quad in self.quadruples:
+            print(quad)
+        
+       
