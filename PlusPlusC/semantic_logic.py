@@ -59,7 +59,6 @@ class SemanticHandler:
             var_name = self.stack.operands.pop()
             quadruple = Quadruple(Operator.PRINT, None, None, var_name)
             self.quadruples.append(quadruple)
-            self.print_quadruples()
 
     def create_temp_var(self, vtype):
         name = "temp_" + str(self.temp_index)
@@ -115,9 +114,6 @@ class SemanticHandler:
             if cube_result != "err":
                 quadruple = Quadruple(Operator(operator), right_operand, None, left_operand)
                 self.quadruples.append(quadruple)
-                
-                #print a los quadruplos actuales
-                self.print_quadruples()
             else:
                 print("type mismatch between operand", left_operand, left_operand_type,  "and", right_operand, right_operand_type)
 
@@ -151,9 +147,6 @@ class SemanticHandler:
         else:
             raise Exception("Error: Jump stack is empty")
 
-        #print a los quadruplos actuales
-        self.print_quadruples()
-
     def set_end_of_while(self):
         end_jump_index = self.jumps_stack.pop()
         condition_jump_index = self.jumps_stack.pop()
@@ -175,8 +168,9 @@ class SemanticHandler:
         else:
             raise Exception("Jump stack error")
 
+    # Método de debugging
     def print_quadruples(self):
-        for quad in self.quadruples:
-            print(quad.operator, quad.temp_result)
+        for index, quad in enumerate(self.quadruples):
+            print(f"{index})", quad.operator, quad.temp_result)
 
        

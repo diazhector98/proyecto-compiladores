@@ -226,6 +226,7 @@ class PlusPlusCParser(Parser):
     @_('while_inicial bloque')
     def ciclo_while(self, p):
         self.semantic_actions.set_end_of_while()
+        self.semantic_actions.print_quadruples()
 
     @_('WHILE condiciones')
     def while_inicial(self, p):
