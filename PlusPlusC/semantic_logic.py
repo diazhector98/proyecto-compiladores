@@ -137,15 +137,23 @@ class SemanticHandler:
             else:
                 print("type mismatch between operand", left_operand, left_operand_type,  "and", right_operand, right_operand_type)
 
-
     def set_initial_if(self):
+        self.set_conditional_block()
+
+    def set_initial_while(self):
+        # Jump index para regresar a evaluar la condicion del while (al cuádruplo de la condición)
+        jump_index = len(self.quadruples) - 1
+        self.jumps_stack.append(jump_index)
+        self.set_conditional_block()
+
+    def set_conditional_block(self):
         if self.stack.operands:
             result = self.stack.operands.pop()
             if self.stack.types.pop() == VarType.BOOL:
                 quadruple = Quadruple(Operator.GOTOF, result, None, None)
                 self.quadruples.append(quadruple)
-                jump = len(self.quadruples) - 1
-                self.jumps_stack.append(jump)
+                jump_index = len(self.quadruples) - 1
+                self.jumps_stack.append(jump_index)
             else:
                 raise TypeError("Error: Type of operation must be of type BOOL")
         else:
@@ -164,6 +172,13 @@ class SemanticHandler:
         print("---------")
         for quad in self.quadruples:
             print(quad)
+
+    def set_end_of_while(self):
+        end_jump_index = self.jumps_stack.pop()
+        condition_jump_index = self.jumps_stack.pop()
+        quadruple = Quadruple(Operator.GOTO, None, None, condition_jump_index)
+        self.quadruples.append(quadruple)        
+        self.set_final_jump(end_jump_index, len(self.jumps_stack))
 
     def set_final_jump(self, quadruple_index_to_set, final_jump_index):
         self.quadruples[quadruple_index_to_set].temp_result = final_jump_index

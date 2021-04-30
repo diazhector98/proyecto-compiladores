@@ -223,9 +223,13 @@ class PlusPlusCParser(Parser):
         pass
 
     #While
-    @_('WHILE condiciones bloque')
+    @_('while_inicial bloque')
     def ciclo_while(self, p):
-        pass
+        self.semantic_actions.set_end_of_while()
+
+    @_('WHILE condiciones')
+    def while_inicial(self, p):
+        self.semantic_actions.set_initial_while()
 
     @_('expresion', 'expresion operador_condicional condiciones')
     def condiciones(self, p):
