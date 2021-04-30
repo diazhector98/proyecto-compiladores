@@ -1,8 +1,7 @@
 # proyecto-compiladores
 
-## 3er Avance
+## 4to Avance
 
-- Se creó la clase de cuadruplos
-- Se creó una clase que maneja las pilas de la semantica.
-- Se generaron los cuádruplos de la escritura, lectura y se hizo la generación de cuádruplos de expresiones sencillas.
-- Se trabajó en considerar los operadores de comparación (>,<, etc.) y también en el uso de variables en las expresiones.
+- Se creo la stack de saltos y se agregaron nuevos operadores.
+- Se crearon los cuadruplos para el manejo de if y else.
+- Se crearon los cuadruplos para el manejo de while.
