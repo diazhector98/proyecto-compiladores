@@ -159,7 +159,7 @@ class SemanticHandler:
         condition_jump_index = self.jumps_stack.pop()
         quadruple = Quadruple(Operator.GOTO, None, None, condition_jump_index)
         self.quadruples.append(quadruple)        
-        self.set_final_jump(end_jump_index, len(self.jumps_stack))
+        self.set_final_jump(end_jump_index, len(self.quadruples))
 
     def set_final_jump(self, quadruple_index_to_set, final_jump_index):
         self.quadruples[quadruple_index_to_set].temp_result = final_jump_index
