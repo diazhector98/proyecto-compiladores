@@ -6,6 +6,9 @@ func foo() -> int {
     if 1 < 2 {
         var A int;
         A = 1;
+    } else {
+       A = 2;
+       A = 3;
     }
     
 }
