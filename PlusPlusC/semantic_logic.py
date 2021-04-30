@@ -59,9 +59,7 @@ class SemanticHandler:
             var_name = self.stack.operands.pop()
             quadruple = Quadruple(Operator.PRINT, None, None, var_name)
             self.quadruples.append(quadruple)
-            print("Cuadruplos al añadir el print")
-            print("---------")
-            print(self.quadruples)
+            self.print_quadruples()
 
     def create_temp_var(self, vtype):
         name = "temp_" + str(self.temp_index)
@@ -89,16 +87,6 @@ class SemanticHandler:
                 print("type mismatch between operand", left_operand, "and", right_operand)
         else:
             print("Error: Not enough operands")
-
-        #print a los quadruplos actuales
-        # print("Cuadruplos")
-        # print("---------")
-        # for quad in self.quadruples:
-        #     print(quad)
-
-        # print(self.stack.operands)
-        # print(self.stack.types)
-
 
     def get_variable(self, var_name):
         var = self.current_var_table[var_name]
@@ -129,11 +117,7 @@ class SemanticHandler:
                 self.quadruples.append(quadruple)
                 
                 #print a los quadruplos actuales
-                print("Cuadruplos")
-                print("---------")
-                for quad in self.quadruples:
-                    print(quad)
-                print(cube_result)
+                self.print_quadruples()
             else:
                 print("type mismatch between operand", left_operand, left_operand_type,  "and", right_operand, right_operand_type)
 
@@ -168,10 +152,7 @@ class SemanticHandler:
             raise Exception("Error: Jump stack is empty")
 
         #print a los quadruplos actuales
-        print("Cuadruplos")
-        print("---------")
-        for quad in self.quadruples:
-            print(quad)
+        self.print_quadruples()
 
     def set_end_of_while(self):
         end_jump_index = self.jumps_stack.pop()
@@ -193,5 +174,9 @@ class SemanticHandler:
             self.set_final_jump(quadruple_index_to_set, len(self.quadruples) + 1)
         else:
             raise Exception("Jump stack error")
+
+    def print_quadruples(self):
+        for quad in self.quadruples:
+            print(quad.operator, quad.temp_result)
 
        
