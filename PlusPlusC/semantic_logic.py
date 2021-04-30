@@ -152,7 +152,6 @@ class SemanticHandler:
             raise Exception("Error: Not enough operands")
 
     def set_end_of_if(self):
-        
         if self.jumps_stack:
             quadruple_index_to_set = self.jumps_stack.pop()
             final_jump_index = len(self.quadruples) + 1
@@ -160,12 +159,24 @@ class SemanticHandler:
         else:
             raise Exception("Error: Jump stack is empty")
 
-    def set_final_jump(self, quadruple_index_to_set, final_jump_index):
-        self.quadruples[quadruple_index_to_set].temp_result = final_jump_index
-
+        #print a los quadruplos actuales
         print("Cuadruplos")
         print("---------")
         for quad in self.quadruples:
             print(quad)
-        
+
+    def set_final_jump(self, quadruple_index_to_set, final_jump_index):
+        self.quadruples[quadruple_index_to_set].temp_result = final_jump_index
+
+    def set_else(self):
+        quadruple = Quadruple(Operator.GOTO, None, None, None)
+        self.quadruples.append(quadruple)
+
+        if self.jumps_stack:
+            quadruple_index_to_set = self.jumps_stack.pop()
+            self.jumps_stack.append(len(self.quadruples) - 1)
+            self.set_final_jump(quadruple_index_to_set, len(self.quadruples) + 1)
+        else:
+            raise Exception("Jump stack error")
+
        
