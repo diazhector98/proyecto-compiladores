@@ -11,5 +11,8 @@ func foo() -> int {
 }
 
 main () {
-    
+    while 8 < 10 {
+        var C int;
+        C = 0;
+    }
 }

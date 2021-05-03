@@ -16,6 +16,15 @@ class SemanticHandler:
         self.cube = SemanticCube()
         self.stack = SemanticStack()
 
+    def initialize_program(self):
+        goto_main = Quadruple(Operator.GOTO, None, None, None)
+        self.quadruples.append(goto_main)
+        self.jumps_stack.append(0)
+
+    def set_goto_main(self):
+        main_jump = self.jumps_stack.pop()
+        self.set_final_jump(main_jump, len(self.quadruples))
+
     def set_init_func(self, func_name, t):
         self.functions_directory[func_name] = FunctionDirectoryRecord(
             name = func_name,

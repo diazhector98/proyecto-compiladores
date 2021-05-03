@@ -23,9 +23,13 @@ class PlusPlusCParser(Parser):
     def __init__(self):
         self.names = { }
 
-    @_('PROGRAM ID ";" globals funciones main')
+    @_('inicio_programa ";" globals funciones main')
     def program(self, p):
-        pass
+        self.semantic_actions.print_quadruples()
+
+    @_('PROGRAM ID')
+    def inicio_programa(self, p):
+        self.semantic_actions.initialize_program()
 
     @_('global_aux globals', 'epsilon')
     def globals(self, p):
@@ -89,9 +93,13 @@ class PlusPlusCParser(Parser):
         pass
 
     #Main
-    @_('MAIN "(" ")" bloque')
+    @_('inicio_main bloque')
     def main(self, p):
         pass
+
+    @_('MAIN "(" ")"')
+    def inicio_main(self, p):
+        self.semantic_actions.set_goto_main()
 
     #Bloque
     @_('"{" estatutos "}"', '"{" "}"')
@@ -226,7 +234,6 @@ class PlusPlusCParser(Parser):
     @_('while_inicial bloque')
     def ciclo_while(self, p):
         self.semantic_actions.set_end_of_while()
-        self.semantic_actions.print_quadruples()
 
     @_('WHILE condiciones')
     def while_inicial(self, p):
