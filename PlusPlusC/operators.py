@@ -18,3 +18,7 @@ class Operator(Enum):
     ASSIGN = "="
     GOTO = 'goto'
     GOTOF = 'gotof'
+    GOSUB = 'gosub'
+    ERA = 'era'
+    PARAMETER = 'parameter'
+    ENDFUNC = 'endfunc'
