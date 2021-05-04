@@ -61,17 +61,22 @@ class PlusPlusCParser(Parser):
     def funciones(self, p):
         pass
 
-    @_('FUNC ID "(" parametros ")" ARROW tipo bloque'
+    @_('declaracion_funcion bloque'
     )
     def funcion(self, p):
-        self.semantic_actions.set_init_func(p.ID, FuncReturnType(p.tipo))
-        self.semantic_actions.set_parametros(p.parametros)
+        pass
 
+    # TODO: Manejar funciones tipo void para manejo de funciones...(como la de arriba)
     @_(
     'FUNC ID "(" parametros ")" ARROW VOID bloque'
     )
     def funcion(self, p):
         self.semantic_actions.set_init_func(p.ID, FuncReturnType.VOID)
+        self.semantic_actions.set_parametros(p.parametros)
+
+    @_('FUNC ID "(" parametros ")" ARROW tipo')
+    def declaracion_funcion(self, p):
+        self.semantic_actions.set_init_func(p.ID, FuncReturnType(p.tipo))
         self.semantic_actions.set_parametros(p.parametros)
 
     @_('ID tipo')

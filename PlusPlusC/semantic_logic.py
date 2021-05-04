@@ -15,6 +15,7 @@ class SemanticHandler:
     def __init__(self):
         self.cube = SemanticCube()
         self.stack = SemanticStack()
+        self.current_function = None
 
     def initialize_program(self):
         goto_main = Quadruple(Operator.GOTO, None, None, None)
@@ -30,6 +31,7 @@ class SemanticHandler:
             name = func_name,
             return_type= t
         )
+        self.current_function = func_name
 
     def set_parametros(self, parametros):
         for (param_name, param_var_type) in parametros:
