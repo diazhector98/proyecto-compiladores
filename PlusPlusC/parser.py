@@ -253,9 +253,13 @@ class PlusPlusCParser(Parser):
         pass
 
     #Llamadas a funciones
-    @_('ID "(" argumentos_funcion ")"')
+    @_('inicio_llamada_funcion argumentos_funcion ")"')
     def llamada_funcion(self, p):
         pass
+
+    @_('ID "("')
+    def inicio_llamada_funcion(self,p):
+        self.semantic_actions.set_function_call(p[0])
 
     @_('argumento_funcion', 'argumento_funcion "," argumentos_funcion', 'epsilon')
     def argumentos_funcion(self, p):
