@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 
 class VarType(Enum):
@@ -25,7 +25,9 @@ param_types: Lista de los tipos de parametros esperados
 class FunctionDirectoryRecord:
     name: str
     return_type: FuncReturnType
-    param_types: [str] = None
+    params: [VarType] = field(default_factory=list)
+    def add_param(self, param):
+        self.params.append(param)
 
 """
 Clase para guardar datos de una registro de variable.

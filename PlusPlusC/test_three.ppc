@@ -1,7 +1,7 @@
 program Main;
 
 
-func foo() -> int {
+func foo(C int, D float) -> int {
 
     while 1 < 2 {
         var A int;

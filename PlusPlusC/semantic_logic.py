@@ -35,6 +35,7 @@ class SemanticHandler:
 
     def set_parametros(self, parametros):
         for (param_name, param_var_type) in parametros:
+            self.functions_directory[self.current_function].add_param((param_name, param_var_type))
             self.current_var_table[param_name] = VariableTableRecord(
                 name = param_name,
                 type = param_var_type
