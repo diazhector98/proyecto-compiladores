@@ -94,14 +94,14 @@ class PlusPlusCLexer(Lexer):
       t.value = t.value
       return t
     
-    @_(r'\d+')
-    def C_INTEGER(self, t):
-        t.value = int(t.value)
-        return t
-
     @_(r'\d+\.\d+')
     def C_FLOAT(self, t):
         t.value = float(t.value)
+        return t
+
+    @_(r'\d+')
+    def C_INTEGER(self, t):
+        t.value = int(t.value)
         return t
 
     @_(r'\'.\'')
