@@ -26,6 +26,7 @@ class PlusPlusCParser(Parser):
     @_('inicio_programa ";" globals funciones main')
     def program(self, p):
         self.semantic_actions.print_quadruples()
+        pass
 
     @_('PROGRAM ID')
     def inicio_programa(self, p):
@@ -40,19 +41,6 @@ class PlusPlusCParser(Parser):
         self.semantic_actions.set_variable(p.ID, VarType(p.tipo))
         pass
     
-    # @_('GLOBALS declaraciones')
-    # def globals(self, p):
-    #     pass
-
-    # @_('identificadores tipo ";"', 
-    #   'identificadores tipo ";" declaraciones')
-    # def declaraciones(self, p):
-    #     pass
-
-    # @_('ID', 'ID "," identificadores')
-    # def identificadores(self, p):
-    #     pass
-
     @_('INT_TYPE', 'FLOAT_TYPE', 'CHAR_TYPE', 'BOOL_TYPE')
     def tipo(self, p):
         return p[0]
@@ -64,6 +52,7 @@ class PlusPlusCParser(Parser):
     @_('declaracion_funcion bloque'
     )
     def funcion(self, p):
+        self.semantic_actions.end_func()
         pass
 
     # TODO: Manejar funciones tipo void para manejo de funciones...(como la de arriba)
@@ -78,6 +67,7 @@ class PlusPlusCParser(Parser):
     def declaracion_funcion(self, p):
         self.semantic_actions.set_init_func(p.ID, FuncReturnType(p.tipo))
         self.semantic_actions.set_parametros(p.parametros)
+        pass
 
     @_('ID tipo')
     def parametros(self, p):
