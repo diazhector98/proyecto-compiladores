@@ -29,7 +29,8 @@ class SemanticHandler:
     def set_init_func(self, func_name, t):
         self.functions_directory[func_name] = FunctionDirectoryRecord(
             name = func_name,
-            return_type= t
+            return_type= t,
+            address = len(self.quadruples)
         )
         self.current_function = func_name
 
