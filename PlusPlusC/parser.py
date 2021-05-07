@@ -261,8 +261,9 @@ class PlusPlusCParser(Parser):
 
     @_('exp')
     def argumento_funcion(self, p):
-        argument = self.semantic_actions.stack.operands.pop()
-        return argument
+        argumento = self.semantic_actions.stack.operands.pop()
+        tipo = self.semantic_actions.stack.types.pop()
+        return (argumento, tipo)
 
     def error(self, p):
         if p:

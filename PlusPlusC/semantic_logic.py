@@ -186,7 +186,7 @@ class SemanticHandler:
         self.quadruples.append(quadruple)
 
         arguments.reverse()
-        for index, argument in enumerate(arguments):
+        for index, (argument, argument_type) in enumerate(arguments):
             param_quad = Quadruple(Operator.PARAMETER, argument, None, f"p{index}")
             self.quadruples.append(param_quad)
 
