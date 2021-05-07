@@ -190,4 +190,11 @@ class SemanticHandler:
         for index, quad in enumerate(self.quadruples):
             print(f"{index})", quad.operator, quad.temp_result)
 
-       
+    def end_func(self):
+        function = self.functions_directory[self.current_function]
+        if function is None:
+            print("Funcion no se encuentra en directorio de funciones")
+        else:
+            quadruple = Quadruple(Operator.ENDFUNC, None, None, None)
+            self.quadruples.append(quadruple)
+            self.print_quadruples()
