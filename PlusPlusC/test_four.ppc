@@ -1,0 +1,17 @@
+program Main;
+
+
+func foo(C int, D float) -> int {
+    var A int;
+    var B int;
+    A = 1;
+    A = 2;
+    B = 2;
+}
+
+main () {
+    while 8 < 10 {
+        var C int;
+        C = 0;
+    } 
+}
