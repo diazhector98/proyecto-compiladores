@@ -26,7 +26,6 @@ class PlusPlusCParser(Parser):
     @_('inicio_programa ";" globals funciones main')
     def program(self, p):
         self.semantic_actions.print_quadruples()
-        pass
 
     @_('PROGRAM ID')
     def inicio_programa(self, p):
@@ -243,21 +242,27 @@ class PlusPlusCParser(Parser):
         pass
 
     #Llamadas a funciones
-    @_('inicio_llamada_funcion argumentos_funcion ")"')
+    @_('ID "(" argumentos_funcion ")"')
     def llamada_funcion(self, p):
-        pass
+        self.semantic_actions.set_function_call(p[0], p.argumentos_funcion)
 
-    @_('ID "("')
-    def inicio_llamada_funcion(self,p):
-        self.semantic_actions.set_function_call(p[0])
-
-    @_('argumento_funcion', 'argumento_funcion "," argumentos_funcion', 'epsilon')
+    @_('argumento_funcion')
     def argumentos_funcion(self, p):
-        pass
+        return [p.argumento_funcion]
 
-    @_('ID', 'constante', 'llamada_funcion')
+    @_('argumento_funcion "," argumentos_funcion')
+    def argumentos_funcion(self, p):
+        p.argumentos_funcion.append(p.argumento_funcion)
+        return p.argumentos_funcion
+
+    @_('epsilon')
+    def argumentos_funcion(self, p):
+        return []
+
+    @_('exp')
     def argumento_funcion(self, p):
-        pass
+        argument = self.semantic_actions.stack.operands.pop()
+        return argument
 
     def error(self, p):
         if p:

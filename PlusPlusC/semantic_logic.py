@@ -181,10 +181,10 @@ class SemanticHandler:
         else:
             raise Exception("Jump stack error")
 
-    def set_function_call(self, function):
+    def set_function_call(self, function, arguments):
         quadruple = Quadruple(Operator.ERA, None, None, function)
         self.quadruples.append(quadruple)
-
+    
     # Método de debugging
     def print_quadruples(self):
         for index, quad in enumerate(self.quadruples):
@@ -197,4 +197,3 @@ class SemanticHandler:
         else:
             quadruple = Quadruple(Operator.ENDFUNC, None, None, None)
             self.quadruples.append(quadruple)
-            self.print_quadruples()
