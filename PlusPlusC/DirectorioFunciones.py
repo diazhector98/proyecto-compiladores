@@ -28,6 +28,7 @@ class FunctionDirectoryRecord:
     params: [VarType] = field(default_factory=list)
     def add_param(self, param):
         self.params.append(param)
+    address: int = None
 
 """
 Clase para guardar datos de una registro de variable.
