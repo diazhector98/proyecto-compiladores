@@ -184,6 +184,14 @@ class SemanticHandler:
     def set_function_call(self, function, arguments):
         quadruple = Quadruple(Operator.ERA, None, None, function)
         self.quadruples.append(quadruple)
+
+        arguments.reverse()
+        for index, argument in enumerate(arguments):
+            param_quad = Quadruple(Operator.PARAMETER, argument, None, f"p{index}")
+            self.quadruples.append(param_quad)
+
+        gosub_quad = Quadruple(Operator.GOSUB, None, None, function)
+        self.quadruples.append(gosub_quad)
     
     # Método de debugging
     def print_quadruples(self):
