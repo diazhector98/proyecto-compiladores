@@ -220,12 +220,16 @@ class SemanticHandler:
                     arguments_types.clear()
                     
     def handle_return(self):
+        function = self.functions_directory[self.current_function]
         operand = self.stack.operands.pop()
         operand_type = self.stack.types.pop()
-        quad = Quadruple(Operator.RETURN, None, None, operand)
-        self.quadruples.append(quad)
 
-    
+        if function.return_type.name == operand_type.name:
+            quad = Quadruple(Operator.RETURN, None, None, operand)
+            self.quadruples.append(quad)
+        else:
+            print("El tipo de retorno que la función espera es incorrecto.")
+        
     # Método de debugging
     def print_quadruples(self):
         for index, quad in enumerate(self.quadruples):

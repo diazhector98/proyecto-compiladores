@@ -4,7 +4,7 @@ program Main;
 func foo(C int, D float, A float) -> int {
     var A int;
     A = 1;
-    return 5 * 30.7;
+    return 5 * 30;
 }
 
 main () {
