@@ -129,7 +129,7 @@ class PlusPlusCParser(Parser):
     #Retorno
     @_('RETURN expresion ";"')
     def retorno(self, p):
-        pass
+        self.semantic_actions.handle_return()
 
     #Asignacion
     @_('ID ASSIGN expresion ";"')

@@ -219,6 +219,13 @@ class SemanticHandler:
                     function_params_types.clear()
                     arguments_types.clear()
                     
+    def handle_return(self):
+        operand = self.stack.operands.pop()
+        operand_type = self.stack.types.pop()
+        quad = Quadruple(Operator.RETURN, None, None, operand)
+        self.quadruples.append(quad)
+
+    
     # Método de debugging
     def print_quadruples(self):
         for index, quad in enumerate(self.quadruples):

@@ -22,3 +22,4 @@ class Operator(Enum):
     ERA = 'era'
     PARAMETER = 'parameter'
     ENDFUNC = 'endfunc'
+    RETURN = 'return'
