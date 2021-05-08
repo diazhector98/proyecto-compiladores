@@ -23,9 +23,13 @@ class PlusPlusCParser(Parser):
     def __init__(self):
         self.names = { }
 
-    @_('PROGRAM ID ";" globals funciones main')
+    @_('inicio_programa ";" globals funciones main')
     def program(self, p):
-        pass
+        self.semantic_actions.print_quadruples()
+
+    @_('PROGRAM ID')
+    def inicio_programa(self, p):
+        self.semantic_actions.initialize_program()
 
     @_('global_aux globals', 'epsilon')
     def globals(self, p):
@@ -36,19 +40,6 @@ class PlusPlusCParser(Parser):
         self.semantic_actions.set_variable(p.ID, VarType(p.tipo))
         pass
     
-    # @_('GLOBALS declaraciones')
-    # def globals(self, p):
-    #     pass
-
-    # @_('identificadores tipo ";"', 
-    #   'identificadores tipo ";" declaraciones')
-    # def declaraciones(self, p):
-    #     pass
-
-    # @_('ID', 'ID "," identificadores')
-    # def identificadores(self, p):
-    #     pass
-
     @_('INT_TYPE', 'FLOAT_TYPE', 'CHAR_TYPE', 'BOOL_TYPE')
     def tipo(self, p):
         return p[0]
@@ -57,18 +48,25 @@ class PlusPlusCParser(Parser):
     def funciones(self, p):
         pass
 
-    @_('FUNC ID "(" parametros ")" ARROW tipo bloque'
+    @_('declaracion_funcion bloque'
     )
     def funcion(self, p):
-        self.semantic_actions.set_init_func(p.ID, FuncReturnType(p.tipo))
-        self.semantic_actions.set_parametros(p.parametros)
+        self.semantic_actions.end_func()
+        pass
 
+    # TODO: Manejar funciones tipo void para manejo de funciones...(como la de arriba)
     @_(
     'FUNC ID "(" parametros ")" ARROW VOID bloque'
     )
     def funcion(self, p):
         self.semantic_actions.set_init_func(p.ID, FuncReturnType.VOID)
         self.semantic_actions.set_parametros(p.parametros)
+
+    @_('FUNC ID "(" parametros ")" ARROW tipo')
+    def declaracion_funcion(self, p):
+        self.semantic_actions.set_init_func(p.ID, FuncReturnType(p.tipo))
+        self.semantic_actions.set_parametros(p.parametros)
+        pass
 
     @_('ID tipo')
     def parametros(self, p):
@@ -89,9 +87,13 @@ class PlusPlusCParser(Parser):
         pass
 
     #Main
-    @_('MAIN "(" ")" bloque')
+    @_('inicio_main bloque')
     def main(self, p):
         pass
+
+    @_('MAIN "(" ")"')
+    def inicio_main(self, p):
+        self.semantic_actions.set_goto_main()
 
     #Bloque
     @_('"{" estatutos "}"', '"{" "}"')
@@ -127,7 +129,7 @@ class PlusPlusCParser(Parser):
     #Retorno
     @_('RETURN expresion ";"')
     def retorno(self, p):
-        pass
+        self.semantic_actions.handle_return()
 
     #Asignacion
     @_('ID ASSIGN expresion ";"')
@@ -226,7 +228,6 @@ class PlusPlusCParser(Parser):
     @_('while_inicial bloque')
     def ciclo_while(self, p):
         self.semantic_actions.set_end_of_while()
-        self.semantic_actions.print_quadruples()
 
     @_('WHILE condiciones')
     def while_inicial(self, p):
@@ -243,15 +244,26 @@ class PlusPlusCParser(Parser):
     #Llamadas a funciones
     @_('ID "(" argumentos_funcion ")"')
     def llamada_funcion(self, p):
-        pass
+        self.semantic_actions.set_function_call(p[0], p.argumentos_funcion)
 
-    @_('argumento_funcion', 'argumento_funcion "," argumentos_funcion', 'epsilon')
+    @_('argumento_funcion')
     def argumentos_funcion(self, p):
-        pass
+        return [p.argumento_funcion]
 
-    @_('ID', 'constante', 'llamada_funcion')
+    @_('argumento_funcion "," argumentos_funcion')
+    def argumentos_funcion(self, p):
+        p.argumentos_funcion.append(p.argumento_funcion)
+        return p.argumentos_funcion
+
+    @_('epsilon')
+    def argumentos_funcion(self, p):
+        return []
+
+    @_('exp')
     def argumento_funcion(self, p):
-        pass
+        argumento = self.semantic_actions.stack.operands.pop()
+        tipo = self.semantic_actions.stack.types.pop()
+        return (argumento, tipo)
 
     def error(self, p):
         if p:

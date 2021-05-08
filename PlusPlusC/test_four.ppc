@@ -2,19 +2,17 @@ program Main;
 
 
 func foo(C int, D float) -> int {
-
-    while 1 < 2 {
-        var A int;
-        A = 1;
-    }
-    
+    var A int;
+    var B int;
+    A = 1;
+    A = 2;
+    B = 2;
 }
 
 main () {
     while 8 < 10 {
         var C int;
         C = 0;
-    }
-
-    foo(8, 9.50);
+    } 
+    foo(10, 19 * 76);
 }

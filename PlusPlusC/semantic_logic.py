@@ -15,15 +15,28 @@ class SemanticHandler:
     def __init__(self):
         self.cube = SemanticCube()
         self.stack = SemanticStack()
+        self.current_function = None
+
+    def initialize_program(self):
+        goto_main = Quadruple(Operator.GOTO, None, None, None)
+        self.quadruples.append(goto_main)
+        self.jumps_stack.append(0)
+
+    def set_goto_main(self):
+        main_jump = self.jumps_stack.pop()
+        self.set_final_jump(main_jump, len(self.quadruples))
 
     def set_init_func(self, func_name, t):
         self.functions_directory[func_name] = FunctionDirectoryRecord(
             name = func_name,
-            return_type= t
+            return_type= t,
+            address = len(self.quadruples)
         )
+        self.current_function = func_name
 
     def set_parametros(self, parametros):
         for (param_name, param_var_type) in parametros:
+            self.functions_directory[self.current_function].add_param((param_name, param_var_type))
             self.current_var_table[param_name] = VariableTableRecord(
                 name = param_name,
                 type = param_var_type
@@ -168,9 +181,64 @@ class SemanticHandler:
         else:
             raise Exception("Jump stack error")
 
+    def set_function_call(self, func_name, arguments):
+        function = self.functions_directory[func_name]
+        function_params_types = []
+        arguments_types = []
+
+        #Revisar funcion en el directorio de funciones
+        if function is None:
+            print("Funcion no se encuentra en directorio de funciones")
+        else:
+            #Revisar numero de parametros
+            if len(arguments) != len(function.params):
+                print("El numero de parametros que la funcion:", function.name, "requiere es incorrecta.")
+            else:
+                #Revisar el tipo de parametros
+                for param in (function.params):
+                    function_params_types.append(param[1])
+
+                for argument in arguments:
+                    arguments_types.append(argument[1])
+                    
+                if function_params_types != arguments_types:
+                    print("El tipo de parametros que la función espera es incorrecto.")
+                else:
+                    #Si todas las restricciones se cumplen
+                    quadruple = Quadruple(Operator.ERA, None, None, func_name)
+                    self.quadruples.append(quadruple)
+        
+                    arguments.reverse()
+                    for index, (argument, argument_type) in enumerate(arguments):
+                        param_quad = Quadruple(Operator.PARAMETER, argument, None, f"p{index}")
+                        self.quadruples.append(param_quad)
+
+                    gosub_quad = Quadruple(Operator.GOSUB, None, None, func_name)
+                    self.quadruples.append(gosub_quad)
+                    
+                    function_params_types.clear()
+                    arguments_types.clear()
+                    
+    def handle_return(self):
+        function = self.functions_directory[self.current_function]
+        operand = self.stack.operands.pop()
+        operand_type = self.stack.types.pop()
+
+        if function.return_type.name == operand_type.name:
+            quad = Quadruple(Operator.RETURN, None, None, operand)
+            self.quadruples.append(quad)
+        else:
+            print("El tipo de retorno que la función espera es incorrecto.")
+        
     # Método de debugging
     def print_quadruples(self):
         for index, quad in enumerate(self.quadruples):
             print(f"{index})", quad.operator, quad.temp_result)
 
-       
+    def end_func(self):
+        function = self.functions_directory[self.current_function]
+        if function is None:
+            print("Funcion no se encuentra en directorio de funciones")
+        else:
+            quadruple = Quadruple(Operator.ENDFUNC, None, None, None)
+            self.quadruples.append(quadruple)
