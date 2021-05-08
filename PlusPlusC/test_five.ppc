@@ -1,0 +1,11 @@
+program Main;
+
+
+func foo(C int, D float, A float) -> int {
+    var A int;
+    A = 1;
+}
+
+main () {
+    foo(10, 10.1, 10.2);
+}
