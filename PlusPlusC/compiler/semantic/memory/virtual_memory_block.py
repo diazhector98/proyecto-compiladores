@@ -6,6 +6,7 @@ Clase para manejar un bloque de memoria (e.g globales)
 class VirtualMemoryBlock:
     def __init__(self, start_address, size):
         partition_size = size // 4
+        self.start_address = start_address
         self.int_partition = VirtualMemoryBlockPartition(start_address, partition_size)
         self.float_partition = VirtualMemoryBlockPartition(start_address + partition_size, partition_size)
         self.char_partition = VirtualMemoryBlockPartition(start_address + partition_size * 2, partition_size)

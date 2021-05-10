@@ -3,6 +3,7 @@ from compiler.semantic.common.operators import Operator
 from compiler.semantic.cube.cube import SemanticCube
 from compiler.semantic.stack import SemanticStack
 from compiler.semantic.common.quadruple import Quadruple
+from compiler.semantic.memory.virtual_memory import VirtualMemory
 
 class SemanticHandler:
     temp_index = 0
@@ -17,6 +18,7 @@ class SemanticHandler:
         print(self.cube)
         self.stack = SemanticStack()
         self.current_function = None
+        self.memory = VirtualMemory()
 
     def initialize_program(self):
         goto_main = Quadruple(Operator.GOTO, None, None, None)
