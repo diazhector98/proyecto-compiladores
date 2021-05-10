@@ -1,6 +1,10 @@
 
 from compiler.semantic.memory.virtual_memory_block import VirtualMemoryBlock
 
+"""
+Clase para manejar la memoria virtual en el proceso de semántica.
+Guarda los bloques de memoria para globales, locales, temporales y constantes
+"""
 class VirtualMemory:
     def __init__(self):
         self.gloabl_block = VirtualMemoryBlock()

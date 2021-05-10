@@ -1,8 +1,14 @@
-
+from compiler.semantic.memory.virtual_memory_block_partition import VirtualMemoryBlockPartition
+"""
+Clase para manejar un bloque de memoria (e.g globales)
+"""
 
 class VirtualMemoryBlock:
     def __init__(self):
-        pass
+        self.int_partition = VirtualMemoryBlockPartition()
+        self.float_partition = VirtualMemoryBlockPartition()
+        self.char_partition = VirtualMemoryBlockPartition()
+        self.bool_partition = VirtualMemoryBlockPartition()
 
     def create_address(self, t):
         if t == 'INT':
@@ -15,13 +21,13 @@ class VirtualMemoryBlock:
             self.create_bool_address()
 
     def create_int_address():
-        pass
+        self.int_partition.create_address()
 
     def create_float_address():
-        pass
+        self.float_partition.create_address()
 
     def create_char_address():
-        pass
+        self.char_partition.create_address()
 
     def create_bool_address():
-        pass
+        self.bool_partition.create_address()
