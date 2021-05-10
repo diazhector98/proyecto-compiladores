@@ -1,5 +1,5 @@
-from compiler.semantic.DirectorioFunciones import VarType
-from compiler.semantic.SemanticCubeRules import INTEGER_RULES, FLOAT_RULES, CHAR_RULES, BOOL_RULES
+from compiler.semantic.common.DirectorioFunciones import VarType
+from compiler.semantic.cube.rules import INTEGER_RULES, FLOAT_RULES, CHAR_RULES, BOOL_RULES
 
 """
 Cubo semántico para verificar el uso de operadores y operandos

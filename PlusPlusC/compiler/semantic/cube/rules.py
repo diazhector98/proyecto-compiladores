@@ -1,5 +1,5 @@
-from compiler.semantic.DirectorioFunciones import VarType
-from compiler.semantic.operators import Operator
+from compiler.semantic.common.DirectorioFunciones import VarType
+from compiler.semantic.common.operators import Operator
 
 ERROR = "err"
 

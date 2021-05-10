@@ -1,7 +1,7 @@
 from sly import Parser
 from compiler.lexer.lexer import PlusPlusCLexer
-from compiler.semantic.semantic_logic import SemanticHandler
-from compiler.semantic.DirectorioFunciones import FuncReturnType, VarType
+from compiler.semantic.handler import SemanticHandler
+from compiler.semantic.common.DirectorioFunciones import FuncReturnType, VarType
 
 """ Falta while, for, hacer pruebas, eliminar recursividad """
 

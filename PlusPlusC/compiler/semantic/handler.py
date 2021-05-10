@@ -1,8 +1,8 @@
-from compiler.semantic.DirectorioFunciones import VariableTableRecord, VarType, FunctionDirectoryRecord
-from compiler.semantic.operators import Operator
-from compiler.semantic.SemanticCube import SemanticCube
-from compiler.semantic.semantic_stack import SemanticStack
-from compiler.semantic.quadruple import Quadruple
+from compiler.semantic.common.DirectorioFunciones import VariableTableRecord, VarType, FunctionDirectoryRecord
+from compiler.semantic.common.operators import Operator
+from compiler.semantic.cube.cube import SemanticCube
+from compiler.semantic.stack import SemanticStack
+from compiler.semantic.common.quadruple import Quadruple
 
 class SemanticHandler:
     temp_index = 0
