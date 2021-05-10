@@ -1,8 +1,8 @@
-from DirectorioFunciones import VariableTableRecord, VarType, FunctionDirectoryRecord
-from operators import Operator
-from SemanticCube import SemanticCube
-from semantic_stack import SemanticStack
-from quadruple import Quadruple
+from compiler.semantic.DirectorioFunciones import VariableTableRecord, VarType, FunctionDirectoryRecord
+from compiler.semantic.operators import Operator
+from compiler.semantic.SemanticCube import SemanticCube
+from compiler.semantic.semantic_stack import SemanticStack
+from compiler.semantic.quadruple import Quadruple
 
 class SemanticHandler:
     temp_index = 0
@@ -14,6 +14,7 @@ class SemanticHandler:
 
     def __init__(self):
         self.cube = SemanticCube()
+        print(self.cube)
         self.stack = SemanticStack()
         self.current_function = None
 

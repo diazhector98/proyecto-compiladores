@@ -1,5 +1,5 @@
-from DirectorioFunciones import VarType
-from SemanticCubeRules import INTEGER_RULES, FLOAT_RULES, CHAR_RULES, BOOL_RULES
+from compiler.semantic.DirectorioFunciones import VarType
+from compiler.semantic.SemanticCubeRules import INTEGER_RULES, FLOAT_RULES, CHAR_RULES, BOOL_RULES
 
 """
 Cubo semántico para verificar el uso de operadores y operandos
@@ -27,6 +27,7 @@ class SemanticCube:
         pass
 
     def __getitem__(self, first_operand):
+        print(first_operand)
         return self.cube[first_operand]
 
     

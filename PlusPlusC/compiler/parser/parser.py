@@ -1,10 +1,7 @@
-import sys
-sys.path.insert(0, '.')
-
 from sly import Parser
-from lexer import PlusPlusCLexer
-from semantic_logic import SemanticHandler
-from DirectorioFunciones import FuncReturnType, VarType
+from compiler.lexer.lexer import PlusPlusCLexer
+from compiler.semantic.semantic_logic import SemanticHandler
+from compiler.semantic.DirectorioFunciones import FuncReturnType, VarType
 
 """ Falta while, for, hacer pruebas, eliminar recursividad """
 
