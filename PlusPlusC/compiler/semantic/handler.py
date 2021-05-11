@@ -250,7 +250,7 @@ class SemanticHandler:
             left_operand = quad.left_operand
             right_operand = quad.right_operand
             result = quad.temp_result
-            print ("{:<12} {:<10} {:<10} {:<10}".format(operator.name, str(left_operand), str(right_operand), str(result)))
+            print ("{:<3} {:<12} {:<10} {:<10} {:<10}".format(index, operator.name, str(left_operand), str(right_operand), str(result)))
 
     def end_func(self):
         function = self.functions_directory[self.current_function]
