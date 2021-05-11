@@ -11,7 +11,7 @@ class SemanticHandler:
     current_var_table = dict()
     constants_table = dict()
     functions_directory = dict()
-    quadruples = []
+    quadruples: [Quadruple] = []
     jumps_stack = []
     current_function = None
 
@@ -245,7 +245,11 @@ class SemanticHandler:
     # Método de debugging
     def print_quadruples(self):
         for index, quad in enumerate(self.quadruples):
-            print(f"{index})", quad.operator, quad.temp_result)
+            operator = quad.operator
+            left_operand = quad.left_operand
+            right_operand = quad.right_operand
+            result = quad.temp_result
+            print ("{:<12} {:<10} {:<10} {:<10}".format(operator.name, str(left_operand), str(right_operand), str(result)))
 
     def end_func(self):
         function = self.functions_directory[self.current_function]
