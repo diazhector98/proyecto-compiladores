@@ -9,15 +9,15 @@ class SemanticHandler:
     temp_index = 0
     global_var_table = dict()   
     current_var_table = dict()
+    constants_table = dict()
     functions_directory = dict()
     quadruples = []
     jumps_stack = []
+    current_function = None
 
     def __init__(self):
         self.cube = SemanticCube()
-        print(self.cube)
         self.stack = SemanticStack()
-        self.current_function = None
         self.memory = VirtualMemory()
 
     def initialize_program(self):
@@ -54,15 +54,21 @@ class SemanticHandler:
     def consume_operator(self, operator):
         self.stack.push_operator(operator)
 
-    def consume_operand(self, operand, var_type=None):
-        if var_type == None:
-            try:
-                t = self.current_var_table[operand]
-                self.stack.push_operand(t.name, t.type)
-            except KeyError:
-                print("varibale", operand, "does not exist")
+    def consume_operand(self, operand, var_type=None, is_constant=False):
+        if is_constant:
+            self.consume_constant_operand(operand, var_type)
         else:
-            self.stack.push_operand(operand, var_type)
+            self.consume_var_operand(operand)
+
+    def consume_var_operand(self, operand):
+        try:
+            t = self.current_var_table[operand]
+            self.stack.push_operand(t.name, t.type)
+        except KeyError:
+            print("variable", operand, "does not exist")
+
+    def consume_constant_operand(self, operand, var_type):
+        self.stack.push_operand(operand, var_type)
 
     # Por lo pronto, solo guardamos el cuadruplo con el nombre de la variable
     def handle_read(self, id):

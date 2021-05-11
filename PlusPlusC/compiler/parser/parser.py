@@ -175,17 +175,17 @@ class PlusPlusCParser(Parser):
 
     @_('C_INTEGER')
     def constante(self, p):
-        self.semantic_actions.consume_operand(p[0], VarType.INT)
+        self.semantic_actions.consume_operand(p[0], VarType.INT, is_constant=True)
         pass
 
     @_('C_FLOAT')
     def constante(self, p):
-        self.semantic_actions.consume_operand(p[0], VarType.FLOAT)
+        self.semantic_actions.consume_operand(p[0], VarType.FLOAT, is_constant=True)
         pass
 
     @_('C_CHAR')
     def constante(self, p):
-        self.semantic_actions.consume_operand(p[0], VarType.CHAR)
+        self.semantic_actions.consume_operand(p[0], VarType.CHAR, is_constant=True)
         pass    
 
     @_('LT', 'GT', 'LTEQUAL', 'GTEQUAL', 'NOTEQUAL', 'EQUAL')
