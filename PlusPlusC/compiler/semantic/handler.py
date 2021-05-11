@@ -71,6 +71,7 @@ class SemanticHandler:
         constant_address = self.constants_table.get(constant)
         if not constant_address:
             constant_address = self.memory.create_constant_address(var_type)
+            self.constants_table[constant] = constant_address
         self.stack.push_operand(constant_address, var_type)
 
     # Por lo pronto, solo guardamos el cuadruplo con el nombre de la variable
