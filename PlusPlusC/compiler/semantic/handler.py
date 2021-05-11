@@ -36,8 +36,6 @@ class SemanticHandler:
             type = var_type,
             address = address
         )
-        # TODO: Borrar siguiente línea
-        self.set_variable(var_name, var_type)
 
     def set_init_func(self, func_name, t):
         self.functions_directory[func_name] = FunctionDirectoryRecord(
@@ -72,10 +70,23 @@ class SemanticHandler:
 
     def consume_var_operand(self, operand):
         try:
-            t = self.current_var_table[operand]
-            self.stack.push_operand(t.name, t.type)
-        except KeyError:
+            var = self.var_lookup(operand)
+            # TODO: En el futuro, todas deberían tener direcciones
+            if var.address:
+                self.stack.push_operand(var.address, var.type)
+            else:
+                print("varname", var.name)
+                self.stack.push_operand(var.name, var.type)
+        except Exception:
             print("variable", operand, "does not exist")
+
+    # Buscar variable en tabla de variables locales y globales
+    def var_lookup(self, var_name):
+        var = self.current_var_table.get(var_name)
+        if var:
+            return var
+        var = self.global_var_table[var_name]
+        return var
 
     def consume_constant_operand(self, constant, var_type):
         constant_address = self.constants_table.get(constant)
