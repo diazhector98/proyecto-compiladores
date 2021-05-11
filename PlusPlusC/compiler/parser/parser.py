@@ -22,7 +22,12 @@ class PlusPlusCParser(Parser):
 
     @_('inicio_programa ";" globals funciones main')
     def program(self, p):
+        print("Cuádruplos")
+        print("--------------")
         self.semantic_actions.print_quadruples()
+        print("Constantes")
+        print("--------------")
+        self.semantic_actions.print_constants_table()
 
     @_('PROGRAM ID')
     def inicio_programa(self, p):

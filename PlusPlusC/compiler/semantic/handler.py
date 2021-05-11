@@ -252,6 +252,11 @@ class SemanticHandler:
             result = quad.temp_result
             print ("{:<3} {:<12} {:<10} {:<10} {:<10}".format(index, operator.name, str(left_operand), str(right_operand), str(result)))
 
+    def print_constants_table(self):
+        for key in self.constants_table:
+            address = self.constants_table[key]
+            print ("{:<7} {:<12}".format(address, key))
+
     def end_func(self):
         function = self.functions_directory[self.current_function]
         if function is None:
