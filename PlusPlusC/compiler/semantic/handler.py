@@ -75,7 +75,6 @@ class SemanticHandler:
             if var.address:
                 self.stack.push_operand(var.address, var.type)
             else:
-                print("varname", var.name)
                 self.stack.push_operand(var.name, var.type)
         except Exception:
             print("variable", operand, "does not exist")
