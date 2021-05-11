@@ -8,7 +8,7 @@ class PlusPlusCLexer(Lexer):
         ID,
         PROGRAM,
         MAIN,
-        GLOBALS,
+        GLOBAL,
 
         #For variables
         VAR,
@@ -65,7 +65,7 @@ class PlusPlusCLexer(Lexer):
     ID['else'] = ELSE
     ID['print'] = PRINT
     ID['program'] = PROGRAM
-    ID['globals'] = GLOBALS
+    ID['global'] = GLOBAL
     ID['var'] = VAR
     ID['int'] = INT_TYPE
     ID['float'] = FLOAT_TYPE

@@ -29,6 +29,16 @@ class SemanticHandler:
         main_jump = self.jumps_stack.pop()
         self.set_final_jump(main_jump, len(self.quadruples))
 
+    def add_global(self, var_name, var_type):
+        address = self.memory.create_global_address(var_type)
+        self.global_var_table[var_name] = VariableTableRecord(
+            name = var_name,
+            type = var_type,
+            address = address
+        )
+        # TODO: Borrar siguiente línea
+        self.set_variable(var_name, var_type)
+
     def set_init_func(self, func_name, t):
         self.functions_directory[func_name] = FunctionDirectoryRecord(
             name = func_name,
@@ -255,6 +265,11 @@ class SemanticHandler:
     def print_constants_table(self):
         for key in self.constants_table:
             address = self.constants_table[key]
+            print ("{:<7} {:<12}".format(address, key))
+
+    def print_globals_table(self):
+        for key in self.global_var_table:
+            address = self.global_var_table[key].address
             print ("{:<7} {:<12}".format(address, key))
 
     def end_func(self):

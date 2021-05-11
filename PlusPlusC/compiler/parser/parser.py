@@ -25,6 +25,9 @@ class PlusPlusCParser(Parser):
         print("Cuádruplos")
         print("--------------")
         self.semantic_actions.print_quadruples()
+        print("Globales")
+        print("--------------")
+        self.semantic_actions.print_globals_table()
         print("Constantes")
         print("--------------")
         self.semantic_actions.print_constants_table()
@@ -37,9 +40,9 @@ class PlusPlusCParser(Parser):
     def globals(self, p):
         pass
 
-    @_('GLOBALS ID tipo ";"')
+    @_('GLOBAL ID tipo ";"')
     def global_aux(self, p):
-        self.semantic_actions.set_variable(p.ID, VarType(p.tipo))
+        self.semantic_actions.add_global(p.ID, VarType(p.tipo))
         pass
     
     @_('INT_TYPE', 'FLOAT_TYPE', 'CHAR_TYPE', 'BOOL_TYPE')

@@ -1,5 +1,7 @@
 program Main;
 
+global G1 int;
+global G2 float;
 
 func foo(C int, D float, A float) -> int {
     var A int;

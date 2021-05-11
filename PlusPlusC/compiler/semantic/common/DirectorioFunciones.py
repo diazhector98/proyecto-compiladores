@@ -40,3 +40,4 @@ type: tipo de la variable
 class VariableTableRecord:
     name: str
     type: VarType
+    address: int = None
