@@ -13,7 +13,7 @@ class FileReader:
         constants_text = contents[1]
         quadruples_text = contents[2]
 
-        self.process_functions_text(functions_text)
+        functions = self.process_functions_text(functions_text)
         constants_table = self.process_constants_text(constants_text)
         quadruples = self.process_quadruples_text(quadruples_text)
     
