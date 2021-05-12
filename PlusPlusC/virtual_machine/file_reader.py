@@ -13,9 +13,9 @@ class FileReader:
         constants_text = contents[1]
         quadruples_text = contents[2]
 
-        functions = self.process_functions_text(functions_text)
-        constants_table = self.process_constants_text(constants_text)
-        quadruples = self.process_quadruples_text(quadruples_text)
+        self.functions = self.process_functions_text(functions_text)
+        self.constants_table = self.process_constants_text(constants_text)
+        self.quadruples = self.process_quadruples_text(quadruples_text)
     
     def process_functions_text(self, text):
         lines = self.split_text(text)
@@ -46,5 +46,8 @@ class FileReader:
         lines = text.split('\n')
         lines = [line for line in lines if line != '']
         return lines
+
+    def __iter__(self):
+        return iter((self.functions, self.constants_table, self.quadruples))
         
     
