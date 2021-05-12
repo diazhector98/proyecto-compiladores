@@ -29,6 +29,14 @@ class FunctionDirectoryRecord:
     def add_param(self, param):
         self.params.append(param)
     address: int = None
+    temp_var_int_size: int = 0
+    temp_var_float_size: int = 0
+    temp_var_char_size: int = 0
+    temp_var_bool_size: int = 0
+    local_var_int_size: int = 0
+    local_var_float_size: int = 0
+    local_var_char_size: int = 0
+    local_var_bool_size: int = 0
 
 """
 Clase para guardar datos de una registro de variable.
