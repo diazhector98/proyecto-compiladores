@@ -54,9 +54,11 @@ class SemanticHandler:
                 )
 
     def set_variable(self, var_name, var_type):
+        address = self.memory.create_local_address(var_type)
         self.current_var_table[var_name] = VariableTableRecord(
             name = var_name,
-            type = var_type
+            type = var_type,
+            address = address
             )
     
     def consume_operator(self, operator):
@@ -108,9 +110,11 @@ class SemanticHandler:
 
     def create_temp_var(self, vtype):
         name = "temp_" + str(self.temp_index)
+        address = self.memory.create_temporal_address(vtype)
         self.current_var_table[name] = VariableTableRecord(
             name = name,
-            type = vtype
+            type = vtype,
+            address = address
         )
         self.temp_index = self.temp_index + 1
         return name
@@ -125,7 +129,8 @@ class SemanticHandler:
             cube_result = self.cube[right_operand_type][left_operand_type][operator]
             if cube_result != "err":
                 temp = self.create_temp_var(cube_result)
-                quadruple = Quadruple(Operator(operator), left_operand, right_operand, temp)
+                temp_address = self.current_var_table[temp].address                
+                quadruple = Quadruple(Operator(operator), left_operand, right_operand, temp_address)
                 self.quadruples.append(quadruple)
                 self.consume_operand(temp, cube_result)
             else:
