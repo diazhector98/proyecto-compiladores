@@ -129,7 +129,19 @@ class SemanticHandler:
             cube_result = self.cube[right_operand_type][left_operand_type][operator]
             if cube_result != "err":
                 temp = self.create_temp_var(cube_result)
-                temp_address = self.current_var_table[temp].address                
+                temp_address = self.current_var_table[temp].address
+                temp_type = self.current_var_table[temp].type
+
+                #set el count de temporales dependiendo el tipo
+                if temp_type == VarType.INT:
+                    self.functions_directory[self.current_function].temp_var_int_size += 1
+                elif temp_type == VarType.FLOAT:
+                    self.functions_directory[self.current_function].temp_var_float_size += 1
+                elif temp_type == VarType.CHAR:
+                    self.functions_directory[self.current_function].temp_var_char_size += 1
+                elif temp_type == VarType.BOOL:
+                    self.functions_directory[self.current_function].temp_var_bool_size += 1
+
                 quadruple = Quadruple(Operator(operator), left_operand, right_operand, temp_address)
                 self.quadruples.append(quadruple)
                 self.consume_operand(temp, cube_result)
