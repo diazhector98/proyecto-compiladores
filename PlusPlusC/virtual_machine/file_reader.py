@@ -40,6 +40,7 @@ class FileReader:
         lines = self.split_text(text)
         for l in lines:
             quadruple = Quadruple(l)
+            print(quadruple)
 
     def split_text(self, text):
         lines = text.split('\n')
