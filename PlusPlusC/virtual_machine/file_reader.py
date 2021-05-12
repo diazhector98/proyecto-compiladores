@@ -1,4 +1,5 @@
 from virtual_machine.common.quadruple import Quadruple
+from virtual_machine.common.function import Function
 
 class FileReader:
     def __init__(self, filename):
@@ -18,8 +19,8 @@ class FileReader:
     
     def process_functions_text(self, text):
         lines = self.split_text(text)
-        for l in lines:
-            pass
+        functions = [Function(l) for l in lines]
+        return functions
 
     def process_constants_text(self, text):
         lines = self.split_text(text)
