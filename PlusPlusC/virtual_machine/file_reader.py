@@ -1,4 +1,4 @@
-
+from virtual_machine.common.quadruple import Quadruple
 
 class FileReader:
     def __init__(self, filename):
@@ -17,13 +17,12 @@ class FileReader:
         self.process_quadruples_text(quadruples_text)
     
     def process_functions_text(self, text):
-        lines = text.split('\n')
+        lines = self.split_text(text)
         for l in lines:
             pass
 
     def process_constants_text(self, text):
-        lines = text.split('\n')
-        lines = [line for line in lines if line != '']
+        lines = self.split_text(text)
         table = dict()
         def process_line(line):
             [string_address, string_value] = line.split(' ')
@@ -38,8 +37,13 @@ class FileReader:
         return table
 
     def process_quadruples_text(self, text):
-        lines = text.split('\n')
+        lines = self.split_text(text)
         for l in lines:
-            pass
+            quadruple = Quadruple(l)
+
+    def split_text(self, text):
+        lines = text.split('\n')
+        lines = [line for line in lines if line != '']
+        return lines
         
     
