@@ -302,7 +302,17 @@ class SemanticHandler:
     def end_func(self):
         function = self.functions_directory[self.current_function]
         if function is None:
-            print("Funcion no se encuentra en directorio de funciones")
-        else:
-            quadruple = Quadruple(Operator.ENDFUNC, None, None, None)
-            self.quadruples.append(quadruple)
+            raise Exception("Funcion no se encuentra en directorio de funciones")
+        quadruple = Quadruple(Operator.ENDFUNC, None, None, None)
+        self.quadruples.append(quadruple)
+        for var_name in self.current_var_table:
+            local_type = self.current_var_table[var_name].type
+            #set el count de locales dependiendo el tipo
+            if local_type == VarType.INT:
+                self.functions_directory[self.current_function].local_var_int_size += 1
+            elif local_type == VarType.FLOAT:
+                self.functions_directory[self.current_function].local_var_float_size += 1
+            elif local_type == VarType.CHAR:
+                self.functions_directory[self.current_function].local_var_char_size += 1
+            elif local_type == VarType.BOOL:
+                self.functions_directory[self.current_function].local_var_bool_size += 1
