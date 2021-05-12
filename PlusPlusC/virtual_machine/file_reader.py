@@ -14,7 +14,7 @@ class FileReader:
 
         self.process_functions_text(functions_text)
         constants_table = self.process_constants_text(constants_text)
-        self.process_quadruples_text(quadruples_text)
+        quadruples = self.process_quadruples_text(quadruples_text)
     
     def process_functions_text(self, text):
         lines = self.split_text(text)
@@ -38,9 +38,8 @@ class FileReader:
 
     def process_quadruples_text(self, text):
         lines = self.split_text(text)
-        for l in lines:
-            quadruple = Quadruple(l)
-            print(quadruple)
+        quadruples = [Quadruple(l) for l in lines]
+        return quadruples
 
     def split_text(self, text):
         lines = text.split('\n')
