@@ -318,3 +318,4 @@ class SemanticHandler:
                 self.functions_directory[self.current_function].local_var_char_size += 1
             elif local_type == VarType.BOOL:
                 self.functions_directory[self.current_function].local_var_bool_size += 1
+        self.memory.reset_local_and_temp_memory()

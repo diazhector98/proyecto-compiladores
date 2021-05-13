@@ -8,11 +8,11 @@ Guarda los bloques de memoria para globales, locales, temporales y constantes
 class VirtualMemory:
     def __init__(self):
         memory_size = 20000
-        block_size = memory_size // 4
-        self.gloabl_block = VirtualMemoryBlock(0, block_size)
-        self.local_block = VirtualMemoryBlock(block_size, block_size)
-        self.temp_block = VirtualMemoryBlock(block_size * 2, block_size)
-        self.constants_block = VirtualMemoryBlock(block_size * 3, block_size)
+        self.block_size = memory_size // 4
+        self.gloabl_block = VirtualMemoryBlock(0, self.block_size)
+        self.local_block = VirtualMemoryBlock(self.block_size, self.block_size)
+        self.temp_block = VirtualMemoryBlock(self.block_size * 2, self.block_size)
+        self.constants_block = VirtualMemoryBlock(self.block_size * 3, self.block_size)
 
     def create_global_address(self, type):
         return self.gloabl_block.create_address(type)
@@ -25,3 +25,7 @@ class VirtualMemory:
 
     def create_constant_address(self, type):
         return self.constants_block.create_address(type)
+
+    def reset_local_and_temp_memory(self):
+        self.local_block = VirtualMemoryBlock(self.block_size, self.block_size)
+        self.temp_block = VirtualMemoryBlock(self.block_size * 2, self.block_size)
