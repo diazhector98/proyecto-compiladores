@@ -70,7 +70,6 @@ class SemanticHandler:
         if is_constant:
             self.consume_constant_operand(operand, var_type)
         else:
-            #print("2 aqui", operand)
             self.consume_var_operand(operand)
 
     def consume_var_operand(self, operand):
