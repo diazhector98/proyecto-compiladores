@@ -47,10 +47,12 @@ class SemanticHandler:
 
     def set_parametros(self, parametros):
         for (param_name, param_var_type) in parametros:
+            address = self.memory.create_local_address(param_var_type)
             self.functions_directory[self.current_function].add_param((param_name, param_var_type))
             self.current_var_table[param_name] = VariableTableRecord(
                 name = param_name,
-                type = param_var_type
+                type = param_var_type,
+                address = address
                 )
 
     def set_variable(self, var_name, var_type):
@@ -68,6 +70,7 @@ class SemanticHandler:
         if is_constant:
             self.consume_constant_operand(operand, var_type)
         else:
+            #print("2 aqui", operand)
             self.consume_var_operand(operand)
 
     def consume_var_operand(self, operand):
