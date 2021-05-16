@@ -1,6 +1,7 @@
 from sly import Parser
 from compiler.lexer.lexer import PlusPlusCLexer
 from compiler.semantic.handler import SemanticHandler
+from compiler.semantic.generator import OutputGenerator
 from compiler.semantic.common.DirectorioFunciones import FuncReturnType, VarType
 
 """ Falta while, for, hacer pruebas, eliminar recursividad """
@@ -31,6 +32,8 @@ class PlusPlusCParser(Parser):
         print("Constantes")
         print("--------------")
         self.semantic_actions.print_constants_table()
+        output_generator = OutputGenerator(self.semantic_actions)
+        output_generator.generate()
 
     @_('PROGRAM ID')
     def inicio_programa(self, p):
