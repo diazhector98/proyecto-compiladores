@@ -6,14 +6,14 @@ foo 1 [1,1,0,0] [3,2,0,0]
 16250 10.1
 16251 10.2
 %%
-GOTO         None       None       6         
+GOTO         -1         -1         6         
 MULTIPLY     15000      5000       10000     
-ASSIGN       10000      None       5001      
+ASSIGN       10000      -1         5001      
 MULTIPLY     15001      1250       11250     
-RETURN       None       None       11250     
-ENDFUNC      None       None       None      
-ERA          None       None       foo       
-PARAMETER    15002      None       p0        
-PARAMETER    16250      None       p1        
-PARAMETER    16251      None       p2        
-GOSUB        None       None       foo       
+RETURN       -1         -1         11250     
+ENDFUNC      -1         -1         -1        
+ERA          -1         -1         foo       
+PARAMETER    15002      -1         p0        
+PARAMETER    16250      -1         p1        
+PARAMETER    16251      -1         p2        
+GOSUB        -1         -1         foo       
