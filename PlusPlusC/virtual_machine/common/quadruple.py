@@ -12,8 +12,7 @@ class Quadruple:
         self.process_string_elements()
 
     def process_string_elements(self):
-        [str_index, str_operator, str_left_operand, str_right_operand, str_result] = self.string_elements
-        self.index = int(str_index)
+        [str_operator, str_left_operand, str_right_operand, str_result] = self.string_elements
         self.operator = str_operator
         self.left_operand = int(str_left_operand)
         self.right_operand = int(str_right_operand)

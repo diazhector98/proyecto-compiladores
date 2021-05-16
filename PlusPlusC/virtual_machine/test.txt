@@ -8,13 +8,13 @@ Main 13 [2,3,4,5] [2,3,4,5]
 16250 10.1
 16251 10.2
 %%
-0   GOTO         -1       -1       5         
-1   ASSIGN       15000      -1       local_0         
-2   MULTIPLY     15001      1250       temp_0    
-3   RETURN       -1       -1       temp_0    
-4   ENDFUNC      -1       -1       -1      
-5   ERA          -1       -1       foo       
-6   PARAMETER    15002      -1       local_1        
-7   PARAMETER    16250      -1       local_2        
-8   PARAMETER    16251      -1       local_3        
-9   GOSUB        -1       -1       foo   
+GOTO         -1       -1       5         
+ASSIGN       15000      -1       local_0         
+MULTIPLY     15001      1250       temp_0    
+RETURN       -1       -1       temp_0    
+ENDFUNC      -1       -1       -1      
+ERA          -1       -1       foo       
+PARAMETER    15002      -1       local_1        
+PARAMETER    16250      -1       local_2        
+PARAMETER    16251      -1       local_3        
+GOSUB        -1       -1       foo   
