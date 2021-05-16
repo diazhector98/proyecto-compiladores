@@ -22,7 +22,11 @@ class OutputGenerator:
         return ""
 
     def get_constants_section(self) -> str:
-        return ""
+        result = ""
+        for constant in self.constants:
+            address = self.constants[constant]
+            result = result + str(address) + " " + str(constant) + "\n"
+        return result
 
     def get_quadruples_section(self) -> str:
         result = ""
