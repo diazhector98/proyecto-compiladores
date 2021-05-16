@@ -19,7 +19,11 @@ class OutputGenerator:
         f.write(quadruples_section)
 
     def get_functions_section(self) -> str:
-        return ""
+        result = ""
+        for function_name in self.functions:
+            function = self.functions[function_name]
+            result = result + str(function) + "\n"
+        return result
 
     def get_constants_section(self) -> str:
         result = ""
