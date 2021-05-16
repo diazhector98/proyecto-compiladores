@@ -11,7 +11,7 @@ class OutputGenerator:
         functions_section = self.get_functions_section()
         constants_section = self.get_constants_section()
         quadruples_section = self.get_quadruples_section()
-        separator = "%%"
+        separator = "%%\n"
         f.write(functions_section)
         f.write(separator)
         f.write(constants_section)
@@ -25,4 +25,7 @@ class OutputGenerator:
         return ""
 
     def get_quadruples_section(self) -> str:
-        return ""
+        result = ""
+        for quad in self.quadruples:
+            result = result + str(quad) + "\n"
+        return result
