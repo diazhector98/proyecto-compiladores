@@ -285,11 +285,7 @@ class SemanticHandler:
     # Método de debugging
     def print_quadruples(self):
         for index, quad in enumerate(self.quadruples):
-            operator = quad.operator
-            left_operand = quad.left_operand
-            right_operand = quad.right_operand
-            result = quad.temp_result
-            print ("{:<3} {:<12} {:<10} {:<10} {:<10}".format(index, operator.name, str(left_operand), str(right_operand), str(result)))
+            print(index, str(quad))
 
     def print_constants_table(self):
         for key in self.constants_table:
