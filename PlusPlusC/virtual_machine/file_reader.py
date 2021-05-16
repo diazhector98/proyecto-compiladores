@@ -28,8 +28,18 @@ class FileReader:
         def process_line(line):
             [string_address, string_value] = line.split(' ')
             address = int(string_address)
-            # TODO: Pensar en como determinar tipo de valor (por ahora convierte todos a float)
-            value = float(string_value)
+            
+            if address >= 15000 and address < 16250:
+                value = int(string_value)
+            elif address >= 1650 and address < 17500:
+                value = float(string_value)
+            elif address >= 17500 and address < 18750:
+                value = str(string_value)
+            elif address >= 18750 and address <= 20000:
+                value = bool(string_value)
+            else:
+                print("La direccion de memoria: ", string_address, "que corresponde al valor: ", value, "no es valida.")
+
             table[address] = value
 
         for l in lines:
