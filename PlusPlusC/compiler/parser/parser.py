@@ -208,9 +208,20 @@ class PlusPlusCParser(Parser):
         array_index = p.uso_arreglo[1]
         self.semantic_actions.consume_operand(array_name, index=array_index)
 
+    @_('uso_matriz')
+    def factor(self, p):
+        matrix_name = p.uso_matriz[0]
+        matrix_row_index = p.uso_matriz[1]
+        matrix_column_index = p.uso_matriz[2]
+        self.semantic_actions.consume_operand(matrix_name, index=(matrix_row_index, matrix_column_index))
+
     @_('ID "[" indice_uso_arreglo "]" ')
     def uso_arreglo(self, p):
         return (p.ID, p.indice_uso_arreglo)
+
+    @_('ID "[" indice_uso_arreglo "]" "[" indice_uso_arreglo "]" ')
+    def uso_matriz(self, p):
+        return (p.ID, p[2], p[5])
 
     @_('exp')
     def indice_uso_arreglo(self, p):

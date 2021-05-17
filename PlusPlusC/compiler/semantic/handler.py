@@ -67,6 +67,8 @@ class SemanticHandler:
         self.stack.push_operator(operator)
 
     def consume_operand(self, operand, var_type=None, is_constant=False, index=None):
+        # Index para arreglos y matrices
+        print(index)
         if is_constant:
             self.consume_constant_operand(operand, var_type)
         else:
