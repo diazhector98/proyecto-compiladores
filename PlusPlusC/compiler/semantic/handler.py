@@ -66,13 +66,16 @@ class SemanticHandler:
     def consume_operator(self, operator):
         self.stack.push_operator(operator)
 
-    def consume_operand(self, operand, var_type=None, is_constant=False):
+    def consume_operand(self, operand, var_type=None, is_constant=False, index=None):
         if is_constant:
             self.consume_constant_operand(operand, var_type)
         else:
-            self.consume_var_operand(operand)
+            self.consume_var_operand(operand, index=index)
 
-    def consume_var_operand(self, operand):
+    def consume_var_operand(self, operand, index=None):
+        if index != None:
+            # Hacer algo para los arreglos
+            pass
         try:
             var = self.var_lookup(operand)
             # TODO: En el futuro, todas deberían tener direcciones

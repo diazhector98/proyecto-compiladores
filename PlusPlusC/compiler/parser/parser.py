@@ -202,6 +202,22 @@ class PlusPlusCParser(Parser):
     def factor(self, p):
         self.semantic_actions.consume_operand(p[0])
 
+    @_('uso_arreglo')
+    def factor(self, p):
+        array_name = p.uso_arreglo[0]
+        array_index = p.uso_arreglo[1]
+        self.semantic_actions.consume_operand(array_name, index=array_index)
+
+    @_('ID "[" indice_uso_arreglo "]" ')
+    def uso_arreglo(self, p):
+        return (p.ID, p.indice_uso_arreglo)
+
+    @_('exp')
+    def indice_uso_arreglo(self, p):
+        operando = self.semantic_actions.stack.operands.pop()
+        tipo = self.semantic_actions.stack.types.pop()
+        return (operando, tipo)
+
     @_('C_INTEGER')
     def constante(self, p):
         self.semantic_actions.consume_operand(p[0], VarType.INT, is_constant=True)
