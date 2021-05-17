@@ -154,13 +154,20 @@ class PlusPlusCParser(Parser):
     def declaracion_variable(self, p):
         self.semantic_actions.set_variable(p.ID, VarType(p.tipo))
 
-    @_('VAR ID "[" constante "]" tipo ";"')
+    @_('VAR ID "[" indice_arreglo "]" tipo ";"')
     def declaracion_arreglo(self, p):
-        self.semantic_actions.set_variable(p.ID, VarType(p.tipo))
+        rows = p[3]
+        self.semantic_actions.set_variable(p.ID, VarType(p.tipo), rows=rows)
 
-    @_('VAR ID "[" constante "]" "[" constante "]" tipo ";"')
+    @_('VAR ID "[" indice_arreglo "]" "[" indice_arreglo "]" tipo ";"')
     def declaracion_matriz(self, p):
-        self.semantic_actions.set_variable(p.ID, VarType(p.tipo))
+        rows = p[3]
+        columns = p[6]
+        self.semantic_actions.set_variable(p.ID, VarType(p.tipo), rows=rows, columns=columns)
+
+    @_('C_INTEGER')
+    def indice_arreglo(self, p):
+        return p[0]
 
     #Expresion
     @_('exp', 'llamada_funcion')

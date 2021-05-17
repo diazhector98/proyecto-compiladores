@@ -5,8 +5,8 @@ global G2 float;
 
 func foo(C int, D float, A float) -> float {
     var A int;
-    var B[5] int;
-    var C[5][10] int;
+    var B[6] int;
+    var C[4][10] int;
     A = 1 * C;
     return 5 * G2;
 }
