@@ -113,7 +113,7 @@ class PlusPlusCParser(Parser):
         pass
 
     #Estatuto
-    @_('escritura', 'lectura', 'retorno', 'asignacion', 'ciclo_while', 'condicion', 'declaracion_asignacion', 'llamada_funcion ";"')
+    @_('escritura', 'lectura', 'retorno', 'asignacion', 'ciclo_while', 'condicion', 'declaracion', 'llamada_funcion ";"')
     def estatuto(self, p):
         pass
 
@@ -146,10 +146,21 @@ class PlusPlusCParser(Parser):
         pass
 
     #Declaracion
-    @_('VAR ID tipo ";"')
-    def declaracion_asignacion(self, p):
-        self.semantic_actions.set_variable(p.ID, VarType(p.tipo))
+    @_('declaracion_variable', 'declaracion_arreglo', 'declaracion_matriz')
+    def declaracion(self, p):
         pass
+
+    @_('VAR ID tipo ";"')
+    def declaracion_variable(self, p):
+        self.semantic_actions.set_variable(p.ID, VarType(p.tipo))
+
+    @_('VAR ID "[" constante "]" tipo ";"')
+    def declaracion_arreglo(self, p):
+        self.semantic_actions.set_variable(p.ID, VarType(p.tipo))
+
+    @_('VAR ID "[" constante "]" "[" constante "]" tipo ";"')
+    def declaracion_matriz(self, p):
+        self.semantic_actions.set_variable(p.ID, VarType(p.tipo))
 
     #Expresion
     @_('exp', 'llamada_funcion')
@@ -187,7 +198,6 @@ class PlusPlusCParser(Parser):
     @_('C_INTEGER')
     def constante(self, p):
         self.semantic_actions.consume_operand(p[0], VarType.INT, is_constant=True)
-        pass
 
     @_('C_FLOAT')
     def constante(self, p):

@@ -1,19 +1,19 @@
-foo 1 [1,1,0,0] [3,2,0,0]
+foo 1 [1,1,0,0] [4,2,0,0]
 %%
-15000 1
-15001 5
-15002 10
+15000 5
+15001 10
+15002 1
 16250 10.1
 16251 10.2
 %%
 GOTO         -1         -1         6         
-MULTIPLY     15000      5000       10000     
-ASSIGN       10000      -1         5001      
-MULTIPLY     15001      1250       11250     
-RETURN       -1         -1         11250     
+MULTIPLY     15002      5003       10000     
+ASSIGN       15000      -1         15000     
+MULTIPLY     15000      1249       11249     
+RETURN       -1         -1         11249     
 ENDFUNC      -1         -1         -1        
 ERA          -1         -1         foo       
-PARAMETER    15002      -1         p0        
+PARAMETER    15001      -1         p0        
 PARAMETER    16250      -1         p1        
 PARAMETER    16251      -1         p2        
 GOSUB        -1         -1         foo       
