@@ -54,3 +54,4 @@ class VariableTableRecord:
     name: str
     type: VarType
     address: int = None
+    dimensions: (int, int) = (None, None)
