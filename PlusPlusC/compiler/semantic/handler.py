@@ -60,7 +60,8 @@ class SemanticHandler:
         self.current_var_table[var_name] = VariableTableRecord(
             name = var_name,
             type = var_type,
-            address = address
+            address = address,
+            dimensions = (rows, columns)
             )
     
     def consume_operator(self, operator):
