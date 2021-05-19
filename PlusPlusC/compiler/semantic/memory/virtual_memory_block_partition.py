@@ -10,7 +10,7 @@ class VirtualMemoryBlockPartition:
         self.current_address = start_address
         self.end_address = start_address + size
 
-    def create_address(self):
+    def create_address(self, addressesBlock=1):
         address = self.current_address
-        self.current_address += 1
+        self.current_address += addressesBlock
         return address
