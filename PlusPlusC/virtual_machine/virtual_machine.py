@@ -25,4 +25,10 @@ class VirtualMachine:
             if operator == Operator.READ:
                 capture = input("Waiting input: ")
                 self.memory.write(result, capture)
+            if operator == Operator.SUM:
+                left_operand_value = self.memory.read(left_operand)
+                right_operand_value = self.memory.read(right_operand)
+                operation_outcome = left_operand_value + right_operand_value
+                self.memory.write(result, operation_outcome)
+
             

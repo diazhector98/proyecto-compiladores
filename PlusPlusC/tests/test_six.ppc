@@ -10,4 +10,9 @@ main () {
     D = 54;
     print(D);
     input(D);
+    var F int;
+    input(F);
+    var G int;
+    G = F + D;
+    print(G);
 }
