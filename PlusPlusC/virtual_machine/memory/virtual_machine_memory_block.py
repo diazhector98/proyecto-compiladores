@@ -37,12 +37,12 @@ class VirtualMachineMemoryBlock:
         elif block_type == BlockType.TEMP:
             if address >= 10000 and address < 11250:
                 self.write_int_address(address - 10000, value)
-            elif address >= 12250 and address < 13500:
-                self.write_float_address(address - 12250, value)  
-            elif address >= 13500 and address < 14750:
-                self.write_char_address(address - 13500, value)
-            elif address >= 14750 and address < 15000:
-                self.write_bool_address(address - 14750, value)  
+            elif address >= 11250 and address < 12500:
+                self.write_float_address(address - 11250, value)  
+            elif address >= 12500 and address < 13750:
+                self.write_char_address(address - 12500, value)
+            elif address >= 13750 and address < 15000:
+                self.write_bool_address(address - 13750, value)  
             else: 
                 print("La direccion temporal a la que se desea accesar es erronea.")
             
@@ -90,12 +90,12 @@ class VirtualMachineMemoryBlock:
         elif block_type == BlockType.TEMP:
             if address >= 10000 and address < 11250:
                 return self.read_int_address(address - 10000)
-            elif address >= 12250 and address < 13500:
-                return self.read_float_address(address - 12250)  
-            elif address >= 13500 and address < 14750:
-                return self.read_char_address(address - 13500)
-            elif address >= 14750 and address < 15000:
-                return self.read_bool_address(address - 14750)  
+            elif address >= 11250 and address < 12500:
+                return self.read_float_address(address - 11250)  
+            elif address >= 12500 and address < 13750:
+                return self.read_char_address(address - 12500)
+            elif address >= 13750 and address < 15000:
+                return self.read_bool_address(address - 13750)  
             else: 
                 print("La direccion temporal que desea leer es erronea.")
             

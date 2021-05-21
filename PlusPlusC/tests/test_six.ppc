@@ -15,4 +15,7 @@ main () {
     var G int;
     G = F * D;
     print(G);
+    var lolz bool;
+    lolz = 10 > 20;
+    print(lolz);
 }

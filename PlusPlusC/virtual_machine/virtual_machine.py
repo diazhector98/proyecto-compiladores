@@ -19,6 +19,9 @@ class VirtualMachine:
             if self.is_arithmetic_operator(operator):
                 self.handle_arithmetic_operator(quadruple)
 
+            if self.is_boolean_operator(operator):
+                self.handle_boolean_operator(quadruple)
+
             if operator == Operator.ASSIGN:
                 value = self.memory.read(left_operand)
                 self.memory.write(result, value)
@@ -54,5 +57,30 @@ class VirtualMachine:
             operation_outcome = right_operand_value / left_operand_value
             self.memory.write(result, operation_outcome)
 
+    def is_boolean_operator(self, operator):
+        return operator in [
+            Operator.LT, 
+            Operator.GT, 
+            Operator.LTE,
+            Operator.GTE,
+            Operator.EQUAL,
+            Operator.NE,
+            Operator.AND,
+            Operator.OR
+        ]
+
+    def handle_boolean_operator(self, quadruple):
+        operator = quadruple.operator
+        left_operand = quadruple.left_operand
+        right_operand = quadruple.right_operand
+        result = quadruple.result
+
+        left_operand_value = self.memory.read(left_operand)
+        right_operand_value = self.memory.read(right_operand)
+
+        if operator == Operator.GT:
+            operation_outcome = left_operand_value > right_operand_value
+        
+        self.memory.write(result, operation_outcome)
 
             
