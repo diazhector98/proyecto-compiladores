@@ -18,5 +18,8 @@ class VirtualMachine:
 
             if operator == Operator.ASSIGN:
                 value = self.memory.read(left_operand)
+                self.memory.write(result, value)
+            if operator == Operator.PRINT:
+                value = self.memory.read(result)
                 print(value)
             

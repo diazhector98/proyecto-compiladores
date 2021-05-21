@@ -17,7 +17,10 @@ class Quadruple:
         self.left_operand = int(str_left_operand)
         self.right_operand = int(str_right_operand)
         # TODO: Manejar todos resultados como ints o averiguar como manejar nombres de funciones
-        self.result = str_result
+        try:
+            self.result = int(str_result)
+        except Exception:
+            self.result = str_result
 
     def __str__(self):
         return "{:<12} {:<7} {:<7} {:<7}".format(self.operator.name, self.left_operand, self.right_operand, self.result)
