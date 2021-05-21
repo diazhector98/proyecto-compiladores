@@ -14,47 +14,47 @@ class VirtualMachineMemoryBlock:
             if address >= 0 and address < 1250:
                 self.write_int_address(address, value)
             elif address >= 1250 and address < 2500:
-                self.write_float_address(address, value)  
+                self.write_float_address(address - 1250, value)  
             elif address >= 2500 and address < 3750:
-                self.write_char_address(address, value)
+                self.write_char_address(address - 2500, value)
             elif address >= 3750 and address < 5000:
-                self.write_bool_address(address, value)
+                self.write_bool_address(address - 3750, value)
             else: 
                 print("La direccion global a la que se desea accesar es erronea.")
 
         elif block_type == BlockType.LOCAL:
             if address >= 5000 and address < 6250:
-                self.write_int_address(address, value)
+                self.write_int_address(address - 5000, value)
             elif address >= 6250 and address < 7500:
-                self.write_float_address(address, value)  
+                self.write_float_address(address - 6250, value)  
             elif address >= 7500 and address < 8750:
-                self.write_char_address(address, value)
+                self.write_char_address(address - 7500, value)
             elif address >= 8750 and address < 10000:
-                self.write_bool_address(address, value) 
+                self.write_bool_address(address - 8750, value) 
             else: 
                 print("La direccion local a la que se desea accesar es erronea.") 
 
         elif block_type == BlockType.TEMP:
             if address >= 10000 and address < 11250:
-                self.write_int_address(address, value)
+                self.write_int_address(address - 10000, value)
             elif address >= 12250 and address < 13500:
-                self.write_float_address(address, value)  
+                self.write_float_address(address - 12250, value)  
             elif address >= 13500 and address < 14750:
-                self.write_char_address(address, value)
+                self.write_char_address(address - 13500, value)
             elif address >= 14750 and address < 15000:
-                self.write_bool_address(address, value)  
+                self.write_bool_address(address - 14750, value)  
             else: 
                 print("La direccion temporal a la que se desea accesar es erronea.")
             
         elif block_type == BlockType.CONSTANTS:
             if address >= 15000 and address < 16250:
-                self.write_int_address(address, value)
+                self.write_int_address(address - 15000, value)
             elif address >= 16250 and address < 17500:
-                self.write_float_address(address, value)  
+                self.write_float_address(address - 16250, value)  
             elif address >= 17500 and address < 18750:
-                self.write_char_address(address, value)
+                self.write_char_address(address - 17500, value)
             elif address >= 18750 and address <= 20000:
-                self.write_bool_address(address, value)
+                self.write_bool_address(address - 18750, value)
             else: 
                 print("La direccion de constante a la que se desea accesar es erronea.") 
         
