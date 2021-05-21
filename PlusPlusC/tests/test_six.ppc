@@ -13,6 +13,6 @@ main () {
     var F int;
     input(F);
     var G int;
-    G = F + D;
+    G = F * D;
     print(G);
 }
