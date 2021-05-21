@@ -1,4 +1,4 @@
-from compiler.semantic.common.DirectorioFunciones import VariableTableRecord, VarType, FunctionDirectoryRecord
+from compiler.semantic.common.DirectorioFunciones import VariableTableRecord, VarType, FuncReturnType, FunctionDirectoryRecord
 from compiler.semantic.common.operators import Operator
 from compiler.semantic.cube.cube import SemanticCube
 from compiler.semantic.stack import SemanticStack
@@ -274,6 +274,38 @@ class SemanticHandler:
                     gosub_quad = Quadruple(Operator.GOSUB, None, None, func_name)
                     self.quadruples.append(gosub_quad)
                     
+                    #Si el tipo de retorno de la funcion no es void,
+                    #guardar temp en direccion de funcion
+                    if function.return_type != FuncReturnType.VOID:
+
+                        if FuncReturnType.INT:
+                            temp = self.create_temp_var(VarType.INT)
+                            self.functions_directory[self.current_function].temp_var_int_size += 1
+
+                        if FuncReturnType.FLOAT:
+                            temp = self.create_temp_var(VarType.FLOAT)
+                            self.functions_directory[self.current_function].temp_var_float_size += 1
+
+                        if FuncReturnType.CHAR:
+                            temp = self.create_temp_var(VarType.CHAR)
+                            self.functions_directory[self.current_function].temp_var_char_size += 1
+
+                        if FuncReturnType.BOOL:
+                            temp = self.create_temp_var(VarType.BOOL)
+                            self.functions_directory[self.current_function].temp_var_bool_size += 1
+
+                        temp_address = self.current_var_table[temp].address
+                        temp_type = self.current_var_table[temp].type
+
+                        #Obtener address global de func de la tabla de vars globales
+                        function_address = self.global_var_table[function.name].address
+
+                        quadruple = Quadruple(Operator.ASSIGN, function_address, None, temp_address)
+                        self.quadruples.append(quadruple)
+                        self.consume_operand(temp, temp_type)
+
+                    #Reset a listas para comparar de nuevo parametros 
+                    #de funcion con los parametros que se mandaron con la func a llamar
                     function_params_types.clear()
                     arguments_types.clear()
                     
