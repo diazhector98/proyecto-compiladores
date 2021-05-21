@@ -16,6 +16,7 @@ class VirtualMachine:
             right_operand = quadruple.right_operand
             result = quadruple.result
 
-            if operator == Operator.PRINT:
-                print(result)
+            if operator == Operator.ASSIGN:
+                value = self.memory.read(left_operand)
+                print(value)
             

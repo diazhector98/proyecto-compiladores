@@ -65,49 +65,49 @@ class VirtualMachineMemoryBlock:
     def read(self, address, block_type):
         if block_type == BlockType.GLOBAL:
             if address >= 0 and address < 1250:
-                self.read_int_address(address)
+                return self.read_int_address(address)
             elif address >= 1250 and address < 2500:
-                self.read_float_address(address - 1250)  
+                return self.read_float_address(address - 1250)  
             elif address >= 2500 and address < 3750:
-                self.read_char_address(address - 2500)
+                return self.read_char_address(address - 2500)
             elif address >= 3750 and address < 5000:
-                self.read_bool_address(address - 3750)
+                return self.read_bool_address(address - 3750)
             else: 
                 print("La direccion global que desea leer es erronea.")
 
         elif block_type == BlockType.LOCAL:
             if address >= 5000 and address < 6250:
-                self.read_int_address(address - 5000)
+                return self.read_int_address(address - 5000)
             elif address >= 6250 and address < 7500:
-                self.read_float_address(address - 6250)  
+                return self.read_float_address(address - 6250)  
             elif address >= 7500 and address < 8750:
-                self.read_char_address(address - 7500)
+                return self.read_char_address(address - 7500)
             elif address >= 8750 and address < 10000:
-                self.read_bool_address(address - 8750) 
+                return self.read_bool_address(address - 8750) 
             else: 
                 print("La direccion local que se desea leer es erronea.") 
 
         elif block_type == BlockType.TEMP:
             if address >= 10000 and address < 11250:
-                self.read_int_address(address - 10000)
+                return self.read_int_address(address - 10000)
             elif address >= 12250 and address < 13500:
-                self.read_float_address(address - 12250)  
+                return self.read_float_address(address - 12250)  
             elif address >= 13500 and address < 14750:
-                self.read_char_address(address - 13500)
+                return self.read_char_address(address - 13500)
             elif address >= 14750 and address < 15000:
-                self.read_bool_address(address - 14750)  
+                return self.read_bool_address(address - 14750)  
             else: 
                 print("La direccion temporal que desea leer es erronea.")
             
         elif block_type == BlockType.CONSTANTS:
             if address >= 15000 and address < 16250:
-                self.read_int_address(address - 15000)
+                return self.read_int_address(address - 15000)
             elif address >= 16250 and address < 17500:
-                self.read_float_address(address - 16250)  
+                return self.read_float_address(address - 16250)  
             elif address >= 17500 and address < 18750:
-                self.read_char_address(address - 17500)
+                return self.read_char_address(address - 17500)
             elif address >= 18750 and address <= 20000:
-                self.read_bool_address(address - 18750)
+                return self.read_bool_address(address - 18750)
             else: 
                 print("La direccion de constante que desea leer es erronea.") 
         
