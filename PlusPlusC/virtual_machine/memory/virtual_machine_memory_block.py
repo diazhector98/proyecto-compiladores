@@ -116,16 +116,33 @@ class VirtualMachineMemoryBlock:
 
 
     def write_int_address(self, address, value):
-        self.int_partition[address] = value
+        try:
+            value = int(value)
+            self.int_partition[address] = value
+        except Exception:
+            raise Exception("Value cannot be converted to int")
 
     def write_float_address(self, address, value):
-        self.float_partition[address] = value
+        try:
+            value = float(value)
+            self.float_partition[address] = value
+        except Exception:
+            raise Exception("Value cannot be converted to float")
 
     def write_char_address(self, address, value):
-        self.char_partition[address] = value
+        try:
+            value = str(value)
+            assert len(value) == 1
+            self.char_partition[address] = value
+        except Exception:
+            raise Exception("Value cannot be converted to char")
 
     def write_bool_address(self, address, value):
-        self.bool_partition[address] = value
+        try:
+            value = bool(value)
+            self.bool_partition[address] = value
+        except Exception:
+            raise Exception("Value cannot be converted to bool")
 
     def read_int_address(self, address):
         return self.int_partition[address]
