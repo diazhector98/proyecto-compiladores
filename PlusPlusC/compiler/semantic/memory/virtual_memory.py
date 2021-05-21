@@ -9,9 +9,9 @@ class VirtualMemory:
     def __init__(self):
         memory_size = 20000
         self.block_size = memory_size // 4
-        self.gloabl_block = VirtualMemoryBlock(0, self.block_size - 1)
-        self.local_block = VirtualMemoryBlock(self.block_size, self.block_size - 1)
-        self.temp_block = VirtualMemoryBlock(self.block_size * 2, self.block_size - 1)
+        self.gloabl_block = VirtualMemoryBlock(0, self.block_size)
+        self.local_block = VirtualMemoryBlock(self.block_size, self.block_size)
+        self.temp_block = VirtualMemoryBlock(self.block_size * 2, self.block_size)
         self.constants_block = VirtualMemoryBlock(self.block_size * 3, self.block_size)
 
     def create_global_address(self, type):
