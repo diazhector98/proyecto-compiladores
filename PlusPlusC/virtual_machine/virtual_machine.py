@@ -7,9 +7,15 @@ class VirtualMachine:
         self.functions = functions
         self.constants = constants
         self.quadruples = quadruples
-        self.memory = VirtualMachineMemory()
+        self.memory = VirtualMachineMemory(constants)
 
     def run(self):
         for quadruple in self.quadruples:
-            print(quadruple)
+            operator = quadruple.operator
+            left_operand = quadruple.left_operand
+            right_operand = quadruple.right_operand
+            result = quadruple.result
+
+            if operator == Operator.PRINT:
+                print(result)
             
