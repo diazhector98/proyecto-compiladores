@@ -74,6 +74,7 @@ class PlusPlusCParser(Parser):
     def declaracion_funcion(self, p):
         self.semantic_actions.set_init_func(p.ID, FuncReturnType(p.tipo))
         self.semantic_actions.set_parametros(p.parametros)
+        self.semantic_actions.add_global(p.ID, VarType(p.tipo))
         pass
 
     @_('ID tipo')
