@@ -133,7 +133,7 @@ class PlusPlusCParser(Parser):
     #Lectura
     @_('INPUT "(" ID ")" ";"')
     def lectura(self, p):
-        pass
+        self.semantic_actions.handle_read(p.ID)
 
     #Retorno
     @_('RETURN expresion ";"')

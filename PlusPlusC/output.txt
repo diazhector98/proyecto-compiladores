@@ -13,3 +13,4 @@ PARAMETER    16251      -1         p2
 GOSUB        -1         -1         foo       
 ASSIGN       15001      -1         5002      
 PRINT        -1         -1         5002      
+READ         -1         -1         5002      

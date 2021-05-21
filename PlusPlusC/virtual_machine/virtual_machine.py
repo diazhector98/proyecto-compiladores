@@ -22,4 +22,6 @@ class VirtualMachine:
             if operator == Operator.PRINT:
                 value = self.memory.read(result)
                 print(value)
+            if operator == Operator.READ:
+                capture = input("Waiting input: ")
             

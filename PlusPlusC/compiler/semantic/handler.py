@@ -106,8 +106,8 @@ class SemanticHandler:
 
     # Por lo pronto, solo guardamos el cuadruplo con el nombre de la variable
     def handle_read(self, id):
-        var = current_var_table[id]
-        quadruple = Quadruple(Operator.READ, None, None, var.name)
+        var = self.var_lookup(id)
+        quadruple = Quadruple(Operator.READ, None, None, var.address)
         self.quadruples.append(quadruple)
 
     def handle_print(self):

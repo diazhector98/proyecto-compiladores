@@ -9,4 +9,5 @@ main () {
     var D int;
     D = 54;
     print(D);
+    input(D);
 }
