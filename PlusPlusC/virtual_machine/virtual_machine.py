@@ -16,6 +16,9 @@ class VirtualMachine:
             right_operand = quadruple.right_operand
             result = quadruple.result
 
+            if self.is_arithmetic_operator(operator):
+                self.handle_arithmetic_operator(quadruple)
+
             if operator == Operator.ASSIGN:
                 value = self.memory.read(left_operand)
                 self.memory.write(result, value)
@@ -25,10 +28,20 @@ class VirtualMachine:
             if operator == Operator.READ:
                 capture = input("Waiting input: ")
                 self.memory.write(result, capture)
-            if operator == Operator.SUM:
-                left_operand_value = self.memory.read(left_operand)
-                right_operand_value = self.memory.read(right_operand)
-                operation_outcome = left_operand_value + right_operand_value
-                self.memory.write(result, operation_outcome)
+
+    def is_arithmetic_operator(self, operator):
+        return operator in [Operator.SUM]
+
+    def handle_arithmetic_operator(self, quadruple):
+        operator = quadruple.operator
+        left_operand = quadruple.left_operand
+        right_operand = quadruple.right_operand
+        result = quadruple.result
+
+        if operator == Operator.SUM:
+            left_operand_value = self.memory.read(left_operand)
+            right_operand_value = self.memory.read(right_operand)
+            operation_outcome = left_operand_value + right_operand_value
+            self.memory.write(result, operation_outcome)
 
             
