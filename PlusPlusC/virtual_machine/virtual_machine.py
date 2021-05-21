@@ -30,7 +30,7 @@ class VirtualMachine:
                 self.memory.write(result, capture)
 
     def is_arithmetic_operator(self, operator):
-        return operator in [Operator.SUM, Operator.MULTIPLY]
+        return operator in [Operator.SUM, Operator.MULTIPLY, Operator.MINUS, Operator.DIVIDE]
 
     def handle_arithmetic_operator(self, quadruple):
         operator = quadruple.operator
@@ -42,10 +42,16 @@ class VirtualMachine:
         right_operand_value = self.memory.read(right_operand)
 
         if operator == Operator.SUM:
-            operation_outcome = left_operand_value + right_operand_value
+            operation_outcome = right_operand_value + left_operand_value
             self.memory.write(result, operation_outcome)
         if operator == Operator.MULTIPLY:
-            operation_outcome = left_operand_value * right_operand_value
+            operation_outcome = right_operand_value * left_operand_value
+            self.memory.write(result, operation_outcome)
+        if operator == Operator.MINUS:
+            operation_outcome = right_operand_value - left_operand_value
+            self.memory.write(result, operation_outcome)
+        if operator == Operator.DIVIDE:
+            operation_outcome = right_operand_value / left_operand_value
             self.memory.write(result, operation_outcome)
 
 
