@@ -6,3 +6,4 @@ from virtual_machine.virtual_machine import VirtualMachine
 
 file_path = 'virtual_machine/test.txt'
 virtual_machine = VirtualMachine(file_path)
+virtual_machine.run()
