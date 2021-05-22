@@ -17,8 +17,8 @@ class VirtualMemory:
     def create_global_address(self, type):
         return self.gloabl_block.create_address(type)
 
-    def create_local_address(self, type):
-        return self.local_block.create_address(type)
+    def create_local_address(self, type, size=1):
+        return self.local_block.create_address(type, size=size)
 
     def create_temporal_address(self, type):
         return self.temp_block.create_address(type)

@@ -56,7 +56,7 @@ class SemanticHandler:
                 )
 
     def set_variable(self, var_name, var_type, rows=1, columns=1):
-        address = self.memory.create_local_address(var_type)
+        address = self.memory.create_local_address(var_type, size=(rows * columns))
         self.current_var_table[var_name] = VariableTableRecord(
             name = var_name,
             type = var_type,

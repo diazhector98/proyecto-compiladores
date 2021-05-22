@@ -1,31 +1,9 @@
-foo 1 [2,0,0,3] [0,0,0,0]
+foo 1 [0,0,0,0] [2,1,0,0]
 %%
-15000 10
-16250 10.1
-16251 10.2
-15001 1
-15002 2
 %%
-GOTO         -1         -1         1         
-ERA          -1         -1         foo       
-PARAMETER    15000      -1         p0        
-PARAMETER    16250      -1         p1        
-PARAMETER    16251      -1         p2        
-GOSUB        -1         -1         foo       
-ASSIGN       15001      -1         5002      
-EQUAL        5002       15001      13750     
-GOTOF        13750      -1         23        
-READ         -1         -1         5004      
-READ         -1         -1         5005      
-READ         -1         -1         5003      
-EQUAL        5003       15001      13751     
-GOTOF        13751      -1         16        
-SUM          5004       5005       10000     
-ASSIGN       10000      -1         5006      
-EQUAL        5003       15002      13752     
-GOTOF        13752      -1         20        
-MULTIPLY     5004       5005       10001     
-ASSIGN       10001      -1         5006      
-PRINT        -1         -1         5006      
-READ         -1         -1         5002      
-GOTO         -1         -1         7         
+GOTO         -1         -1         2         
+ENDFUNC      -1         -1         -1        
+PRINT        -1         -1         5000      
+PRINT        -1         -1         6250      
+PRINT        -1         -1         5010      
+PRINT        -1         -1         6400      
