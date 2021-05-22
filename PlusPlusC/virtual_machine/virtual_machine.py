@@ -80,7 +80,21 @@ class VirtualMachine:
 
         if operator == Operator.GT:
             operation_outcome = left_operand_value > right_operand_value
-        
+        if operator == Operator.LT:
+            operation_outcome = left_operand_value < right_operand_value
+        if operator == Operator.GTE:
+            operation_outcome = left_operand_value >= right_operand_value
+        if operator == Operator.LTE:
+            operation_outcome = left_operand_value <= right_operand_value
+        if operator == Operator.EQUAL:
+            operation_outcome = left_operand_value == right_operand_value
+        if operator == Operator.NE:
+            operation_outcome = left_operand_value != right_operand_value
+        if operator == Operator.AND:
+            operation_outcome = left_operand_value and right_operand_value
+        if operator == Operator.OR:
+            operation_outcome = left_operand_value or right_operand_value
+            
         self.memory.write(result, operation_outcome)
 
     def is_jump_operator(self, operator):
