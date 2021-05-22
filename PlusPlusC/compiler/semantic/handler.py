@@ -175,6 +175,7 @@ class SemanticHandler:
 
             self.stack.operands.reverse()
             self.stack.operators.reverse()
+            self.stack.types.reverse()
 
             right_operand = self.stack.operands.pop()
             left_operand = self.stack.operands.pop()
@@ -187,6 +188,35 @@ class SemanticHandler:
                 self.quadruples.append(quadruple)
             else:
                 print("type mismatch between operand", left_operand, left_operand_type,  "and", right_operand, right_operand_type)
+
+    def handle_array_assign(self, var_name):
+        var = self.current_var_table[var_name]
+        if var is None:
+            print("var is not declared")
+        else:
+            self.consume_operand(var.name, var.type)
+            self.stack.operators.append(Operator.ASSIGN)
+
+            self.stack.operands.reverse()
+            self.stack.operators.reverse()
+            self.stack.types.reverse()
+
+            array_index_operand = self.stack.operands.pop()
+            right_operand = self.stack.operands.pop()
+            array_base_index = self.stack.operands.pop()
+
+            array_index_type = self.stack.types.pop()
+            right_operand_type = self.stack.types.pop()
+            array_type = self.stack.types.pop()
+
+            operator = Operator(self.stack.operators.pop())
+            cube_result = self.cube[right_operand_type][array_type][operator]
+            if cube_result != "err":
+                quadruple = Quadruple(Operator(operator), right_operand, None, array_base_index)
+                self.quadruples.append(quadruple)
+            else:
+                print("type mismatch between operand", array_base_index, array_type,  "and", right_operand, right_operand_type)
+
 
     def set_initial_if(self):
         self.set_conditional_block()

@@ -9,6 +9,7 @@ main () {
     var matrix[5][30] float;
     var arrayIndex int;
     var qty float;
+    array[0 + 25] = 30 * 78 + 17;
     print(array);
     print(matrix);
     print(arrayIndex);
