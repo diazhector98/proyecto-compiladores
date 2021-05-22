@@ -3,9 +3,9 @@ from virtual_machine.memory.virtual_machine_memory import VirtualMachineMemory
 from virtual_machine.common.operator import Operator
 class VirtualMachine:
     
-    quadIndex = -1
-    goToFIndexToGo = -1
-    goToFActivated = False
+    quad_index = -1
+    go_to_f_index_to_go = -1
+    go_to_f_activated = False
     
 
     def __init__(self, filename):
@@ -18,11 +18,11 @@ class VirtualMachine:
 
     def run(self):
         for quadruple in self.quadruples:
-            self.quadIndex += 1
+            self.quad_index += 1
 
-            if self.goToFActivated == False or self.goToFIndexToGo == self.quadIndex:
-                self.goToFIndexToGo = -1
-                self.goToFActivated == False
+            if self.go_to_f_activated == False or self.go_to_f_index_to_go == self.quad_index:
+                self.go_to_f_index_to_go = -1
+                self.go_to_f_activated == False
 
                 operator = quadruple.operator
                 left_operand = quadruple.left_operand
@@ -115,9 +115,8 @@ class VirtualMachine:
 
     def is_jump_operator(self, operator):
         return operator in [
-            #Operator.GOTO,
+            Operator.GOTO,
             Operator.GOTOF
-            #Operator.GOTOF
         ]
 
             
@@ -132,6 +131,5 @@ class VirtualMachine:
             #en caso de ser False saltarse al cuadruplo
             #sino continua leyendo
             if left_operand_value == False:
-                self.goToFIndexToGo = result
-                self.goToFActivated = True
-                
+                self.go_to_f_index_to_go = result
+                self.go_to_f_activated = True
