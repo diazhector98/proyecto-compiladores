@@ -83,4 +83,11 @@ class VirtualMachine:
         
         self.memory.write(result, operation_outcome)
 
+    def is_jump_operator(self, operator):
+        return operator in [
+            Operator.GOTO,
+            Operator.GOTOT,
+            Operator.GOTOF
+        ]
+
             
