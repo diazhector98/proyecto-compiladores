@@ -43,10 +43,6 @@ class VirtualMachine:
             elif self.is_jump_operator(operator):
                 self.handle_jump_operator(quadruple)
 
-            elif operator == Operator.ASSIGN:
-                value = self.memory.read(left_operand)
-                self.memory.write(result, value)
-                self.quad_index += 1
             elif operator == Operator.PRINT:
                 value = self.memory.read(result)
                 print(value)
@@ -59,13 +55,25 @@ class VirtualMachine:
                 self.quad_index += 1
 
     def is_arithmetic_operator(self, operator):
-        return operator in [Operator.SUM, Operator.MULTIPLY, Operator.MINUS, Operator.DIVIDE]
+        return operator in [
+            Operator.ASSIGN, 
+            Operator.SUM, 
+            Operator.MULTIPLY, 
+            Operator.MINUS, 
+            Operator.DIVIDE
+        ]
 
     def handle_arithmetic_operator(self, quadruple):
         operator = quadruple.operator
         left_operand = quadruple.left_operand
         right_operand = quadruple.right_operand
         result = quadruple.result
+
+        if operator == Operator.ASSIGN:
+            value = self.memory.read(left_operand)
+            self.memory.write(result, value)
+            self.quad_index += 1
+            return
 
         left_operand_value = self.memory.read(left_operand)
         right_operand_value = self.memory.read(right_operand)
