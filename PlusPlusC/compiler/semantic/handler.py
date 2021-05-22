@@ -213,7 +213,7 @@ class SemanticHandler:
     def set_end_of_if(self):
         if self.jumps_stack:
             quadruple_index_to_set = self.jumps_stack.pop()
-            final_jump_index = len(self.quadruples) + 1
+            final_jump_index = len(self.quadruples)
             self.set_final_jump(quadruple_index_to_set, final_jump_index)
         else:
             raise Exception("Error: Jump stack is empty")
