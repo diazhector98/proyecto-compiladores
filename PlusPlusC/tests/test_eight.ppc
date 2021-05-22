@@ -8,14 +8,16 @@ main () {
     foo(10, 10.1, 10.2);
     var D int;
     D = 5;
-
-    if 30 > 20 {
-        D = 2;
+    while D > 0 {
+        print(D);
+        D = D - 1;
+    }
+    D = 1;
+    if D == 0 {
+        D = 1;
     }
     else {
-        D = 10;
-        D = 12;
+        D = 2;
     }
-    
     print(D);
 }

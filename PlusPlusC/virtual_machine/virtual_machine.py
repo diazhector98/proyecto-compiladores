@@ -13,7 +13,7 @@ class VirtualMachine:
 
     """
     
-    quad_index = -1
+    quad_index = 0
     go_to_f_index_to_go = -1
     go_to_f_activated = False
     can_read_else = False
@@ -28,40 +28,35 @@ class VirtualMachine:
         self.memory = VirtualMachineMemory(constants)
         
     def run(self):
-        for quadruple in self.quadruples:
-            self.quad_index += 1
+        while self.quad_index < len(self.quadruples):
+            quadruple = self.quadruples[self.quad_index]
+            operator = quadruple.operator
+            left_operand = quadruple.left_operand
+            result = quadruple.result
 
-            if self.go_to_f_activated == False or self.go_to_f_index_to_go == self.quad_index or self.go_to_activated == False or self.go_to_index_to_go == self.quad_index:
-                
-                #Reset a variables a valor default
-                self.go_to_f_index_to_go = -1
-                self.go_to_f_activated == False
-                self.go_to_activated == False
-                self.go_to_index_to_go = -1
+            if self.is_arithmetic_operator(operator):
+                self.handle_arithmetic_operator(quadruple)
 
-                operator = quadruple.operator
-                left_operand = quadruple.left_operand
-                right_operand = quadruple.right_operand
-                result = quadruple.result
+            elif self.is_boolean_operator(operator):
+                self.handle_boolean_operator(quadruple)
 
-                if self.is_arithmetic_operator(operator):
-                    self.handle_arithmetic_operator(quadruple)
+            elif self.is_jump_operator(operator):
+                self.handle_jump_operator(quadruple)
 
-                if self.is_boolean_operator(operator):
-                    self.handle_boolean_operator(quadruple)
-
-                if self.is_jump_operator(operator):
-                    self.handle_jump_operator(quadruple)
-
-                if operator == Operator.ASSIGN:
-                    value = self.memory.read(left_operand)
-                    self.memory.write(result, value)
-                if operator == Operator.PRINT:
-                    value = self.memory.read(result)
-                    print(value)
-                if operator == Operator.READ:
-                    capture = input("Waiting input: ")
-                    self.memory.write(result, capture)
+            elif operator == Operator.ASSIGN:
+                value = self.memory.read(left_operand)
+                self.memory.write(result, value)
+                self.quad_index += 1
+            elif operator == Operator.PRINT:
+                value = self.memory.read(result)
+                print(value)
+                self.quad_index += 1
+            elif operator == Operator.READ:
+                capture = input("Waiting input: ")
+                self.memory.write(result, capture)
+                self.quad_index += 1
+            else:
+                self.quad_index += 1
 
     def is_arithmetic_operator(self, operator):
         return operator in [Operator.SUM, Operator.MULTIPLY, Operator.MINUS, Operator.DIVIDE]
@@ -87,6 +82,8 @@ class VirtualMachine:
         if operator == Operator.DIVIDE:
             operation_outcome = left_operand_value / right_operand_value
             self.memory.write(result, operation_outcome)
+
+        self.quad_index += 1
 
     def is_boolean_operator(self, operator):
         return operator in [
@@ -127,6 +124,7 @@ class VirtualMachine:
             operation_outcome = left_operand_value or right_operand_value
             
         self.memory.write(result, operation_outcome)
+        self.quad_index += 1
 
     def is_jump_operator(self, operator):
         return operator in [
@@ -137,33 +135,15 @@ class VirtualMachine:
     def handle_jump_operator(self, quadruple):
         operator = quadruple.operator
         left_operand = quadruple.left_operand
-        right_operand = quadruple.right_operand
         result = quadruple.result
         
         if operator == Operator.GOTOF:
             left_operand_value = self.memory.read(left_operand)
-            #En caso de ser False saltarse al cuadruplo
-            #sino continua leyendo
             if left_operand_value == False:
-                self.go_to_f_index_to_go = result
-                self.go_to_f_activated = True
-                self.can_read_else = True
+                self.quad_index = result
             else:
-                self.can_read_else = False
-
-        if operator == Operator.GOTO:
-
-            #Si no es cuadruplo de main, puede ser de Else o While
-            if self.quad_index != 0:
-                #Si es False, saltarte cuadruplos de Else
-                if self.can_read_else == False:
-                    self.go_to_index_to_go = result
-                    self.go_to_activated = True
-                    self.go_to_f_activated = True
-
-                    #prints para debuggear
-                    # print("go_to_f_index_to_go",self.go_to_f_index_to_go)
-                    # print("go_to_f_activated",self.go_to_f_activated)
-                    # print("go_to_activated",self.go_to_activated)
-                    # print("go_to_index_to_go",self.go_to_index_to_go)
-                    # print("quadindex", self.quad_index)
+                self.quad_index += 1
+        elif operator == Operator.GOTO:
+            self.quad_index = result
+        else:
+            self.quad_index += 1
