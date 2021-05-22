@@ -211,7 +211,7 @@ class SemanticHandler:
 
             array_index_operand = self.stack.operands.pop()
             right_operand = self.stack.operands.pop()
-            array_base_index = self.stack.operands.pop()
+            array_base_address = self.stack.operands.pop()
 
             array_index_type = self.stack.types.pop()
             right_operand_type = self.stack.types.pop()
@@ -221,16 +221,22 @@ class SemanticHandler:
             cube_result = self.cube[right_operand_type][array_type][operator]
             if cube_result != "err":
 
-                #Agregando Verify
+                # Agregando Verify
                 rows_address = self.constants_table.get(var.dimensions[0])
                 verify_quadruple = Quadruple(Operator.VERIFY, array_index_operand, None, rows_address)
                 self.quadruples.append(verify_quadruple)
 
+                # Agregando suma de dirección base
+                temp = self.create_temp_var(VarType.INT)
+                temp_address = self.current_var_table[temp].address
+                add_array_base_quadruple = Quadruple(Operator.SUM, array_index_operand, array_base_address, temp_address)
+                self.quadruples.append(add_array_base_quadruple)
+
                 # Agregando Assign
-                assign_quadruple = Quadruple(Operator(operator), right_operand, None, array_base_index)
+                assign_quadruple = Quadruple(Operator(operator), right_operand, None, array_base_address)
                 self.quadruples.append(assign_quadruple)
             else:
-                print("type mismatch between operand", array_base_index, array_type,  "and", right_operand, right_operand_type)
+                print("type mismatch between operand", array_base_address, array_type,  "and", right_operand, right_operand_type)
 
 
     def set_initial_if(self):
