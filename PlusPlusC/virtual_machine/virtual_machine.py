@@ -1,6 +1,7 @@
 from virtual_machine.file_reader import FileReader
 from virtual_machine.memory.virtual_machine_memory import VirtualMachineMemory
 from virtual_machine.common.operator import Operator
+from virtual_machine.operators_handlers import handle_arithmetic_operator, handle_boolean_operator
 class VirtualMachine:
     
     """
@@ -35,10 +36,12 @@ class VirtualMachine:
             result = quadruple.result
 
             if self.is_arithmetic_operator(operator):
-                self.handle_arithmetic_operator(quadruple)
+                handle_arithmetic_operator(quadruple, self.memory)
+                self.go_to_next_quadruple()
 
             elif self.is_boolean_operator(operator):
-                self.handle_boolean_operator(quadruple)
+                handle_boolean_operator(quadruple, self.memory)
+                self.go_to_next_quadruple()
 
             elif self.is_jump_operator(operator):
                 self.handle_jump_operator(quadruple)
@@ -63,36 +66,6 @@ class VirtualMachine:
             Operator.DIVIDE
         ]
 
-    def handle_arithmetic_operator(self, quadruple):
-        operator = quadruple.operator
-        left_operand = quadruple.left_operand
-        right_operand = quadruple.right_operand
-        result = quadruple.result
-
-        if operator == Operator.ASSIGN:
-            value = self.memory.read(left_operand)
-            self.memory.write(result, value)
-            self.go_to_next_quadruple()
-            return
-
-        left_operand_value = self.memory.read(left_operand)
-        right_operand_value = self.memory.read(right_operand)
-
-        if operator == Operator.SUM:
-            operation_outcome = left_operand_value + right_operand_value
-            self.memory.write(result, operation_outcome)
-        if operator == Operator.MULTIPLY:
-            operation_outcome = left_operand_value * right_operand_value
-            self.memory.write(result, operation_outcome)
-        if operator == Operator.MINUS:
-            operation_outcome = left_operand_value - right_operand_value
-            self.memory.write(result, operation_outcome)
-        if operator == Operator.DIVIDE:
-            operation_outcome = left_operand_value / right_operand_value
-            self.memory.write(result, operation_outcome)
-
-        self.go_to_next_quadruple()
-
     def is_boolean_operator(self, operator):
         return operator in [
             Operator.LT, 
@@ -104,35 +77,6 @@ class VirtualMachine:
             Operator.AND,
             Operator.OR
         ]
-
-    def handle_boolean_operator(self, quadruple):
-        operator = quadruple.operator
-        left_operand = quadruple.left_operand
-        right_operand = quadruple.right_operand
-        result = quadruple.result
-
-        left_operand_value = self.memory.read(left_operand)
-        right_operand_value = self.memory.read(right_operand)
-
-        if operator == Operator.GT:
-            operation_outcome = left_operand_value > right_operand_value
-        if operator == Operator.LT:
-            operation_outcome = left_operand_value < right_operand_value
-        if operator == Operator.GTE:
-            operation_outcome = left_operand_value >= right_operand_value
-        if operator == Operator.LTE:
-            operation_outcome = left_operand_value <= right_operand_value
-        if operator == Operator.EQUAL:
-            operation_outcome = left_operand_value == right_operand_value
-        if operator == Operator.NE:
-            operation_outcome = left_operand_value != right_operand_value
-        if operator == Operator.AND:
-            operation_outcome = left_operand_value and right_operand_value
-        if operator == Operator.OR:
-            operation_outcome = left_operand_value or right_operand_value
-            
-        self.memory.write(result, operation_outcome)
-        self.go_to_next_quadruple()
 
     def is_jump_operator(self, operator):
         return operator in [
