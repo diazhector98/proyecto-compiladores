@@ -63,7 +63,15 @@ class SemanticHandler:
             address = address,
             dimensions = (rows, columns)
             )
-    
+        self.create_constant(rows, VarType.INT)
+        self.create_constant(columns, VarType.INT)
+
+    def create_constant(self, value, type):
+        constant_address = self.constants_table.get(value)
+        if not constant_address:
+            constant_address = self.memory.create_constant_address(type)
+            self.constants_table[value] = constant_address
+
     def consume_operator(self, operator):
         self.stack.push_operator(operator)
 
@@ -214,7 +222,8 @@ class SemanticHandler:
             if cube_result != "err":
 
                 #Agregando Verify
-                verify_quadruple = Quadruple(Operator.VERIFY, array_index_operand, None, var.dimensions[0])
+                rows_address = self.constants_table.get(var.dimensions[0])
+                verify_quadruple = Quadruple(Operator.VERIFY, array_index_operand, None, rows_address)
                 self.quadruples.append(verify_quadruple)
 
                 # Agregando Assign
