@@ -3,23 +3,10 @@ from virtual_machine.memory.virtual_machine_memory import VirtualMachineMemory
 from virtual_machine.common.operator import Operator
 from virtual_machine.operators_handlers import handle_arithmetic_operator, handle_boolean_operator
 class VirtualMachine:
-    
     """
     quad_index = Contabiliza el cuadruplo en el que se encuentra
-    go_to_f_index_to_go = Index a llegar en caso de que go_to_f_activated sea verdadero 
-    go_to_f_activated = Bool para saber si puedo acceder los cuadruplos que vienen despues del GoToFo o no
-    can_read_else = Bool para saber si puedo acceder a los cuadruplos de Else
-    go_to_index_to_go = Index a llegar en caso de que go_to_activated sea verdadero 
-    go_to_activated = Bool para saber si puedo acceder los cuadruplos que vienen despues del GoTo o no
-
     """
-    
     quad_index = 0
-    go_to_f_index_to_go = -1
-    go_to_f_activated = False
-    can_read_else = False
-    go_to_index_to_go = -1
-    go_to_activated = False
 
     def __init__(self, filename):
         [functions, constants, quadruples] = FileReader(filename)

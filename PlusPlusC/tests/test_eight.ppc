@@ -6,18 +6,25 @@ func foo(C int, D float, A float) -> void {
 
 main () {
     foo(10, 10.1, 10.2);
-    var D int;
-    D = 5;
-    while D > 0 {
-        print(D);
-        D = D - 1;
+    var control int;
+    var optionSelected int;
+    var firstNum int;
+    var secondNum int;
+    var result int;
+    
+    control = 1;
+
+    while control == 1 {
+        input(firstNum);
+        input(secondNum);
+        input(optionSelected);
+        if optionSelected == 1 {
+            result = firstNum + secondNum;
+        }
+        if optionSelected == 2 {
+            result = firstNum * secondNum;
+        }
+        print(result);
+        input(control);
     }
-    D = 1;
-    if D == 0 {
-        D = 1;
-    }
-    else {
-        D = 2;
-    }
-    print(D);
 }
