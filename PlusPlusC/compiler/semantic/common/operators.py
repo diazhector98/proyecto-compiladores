@@ -23,3 +23,4 @@ class Operator(Enum):
     PARAMETER = 'parameter'
     ENDFUNC = 'endfunc'
     RETURN = 'return'
+    VERIFY = 'verify'

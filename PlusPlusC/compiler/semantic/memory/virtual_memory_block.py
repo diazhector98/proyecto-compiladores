@@ -9,10 +9,10 @@ class VirtualMemoryBlock:
     def __init__(self, start_address, size):
         partition_size = size // 4
         self.start_address = start_address
-        self.int_partition = VirtualMemoryBlockPartition(start_address, partition_size)
-        self.float_partition = VirtualMemoryBlockPartition(start_address + partition_size, partition_size)
-        self.char_partition = VirtualMemoryBlockPartition(start_address + partition_size * 2, partition_size)
-        self.bool_partition = VirtualMemoryBlockPartition(start_address+ partition_size * 3, partition_size)
+        self.int_partition = VirtualMemoryBlockPartition(start_address, partition_size - 1)
+        self.float_partition = VirtualMemoryBlockPartition(start_address + partition_size, partition_size - 1)
+        self.char_partition = VirtualMemoryBlockPartition(start_address + partition_size * 2, partition_size - 1)
+        self.bool_partition = VirtualMemoryBlockPartition(start_address+ partition_size * 3, partition_size - 1)
 
     def create_address(self, t):
         if t == VarType.INT:

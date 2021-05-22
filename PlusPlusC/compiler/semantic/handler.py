@@ -1,4 +1,4 @@
-from compiler.semantic.common.DirectorioFunciones import VariableTableRecord, VarType, FunctionDirectoryRecord
+from compiler.semantic.common.DirectorioFunciones import VariableTableRecord, VarType, FuncReturnType, FunctionDirectoryRecord
 from compiler.semantic.common.operators import Operator
 from compiler.semantic.cube.cube import SemanticCube
 from compiler.semantic.stack import SemanticStack
@@ -55,24 +55,30 @@ class SemanticHandler:
                 address = address
                 )
 
-    def set_variable(self, var_name, var_type):
+    def set_variable(self, var_name, var_type, rows=1, columns=1):
         address = self.memory.create_local_address(var_type)
         self.current_var_table[var_name] = VariableTableRecord(
             name = var_name,
             type = var_type,
-            address = address
+            address = address,
+            dimensions = (rows, columns)
             )
     
     def consume_operator(self, operator):
         self.stack.push_operator(operator)
 
-    def consume_operand(self, operand, var_type=None, is_constant=False):
+    def consume_operand(self, operand, var_type=None, is_constant=False, index=None):
+        # Index para arreglos y matrices
+        print(index)
         if is_constant:
             self.consume_constant_operand(operand, var_type)
         else:
-            self.consume_var_operand(operand)
+            self.consume_var_operand(operand, index=index)
 
-    def consume_var_operand(self, operand):
+    def consume_var_operand(self, operand, index=None):
+        if index != None:
+            # Hacer algo para los arreglos
+            pass
         try:
             var = self.var_lookup(operand)
             # TODO: En el futuro, todas deberían tener direcciones
@@ -100,8 +106,8 @@ class SemanticHandler:
 
     # Por lo pronto, solo guardamos el cuadruplo con el nombre de la variable
     def handle_read(self, id):
-        var = current_var_table[id]
-        quadruple = Quadruple(Operator.READ, None, None, var.name)
+        var = self.var_lookup(id)
+        quadruple = Quadruple(Operator.READ, None, None, var.address)
         self.quadruples.append(quadruple)
 
     def handle_print(self):
@@ -199,6 +205,7 @@ class SemanticHandler:
                 self.quadruples.append(quadruple)
                 jump_index = len(self.quadruples) - 1
                 self.jumps_stack.append(jump_index)
+                print("set_conditional_block", "jump:", jump_index)
             else:
                 raise TypeError("Error: Type of operation must be of type BOOL")
         else:
@@ -207,7 +214,8 @@ class SemanticHandler:
     def set_end_of_if(self):
         if self.jumps_stack:
             quadruple_index_to_set = self.jumps_stack.pop()
-            final_jump_index = len(self.quadruples) + 1
+            final_jump_index = len(self.quadruples)
+            print("end of if", "jump:", final_jump_index)
             self.set_final_jump(quadruple_index_to_set, final_jump_index)
         else:
             raise Exception("Error: Jump stack is empty")
@@ -229,7 +237,8 @@ class SemanticHandler:
         if self.jumps_stack:
             quadruple_index_to_set = self.jumps_stack.pop()
             self.jumps_stack.append(len(self.quadruples) - 1)
-            self.set_final_jump(quadruple_index_to_set, len(self.quadruples) + 1)
+            print("set_else", "jump:", len(self.quadruples) + 1)
+            self.set_final_jump(quadruple_index_to_set, len(self.quadruples))
         else:
             raise Exception("Jump stack error")
 
@@ -268,6 +277,38 @@ class SemanticHandler:
                     gosub_quad = Quadruple(Operator.GOSUB, None, None, func_name)
                     self.quadruples.append(gosub_quad)
                     
+                    #Si el tipo de retorno de la funcion no es void,
+                    #guardar temp en direccion de funcion
+                    if function.return_type != FuncReturnType.VOID:
+
+                        if FuncReturnType.INT:
+                            temp = self.create_temp_var(VarType.INT)
+                            self.functions_directory[self.current_function].temp_var_int_size += 1
+
+                        if FuncReturnType.FLOAT:
+                            temp = self.create_temp_var(VarType.FLOAT)
+                            self.functions_directory[self.current_function].temp_var_float_size += 1
+
+                        if FuncReturnType.CHAR:
+                            temp = self.create_temp_var(VarType.CHAR)
+                            self.functions_directory[self.current_function].temp_var_char_size += 1
+
+                        if FuncReturnType.BOOL:
+                            temp = self.create_temp_var(VarType.BOOL)
+                            self.functions_directory[self.current_function].temp_var_bool_size += 1
+
+                        temp_address = self.current_var_table[temp].address
+                        temp_type = self.current_var_table[temp].type
+
+                        #Obtener address global de func de la tabla de vars globales
+                        function_address = self.global_var_table[function.name].address
+
+                        quadruple = Quadruple(Operator.ASSIGN, function_address, None, temp_address)
+                        self.quadruples.append(quadruple)
+                        self.consume_operand(temp, temp_type)
+
+                    #Reset a listas para comparar de nuevo parametros 
+                    #de funcion con los parametros que se mandaron con la func a llamar
                     function_params_types.clear()
                     arguments_types.clear()
                     
@@ -285,11 +326,7 @@ class SemanticHandler:
     # Método de debugging
     def print_quadruples(self):
         for index, quad in enumerate(self.quadruples):
-            operator = quad.operator
-            left_operand = quad.left_operand
-            right_operand = quad.right_operand
-            result = quad.temp_result
-            print ("{:<3} {:<12} {:<10} {:<10} {:<10}".format(index, operator.name, str(left_operand), str(right_operand), str(result)))
+            print(index, str(quad))
 
     def print_constants_table(self):
         for key in self.constants_table:

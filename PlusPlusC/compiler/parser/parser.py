@@ -1,6 +1,7 @@
 from sly import Parser
 from compiler.lexer.lexer import PlusPlusCLexer
 from compiler.semantic.handler import SemanticHandler
+from compiler.semantic.generator import OutputGenerator
 from compiler.semantic.common.DirectorioFunciones import FuncReturnType, VarType
 
 """ Falta while, for, hacer pruebas, eliminar recursividad """
@@ -31,6 +32,8 @@ class PlusPlusCParser(Parser):
         print("Constantes")
         print("--------------")
         self.semantic_actions.print_constants_table()
+        output_generator = OutputGenerator(self.semantic_actions)
+        output_generator.generate()
 
     @_('PROGRAM ID')
     def inicio_programa(self, p):
@@ -71,6 +74,7 @@ class PlusPlusCParser(Parser):
     def declaracion_funcion(self, p):
         self.semantic_actions.set_init_func(p.ID, FuncReturnType(p.tipo))
         self.semantic_actions.set_parametros(p.parametros)
+        self.semantic_actions.add_global(p.ID, VarType(p.tipo))
         pass
 
     @_('ID tipo')
@@ -110,7 +114,7 @@ class PlusPlusCParser(Parser):
         pass
 
     #Estatuto
-    @_('escritura', 'lectura', 'retorno', 'asignacion', 'ciclo_while', 'condicion', 'declaracion_asignacion', 'llamada_funcion ";"')
+    @_('escritura', 'lectura', 'retorno', 'asignacion', 'ciclo_while', 'condicion', 'declaracion', 'llamada_funcion ";"')
     def estatuto(self, p):
         pass
 
@@ -129,7 +133,7 @@ class PlusPlusCParser(Parser):
     #Lectura
     @_('INPUT "(" ID ")" ";"')
     def lectura(self, p):
-        pass
+        self.semantic_actions.handle_read(p.ID)
 
     #Retorno
     @_('RETURN expresion ";"')
@@ -143,10 +147,28 @@ class PlusPlusCParser(Parser):
         pass
 
     #Declaracion
-    @_('VAR ID tipo ";"')
-    def declaracion_asignacion(self, p):
-        self.semantic_actions.set_variable(p.ID, VarType(p.tipo))
+    @_('declaracion_variable', 'declaracion_arreglo', 'declaracion_matriz')
+    def declaracion(self, p):
         pass
+
+    @_('VAR ID tipo ";"')
+    def declaracion_variable(self, p):
+        self.semantic_actions.set_variable(p.ID, VarType(p.tipo))
+
+    @_('VAR ID "[" indice_arreglo "]" tipo ";"')
+    def declaracion_arreglo(self, p):
+        rows = p[3]
+        self.semantic_actions.set_variable(p.ID, VarType(p.tipo), rows=rows)
+
+    @_('VAR ID "[" indice_arreglo "]" "[" indice_arreglo "]" tipo ";"')
+    def declaracion_matriz(self, p):
+        rows = p[3]
+        columns = p[6]
+        self.semantic_actions.set_variable(p.ID, VarType(p.tipo), rows=rows, columns=columns)
+
+    @_('C_INTEGER')
+    def indice_arreglo(self, p):
+        return p[0]
 
     #Expresion
     @_('exp', 'llamada_funcion')
@@ -181,10 +203,36 @@ class PlusPlusCParser(Parser):
     def factor(self, p):
         self.semantic_actions.consume_operand(p[0])
 
+    @_('uso_arreglo')
+    def factor(self, p):
+        array_name = p.uso_arreglo[0]
+        array_index = p.uso_arreglo[1]
+        self.semantic_actions.consume_operand(array_name, index=array_index)
+
+    @_('uso_matriz')
+    def factor(self, p):
+        matrix_name = p.uso_matriz[0]
+        matrix_row_index = p.uso_matriz[1]
+        matrix_column_index = p.uso_matriz[2]
+        self.semantic_actions.consume_operand(matrix_name, index=(matrix_row_index, matrix_column_index))
+
+    @_('ID "[" indice_uso_arreglo "]" ')
+    def uso_arreglo(self, p):
+        return (p.ID, p.indice_uso_arreglo)
+
+    @_('ID "[" indice_uso_arreglo "]" "[" indice_uso_arreglo "]" ')
+    def uso_matriz(self, p):
+        return (p.ID, p[2], p[5])
+
+    @_('exp')
+    def indice_uso_arreglo(self, p):
+        operando = self.semantic_actions.stack.operands.pop()
+        tipo = self.semantic_actions.stack.types.pop()
+        return (operando, tipo)
+
     @_('C_INTEGER')
     def constante(self, p):
         self.semantic_actions.consume_operand(p[0], VarType.INT, is_constant=True)
-        pass
 
     @_('C_FLOAT')
     def constante(self, p):

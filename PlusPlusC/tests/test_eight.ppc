@@ -1,0 +1,30 @@
+program Main;
+
+func foo(C int, D float, A float) -> void {
+    var A int;
+}
+
+main () {
+    foo(10, 10.1, 10.2);
+    var control int;
+    var optionSelected int;
+    var firstNum int;
+    var secondNum int;
+    var result int;
+    
+    control = 1;
+
+    while control == 1 {
+        input(firstNum);
+        input(secondNum);
+        input(optionSelected);
+        if optionSelected == 1 {
+            result = firstNum + secondNum;
+        }
+        if optionSelected == 2 {
+            result = firstNum * secondNum;
+        }
+        print(result);
+        input(control);
+    }
+}
