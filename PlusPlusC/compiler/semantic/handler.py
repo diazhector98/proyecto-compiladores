@@ -212,8 +212,14 @@ class SemanticHandler:
             operator = Operator(self.stack.operators.pop())
             cube_result = self.cube[right_operand_type][array_type][operator]
             if cube_result != "err":
-                quadruple = Quadruple(Operator(operator), right_operand, None, array_base_index)
-                self.quadruples.append(quadruple)
+
+                #Agregando Verify
+                verify_quadruple = Quadruple(Operator.VERIFY, array_index_operand, None, var.dimensions[0])
+                self.quadruples.append(verify_quadruple)
+
+                # Agregando Assign
+                assign_quadruple = Quadruple(Operator(operator), right_operand, None, array_base_index)
+                self.quadruples.append(assign_quadruple)
             else:
                 print("type mismatch between operand", array_base_index, array_type,  "and", right_operand, right_operand_type)
 
