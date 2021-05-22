@@ -12,6 +12,7 @@ class VirtualMachine:
     go_to_activated = Bool para saber si puedo acceder los cuadruplos que vienen despues del GoTo o no
 
     """
+    
     quad_index = -1
     go_to_f_index_to_go = -1
     go_to_f_activated = False
@@ -132,7 +133,6 @@ class VirtualMachine:
             Operator.GOTO,
             Operator.GOTOF
         ]
-
             
     def handle_jump_operator(self, quadruple):
         operator = quadruple.operator
@@ -152,10 +152,9 @@ class VirtualMachine:
                 self.can_read_else = False
 
         if operator == Operator.GOTO:
+
             #Si no es cuadruplo de main, puede ser de Else o While
-    
             if self.quad_index != 0:
-                
                 #Si es False, saltarte cuadruplos de Else
                 if self.can_read_else == False:
                     self.go_to_index_to_go = result
