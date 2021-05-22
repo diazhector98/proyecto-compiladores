@@ -205,6 +205,7 @@ class SemanticHandler:
                 self.quadruples.append(quadruple)
                 jump_index = len(self.quadruples) - 1
                 self.jumps_stack.append(jump_index)
+                print("set_conditional_block", "jump:", jump_index)
             else:
                 raise TypeError("Error: Type of operation must be of type BOOL")
         else:
@@ -214,6 +215,7 @@ class SemanticHandler:
         if self.jumps_stack:
             quadruple_index_to_set = self.jumps_stack.pop()
             final_jump_index = len(self.quadruples)
+            print("end of if", "jump:", final_jump_index)
             self.set_final_jump(quadruple_index_to_set, final_jump_index)
         else:
             raise Exception("Error: Jump stack is empty")
@@ -235,7 +237,8 @@ class SemanticHandler:
         if self.jumps_stack:
             quadruple_index_to_set = self.jumps_stack.pop()
             self.jumps_stack.append(len(self.quadruples) - 1)
-            self.set_final_jump(quadruple_index_to_set, len(self.quadruples) + 1)
+            print("set_else", "jump:", len(self.quadruples) + 1)
+            self.set_final_jump(quadruple_index_to_set, len(self.quadruples))
         else:
             raise Exception("Jump stack error")
 
