@@ -45,16 +45,16 @@ class VirtualMachine:
         right_operand_value = self.memory.read(right_operand)
 
         if operator == Operator.SUM:
-            operation_outcome = right_operand_value + left_operand_value
+            operation_outcome = left_operand_value + right_operand_value
             self.memory.write(result, operation_outcome)
         if operator == Operator.MULTIPLY:
-            operation_outcome = right_operand_value * left_operand_value
+            operation_outcome = left_operand_value * right_operand_value
             self.memory.write(result, operation_outcome)
         if operator == Operator.MINUS:
-            operation_outcome = right_operand_value - left_operand_value
+            operation_outcome = left_operand_value - right_operand_value
             self.memory.write(result, operation_outcome)
         if operator == Operator.DIVIDE:
-            operation_outcome = right_operand_value / left_operand_value
+            operation_outcome = left_operand_value / right_operand_value
             self.memory.write(result, operation_outcome)
 
     def is_boolean_operator(self, operator):
