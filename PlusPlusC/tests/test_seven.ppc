@@ -1,0 +1,21 @@
+program Main;
+
+func foo(C int, D float, A float) -> void {
+    var A int;
+}
+
+main () {
+    foo(10, 10.1, 10.2);
+    var D int;
+    D = 5;
+
+    if 10 > 20 {
+        D = 2;
+    }
+    else {
+        D = 10;
+        D = 12;
+    }
+    
+    print(D);
+}

@@ -3,10 +3,21 @@ from virtual_machine.memory.virtual_machine_memory import VirtualMachineMemory
 from virtual_machine.common.operator import Operator
 class VirtualMachine:
     
+    """
+    quad_index = Contabiliza el cuadruplo en el que se encuentra
+    go_to_f_index_to_go = Index a llegar en caso de que go_to_f_activated sea verdadero 
+    go_to_f_activated = Bool para saber si puedo acceder los cuadruplos que vienen despues del GoToFo o no
+    can_read_else = Bool para saber si puedo acceder a los cuadruplos de Else
+    go_to_index_to_go = Index a llegar en caso de que go_to_activated sea verdadero 
+    go_to_activated = Bool para saber si puedo acceder los cuadruplos que vienen despues del GoTo o no
+
+    """
     quad_index = -1
     go_to_f_index_to_go = -1
     go_to_f_activated = False
-    
+    can_read_else = False
+    go_to_index_to_go = -1
+    go_to_activated = False
 
     def __init__(self, filename):
         [functions, constants, quadruples] = FileReader(filename)
@@ -15,14 +26,17 @@ class VirtualMachine:
         self.quadruples = quadruples
         self.memory = VirtualMachineMemory(constants)
         
-
     def run(self):
         for quadruple in self.quadruples:
             self.quad_index += 1
 
-            if self.go_to_f_activated == False or self.go_to_f_index_to_go == self.quad_index:
+            if self.go_to_f_activated == False or self.go_to_f_index_to_go == self.quad_index or self.go_to_activated == False or self.go_to_index_to_go == self.quad_index:
+                
+                #Reset a variables a valor default
                 self.go_to_f_index_to_go = -1
                 self.go_to_f_activated == False
+                self.go_to_activated == False
+                self.go_to_index_to_go = -1
 
                 operator = quadruple.operator
                 left_operand = quadruple.left_operand
@@ -128,8 +142,29 @@ class VirtualMachine:
         
         if operator == Operator.GOTOF:
             left_operand_value = self.memory.read(left_operand)
-            #en caso de ser False saltarse al cuadruplo
+            #En caso de ser False saltarse al cuadruplo
             #sino continua leyendo
             if left_operand_value == False:
                 self.go_to_f_index_to_go = result
                 self.go_to_f_activated = True
+                self.can_read_else = True
+            else:
+                self.can_read_else = False
+
+        if operator == Operator.GOTO:
+            #Si no es cuadruplo de main, puede ser de Else o While
+    
+            if self.quad_index != 0:
+                
+                #Si es False, saltarte cuadruplos de Else
+                if self.can_read_else == False:
+                    self.go_to_index_to_go = result
+                    self.go_to_activated = True
+                    self.go_to_f_activated = True
+
+                    #prints para debuggear
+                    # print("go_to_f_index_to_go",self.go_to_f_index_to_go)
+                    # print("go_to_f_activated",self.go_to_f_activated)
+                    # print("go_to_activated",self.go_to_activated)
+                    # print("go_to_index_to_go",self.go_to_index_to_go)
+                    # print("quadindex", self.quad_index)
