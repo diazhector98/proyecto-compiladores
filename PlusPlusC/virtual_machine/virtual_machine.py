@@ -46,13 +46,13 @@ class VirtualMachine:
             elif operator == Operator.PRINT:
                 value = self.memory.read(result)
                 print(value)
-                self.quad_index += 1
+                self.go_to_next_quadruple()
             elif operator == Operator.READ:
                 capture = input("Waiting input: ")
                 self.memory.write(result, capture)
-                self.quad_index += 1
+                self.go_to_next_quadruple()
             else:
-                self.quad_index += 1
+                self.go_to_next_quadruple()
 
     def is_arithmetic_operator(self, operator):
         return operator in [
@@ -72,7 +72,7 @@ class VirtualMachine:
         if operator == Operator.ASSIGN:
             value = self.memory.read(left_operand)
             self.memory.write(result, value)
-            self.quad_index += 1
+            self.go_to_next_quadruple()
             return
 
         left_operand_value = self.memory.read(left_operand)
@@ -91,7 +91,7 @@ class VirtualMachine:
             operation_outcome = left_operand_value / right_operand_value
             self.memory.write(result, operation_outcome)
 
-        self.quad_index += 1
+        self.go_to_next_quadruple()
 
     def is_boolean_operator(self, operator):
         return operator in [
@@ -132,7 +132,7 @@ class VirtualMachine:
             operation_outcome = left_operand_value or right_operand_value
             
         self.memory.write(result, operation_outcome)
-        self.quad_index += 1
+        self.go_to_next_quadruple()
 
     def is_jump_operator(self, operator):
         return operator in [
@@ -148,10 +148,16 @@ class VirtualMachine:
         if operator == Operator.GOTOF:
             left_operand_value = self.memory.read(left_operand)
             if left_operand_value == False:
-                self.quad_index = result
+                self.jump_to_quadruple(result)
             else:
-                self.quad_index += 1
+                self.go_to_next_quadruple()
         elif operator == Operator.GOTO:
-            self.quad_index = result
+            self.jump_to_quadruple(result)
         else:
-            self.quad_index += 1
+            self.go_to_next_quadruple()
+
+    def go_to_next_quadruple(self):
+        self.quad_index += 1
+
+    def jump_to_quadruple(self, quadruple_index):
+        self.quad_index = quadruple_index
