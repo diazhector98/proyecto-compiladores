@@ -219,6 +219,8 @@ class SemanticHandler:
 
             operator = Operator(self.stack.operators.pop())
             cube_result = self.cube[right_operand_type][array_type][operator]
+
+            # TODO: Checar que array_index_type sea int
             if cube_result != "err":
 
                 # Agregando Verify
@@ -229,10 +231,23 @@ class SemanticHandler:
                 # Agregando suma de dirección base
                 temp = self.create_temp_var(VarType.INT)
                 temp_address = self.current_var_table[temp].address
+                # TODO: No sumar direccion directamente, sino el constante de la direccion base
+                # TODO: Agregar direccion base de arreglo a tabla de constantes, en vez de usar array_base_address, usar get_const(array_base_address)
+                # Arr[5]
+                # 5000 + 5001 = _
+                # VM: 5 + 15000 = 150005
                 add_array_base_quadruple = Quadruple(Operator.SUM, array_index_operand, array_base_address, temp_address)
                 self.quadruples.append(add_array_base_quadruple)
 
+
+                # TODO: El temp_address guardarlo en una direccion de apuntadores (pointer_to_temp_address)
+                # tambien usando operador de assign
+
+
+
                 # Agregando Assign
+                # TODO: En vez de array_base_address usar pointer_to_temp_address
+                # La maquina virtual se va a encargar de detectar que es un apuntador(por su rango de direccion) y manejar la lógica
                 assign_quadruple = Quadruple(Operator(operator), right_operand, None, array_base_address)
                 self.quadruples.append(assign_quadruple)
             else:

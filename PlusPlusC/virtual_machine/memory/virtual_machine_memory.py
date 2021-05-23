@@ -43,6 +43,7 @@ class VirtualMachineMemory:
                 return self.temp_block.read(address, block_type)
         elif address >= 15000 and address <= 20000:
                 return self.constants_block.read(address, block_type)
+        # TODO: Agregar rango de apuntadores y hacer 2 reads
         else:
             print("La direccion de memoria: ", address, "es invalida. No se puede leer el valor guardado en ella.")
 
