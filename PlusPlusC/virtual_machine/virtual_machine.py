@@ -72,7 +72,8 @@ class VirtualMachine:
             Operator.ERA,
             Operator.PARAMETER,
             Operator.ENDFUNC,
-            Operator.GOSUB
+            Operator.GOSUB,
+            Operator.RETURN
         ]
 
     def is_jump_operator(self, operator):
@@ -116,6 +117,10 @@ class VirtualMachine:
             self.go_to_next_quadruple()
             self.handle_gosub()
         elif operator == Operator.ENDFUNC:
+            self.call_stack.pop()
+        elif operator == Operator.RETURN:
+            value = self.memory.read(left_operand)
+            self.memory.write(result, value)
             self.call_stack.pop()
 
     def get_current_activation_record(self):
