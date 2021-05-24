@@ -6,6 +6,7 @@ from virtual_machine.memory.block_type import BlockType
 @dataclass
 class ActivationRecord:
     function: Function = None
+    current_quad_index: int = 0
     local_block: VirtualMachineMemoryBlock = VirtualMachineMemoryBlock(5000, 5000)
     temp_block: VirtualMachineMemoryBlock = VirtualMachineMemoryBlock(10000, 5000)
 
