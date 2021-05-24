@@ -77,7 +77,6 @@ class SemanticHandler:
 
     def consume_operand(self, operand, var_type=None, is_constant=False, index=None):
         # Index para arreglos y matrices
-        print(index)
         if is_constant:
             self.consume_constant_operand(operand, var_type)
         else:
@@ -162,7 +161,7 @@ class SemanticHandler:
                 self.quadruples.append(quadruple)
                 self.consume_operand(temp, cube_result)
             else:
-                print("type mismatch between operand", left_operand, "and", right_operand)
+                print("Setting Quadruple: type mismatch between operand", left_operand, "and", right_operand)
         else:
             print("Error: Not enough operands")
 
@@ -195,7 +194,7 @@ class SemanticHandler:
                 quadruple = Quadruple(Operator(operator), right_operand, None, left_operand)
                 self.quadruples.append(quadruple)
             else:
-                print("type mismatch between operand", left_operand, left_operand_type,  "and", right_operand, right_operand_type)
+                print("Adding var operand: type mismatch between operand", left_operand, left_operand_type,  "and", right_operand, right_operand_type)
 
     def handle_array_assign(self, var_name):
         var = self.current_var_table[var_name]
@@ -347,19 +346,19 @@ class SemanticHandler:
                     #guardar temp en direccion de funcion
                     if function.return_type != FuncReturnType.VOID:
 
-                        if FuncReturnType.INT:
+                        if function.return_type == FuncReturnType.INT:
                             temp = self.create_temp_var(VarType.INT)
                             self.functions_directory[self.current_function].temp_var_int_size += 1
 
-                        if FuncReturnType.FLOAT:
+                        if function.return_type == FuncReturnType.FLOAT:
                             temp = self.create_temp_var(VarType.FLOAT)
                             self.functions_directory[self.current_function].temp_var_float_size += 1
 
-                        if FuncReturnType.CHAR:
+                        if function.return_type == FuncReturnType.CHAR:
                             temp = self.create_temp_var(VarType.CHAR)
                             self.functions_directory[self.current_function].temp_var_char_size += 1
 
-                        if FuncReturnType.BOOL:
+                        if function.return_type == FuncReturnType.BOOL:
                             temp = self.create_temp_var(VarType.BOOL)
                             self.functions_directory[self.current_function].temp_var_bool_size += 1
 

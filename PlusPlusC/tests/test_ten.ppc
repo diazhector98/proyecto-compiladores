@@ -1,0 +1,19 @@
+program Main;
+
+func sumaTres(A int, B int, C int) -> int {
+    var result int;
+    result = A + B + C;
+    return result;
+}
+
+main () {
+    var A int;
+    var B int;
+    var C int;
+    var suma int;
+    input(A);
+    input(B);
+    input(C);
+    suma = sumaTres(A, B, 5);
+    print(suma);
+}
