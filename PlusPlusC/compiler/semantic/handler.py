@@ -71,6 +71,7 @@ class SemanticHandler:
         if not constant_address:
             constant_address = self.memory.create_constant_address(type)
             self.constants_table[value] = constant_address
+    
 
     def consume_operator(self, operator):
         self.stack.push_operator(operator)
@@ -241,7 +242,8 @@ class SemanticHandler:
                     # Arr[5]
                     # 5000 + 5001 = _
                     # VM: 5 + 15000 = 150005
-                    add_array_base_quadruple = Quadruple(Operator.SUM, array_index_operand, array_base_address, temp_address)
+                    constant_address = self.create_constant(array_base_address, array_type)
+                    add_array_base_quadruple = Quadruple(Operator.SUM, array_index_operand, constant_address, temp_address)
                     self.quadruples.append(add_array_base_quadruple)
 
 
