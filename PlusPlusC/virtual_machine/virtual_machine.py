@@ -116,8 +116,7 @@ class VirtualMachine:
             self.go_to_next_quadruple()
             self.handle_gosub()
         elif operator == Operator.ENDFUNC:
-            self.go_to_next_quadruple()
-            print("Eliminar contexto de la funcion")
+            self.call_stack.pop()
 
     def get_current_activation_record(self):
         return self.call_stack[-1]
