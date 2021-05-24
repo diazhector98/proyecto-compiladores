@@ -72,6 +72,12 @@ class SemanticHandler:
             constant_address = self.memory.create_constant_address(type)
             self.constants_table[value] = constant_address
     
+    def get_constant(self, value):
+        constant_address = self.constants_table.get(value)
+        if constant_address != None:
+            return constant_address
+        else:
+            print("Constant variable is not registered yet.")
 
     def consume_operator(self, operator):
         self.stack.push_operator(operator)
@@ -237,26 +243,16 @@ class SemanticHandler:
                     # Agregando suma de dirección base
                     temp = self.create_temp_var(VarType.INT)
                     temp_address = self.current_var_table[temp].address
-                    # TODO: No sumar direccion directamente, sino el constante de la direccion base
-                    # TODO: Agregar direccion base de arreglo a tabla de constantes, en vez de usar array_base_address, usar get_const(array_base_address)
-                    # Arr[5]
-                    # 5000 + 5001 = _
-                    # VM: 5 + 15000 = 150005
-                    constant_address = self.create_constant(array_base_address, array_type)
+                    
+                    # Guardando direccion de base (direccion constante) del arreglo
+                    constant_address = self.get_constant(array_base_address)
                     add_array_base_quadruple = Quadruple(Operator.SUM, array_index_operand, constant_address, temp_address)
                     self.quadruples.append(add_array_base_quadruple)
 
-
-                    # TODO: El temp_address guardarlo en una direccion de apuntadores (pointer_to_temp_address)
-                    # tambien usando operador de assign
-
-
-
-                    # Agregando Assign
-                    # TODO: En vez de array_base_address usar pointer_to_temp_address
-                    # La maquina virtual se va a encargar de detectar que es un apuntador(por su rango de direccion) y manejar la lógica
-                    assign_quadruple = Quadruple(Operator(operator), right_operand, None, array_base_address)
-                    self.quadruples.append(assign_quadruple)
+                    # Guardando direccion de temporal en direeccion de pointer
+                    pointer_to_temp_address = self.memory.create_pointer_address(array_type)
+                    temp_address_to_pointer_quadruple = Quadruple(Operator.ASSIGN, temp_address, None, pointer_to_temp_address)
+                    self.quadruples.append(temp_address_to_pointer_quadruple)
                 else:
                     print("type mismatch between operand", array_base_address, array_type,  "and", right_operand, right_operand_type)
             else:
