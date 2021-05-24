@@ -13,6 +13,7 @@ class VirtualMachineMemory:
         self.local_block = VirtualMachineMemoryBlock(self.block_size, self.block_size - 1)
         self.temp_block = VirtualMachineMemoryBlock(self.block_size * 2, self.block_size - 1)
         self.constants_block = VirtualMachineMemoryBlock(self.block_size * 3, self.block_size)
+        self.pointers_block = VirtualMachineMemoryBlock(self.block_size * 4, self.block_size)
 
         # Escribiendo constantes a bloque de constantes
         for address in constants:

@@ -13,6 +13,7 @@ class VirtualMemory:
         self.local_block = VirtualMemoryBlock(self.block_size, self.block_size)
         self.temp_block = VirtualMemoryBlock(self.block_size * 2, self.block_size)
         self.constants_block = VirtualMemoryBlock(self.block_size * 3, self.block_size)
+        self.pointers_block = VirtualMemoryBlock(self.block_size * 4, self.block_size)
 
     def create_global_address(self, type):
         return self.gloabl_block.create_address(type)
@@ -25,6 +26,9 @@ class VirtualMemory:
 
     def create_constant_address(self, type):
         return self.constants_block.create_address(type)
+    
+    def create_pointer_address(self, type):
+        return self.pointers_block.create_address(type)
 
     def reset_local_and_temp_memory(self):
         self.local_block = VirtualMemoryBlock(self.block_size, self.block_size)
