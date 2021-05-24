@@ -384,10 +384,11 @@ class SemanticHandler:
         operand_type = self.stack.types.pop()
 
         if function.return_type.name == operand_type.name:
-            quad = Quadruple(Operator.RETURN, None, None, operand)
+            function_global_address = self.global_var_table[function.name].address
+            quad = Quadruple(Operator.RETURN, operand, None, function_global_address)
             self.quadruples.append(quad)
         else:
-            print("El tipo de retorno que la función espera es incorrecto.")
+            raise Exception("El tipo de retorno que la función espera es incorrecto.")
         
     # Método de debugging
     def print_quadruples(self):
