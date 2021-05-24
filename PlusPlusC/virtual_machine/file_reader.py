@@ -20,7 +20,10 @@ class FileReader:
     def process_functions_text(self, text):
         lines = self.split_text(text)
         functions = [Function(l) for l in lines]
-        return functions
+        functions_dictionary = {}
+        for f in functions:
+            functions_dictionary[f.name] = f
+        return functions_dictionary
 
     def process_constants_text(self, text):
         lines = self.split_text(text)
