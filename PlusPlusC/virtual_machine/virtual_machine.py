@@ -101,10 +101,10 @@ class VirtualMachine:
         operator = quadruple.operator
         left_operand = quadruple.left_operand
         result = quadruple.result
-
         if operator == Operator.ERA:
             print("Hacer espacio de memoria para la funcion", result)
-            activation_record = ActivationRecord(self.functions[result])
+            function = self.functions[result]
+            activation_record = ActivationRecord(function, function.start_quadruple_index)
             self.activation_records_waiting.append(activation_record)
             self.go_to_next_quadruple()
         elif operator == Operator.PARAMETER:
@@ -114,7 +114,8 @@ class VirtualMachine:
             self.go_to_next_quadruple()
         elif operator == Operator.GOSUB:
             self.go_to_next_quadruple()
-        elif operator == Operator.ENDFUN:
+            self.handle_gosub()
+        elif operator == Operator.ENDFUNC:
             self.go_to_next_quadruple()
             print("Eliminar contexto de la funcion")
 
@@ -123,6 +124,12 @@ class VirtualMachine:
 
     def get_next_activation_record(self):
         return self.activation_records_waiting[-1]
+
+    def handle_gosub(self):
+        # El gosub mueve el activation record que 
+        # se estaba preparando al tope del call stack
+        activation_record = self.activation_records_waiting.pop()
+        self.call_stack.append(activation_record)
 
     def get_quad_index(self):
         current_activation_record = self.get_current_activation_record()
