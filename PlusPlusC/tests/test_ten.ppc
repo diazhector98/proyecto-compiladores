@@ -6,14 +6,23 @@ func sumaTres(A int, B int, C int) -> int {
     return result;
 }
 
+func sumaCuatro(A int, B int, C int, D int) -> int {
+    var result int;
+    result = A + B + C + D;
+    return result;
+}
+
 main () {
     var A int;
     var B int;
     var C int;
-    var suma int;
+    var sum3 int;
+    var sum4 int;
     input(A);
     input(B);
     input(C);
-    suma = sumaTres(A, B, 5);
-    print(suma);
+    sum3 = sumaTres(A, B, C);
+    sum4 = sumaCuatro(A, B, C, sum3);
+    print(sum3);
+    print(sum4);
 }

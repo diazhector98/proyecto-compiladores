@@ -103,7 +103,6 @@ class VirtualMachine:
         left_operand = quadruple.left_operand
         result = quadruple.result
         if operator == Operator.ERA:
-            print("Hacer espacio de memoria para la funcion", result)
             function = self.functions[result]
             activation_record = ActivationRecord(function, function.start_quadruple_index)
             self.activation_records_waiting.append(activation_record)
