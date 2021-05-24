@@ -221,6 +221,7 @@ class SemanticHandler:
             cube_result = self.cube[right_operand_type][array_type][operator]
 
             # TODO: Checar que array_index_type sea int
+            print("array_index_type", array_index_type)
             if cube_result != "err":
 
                 # Agregando Verify
