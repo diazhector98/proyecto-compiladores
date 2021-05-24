@@ -48,7 +48,7 @@ class SemanticHandler:
     def set_parametros(self, parametros):
         for (param_name, param_var_type) in parametros:
             address = self.memory.create_local_address(param_var_type)
-            self.functions_directory[self.current_function].add_param((param_name, param_var_type))
+            self.functions_directory[self.current_function].add_param((param_name, param_var_type, address))
             self.current_var_table[param_name] = VariableTableRecord(
                 name = param_name,
                 type = param_var_type,
@@ -336,7 +336,8 @@ class SemanticHandler:
         
                     arguments.reverse()
                     for index, (argument, argument_type) in enumerate(arguments):
-                        param_quad = Quadruple(Operator.PARAMETER, argument, None, f"p{index}")
+                        param_address = function.params[index][2]
+                        param_quad = Quadruple(Operator.PARAMETER, argument, None, param_address)
                         self.quadruples.append(param_quad)
 
                     gosub_quad = Quadruple(Operator.GOSUB, None, None, func_name)

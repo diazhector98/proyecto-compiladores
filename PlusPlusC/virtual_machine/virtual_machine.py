@@ -15,7 +15,7 @@ class VirtualMachine:
         self.constants = constants
         self.quadruples = quadruples
         self.call_stack = [ActivationRecord()]
-        self.activation_records_queue = []
+        self.activation_records_waiting = []
         self.memory = VirtualMachineMemory(constants, self.get_current_activation_record())
         
     def run(self):
@@ -110,8 +110,11 @@ class VirtualMachine:
         if operator == Operator.ERA:
             print("Hacer espacio de memoria para la funcion", result)
             activation_record = ActivationRecord(self.functions[result])
-            self.activation_records_queue.append(activation_record)
+            self.activation_records_waiting.append(activation_record)
         elif operator == Operator.PARAMETER:
+            next_activation_record = self.get_next_activation_record()
+            value = self.memory.read(left_operand)
+            next_activation_record.write(result, value)
             print("Quardar ", left_operand , "en parametro", result)
         elif operator == Operator.GOSUB:
             print("Cambio de contexto a la funcion")
@@ -120,6 +123,9 @@ class VirtualMachine:
 
     def get_current_activation_record(self):
         return self.call_stack[-1]
+
+    def get_next_activation_record(self):
+        return self.activation_records_waiting[-1]
 
     def go_to_next_quadruple(self):
         self.quad_index += 1

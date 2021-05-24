@@ -13,9 +13,9 @@ READ         -1         -1         5000
 READ         -1         -1         5001      
 READ         -1         -1         5002      
 ERA          -1         -1         sumaTres  
-PARAMETER    5000       -1         p0        
-PARAMETER    5001       -1         p1        
-PARAMETER    15001      -1         p2        
+PARAMETER    5000       -1         5000      
+PARAMETER    5001       -1         5001      
+PARAMETER    15001      -1         5002      
 GOSUB        -1         -1         sumaTres  
 ASSIGN       0          -1         10000     
 ASSIGN       10000      -1         5003      
