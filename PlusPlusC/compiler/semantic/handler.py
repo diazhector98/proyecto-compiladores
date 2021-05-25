@@ -104,6 +104,28 @@ class SemanticHandler:
         except Exception:
             print("variable", operand, "does not exist")
 
+    def consume_array_usage(self, array_name, index_operand):
+        var = self.var_lookup(array_name)
+        if var is None:
+            raise Exception("Array does not exist")
+        
+        base_address = var.address
+        index_address = index_operand[0]
+        index_type = index_operand[1]
+
+        # Verificar que el indice este en rango
+        rows_address = self.constants_table.get(var.dimensions[0])
+        verify_quadruple = Quadruple(Operator.VERIFY, index_address, None, rows_address)
+        self.quadruples.append(verify_quadruple)
+
+        constant_address = self.get_constant(base_address)
+        pointer_to_temp_address = self.memory.create_pointer_address(var.type)
+        add_array_base_quadruple = Quadruple(Operator.SUM, index_address, constant_address, pointer_to_temp_address)
+        self.quadruples.append(add_array_base_quadruple)
+
+        self.stack.push_operand(pointer_to_temp_address, var.type)
+
+
     # Buscar variable en tabla de variables locales y globales
     def var_lookup(self, var_name):
         var = self.current_var_table.get(var_name)

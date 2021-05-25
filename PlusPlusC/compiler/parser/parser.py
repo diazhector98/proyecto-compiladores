@@ -214,7 +214,7 @@ class PlusPlusCParser(Parser):
     def factor(self, p):
         array_name = p.uso_arreglo[0]
         array_index = p.uso_arreglo[1]
-        self.semantic_actions.consume_operand(array_name, index=array_index)
+        self.semantic_actions.consume_array_usage(array_name, array_index)
 
     @_('uso_matriz')
     def factor(self, p):
