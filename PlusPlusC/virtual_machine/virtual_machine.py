@@ -20,6 +20,7 @@ class VirtualMachine:
             operator = quadruple.operator
             left_operand = quadruple.left_operand
             result = quadruple.result
+            # print(quad_index, ")", quadruple)
 
             if self.is_arithmetic_operator(operator):
                 handle_arithmetic_operator(quadruple, self.memory)
@@ -116,11 +117,13 @@ class VirtualMachine:
             self.go_to_next_quadruple()
             self.handle_gosub()
         elif operator == Operator.ENDFUNC:
-            self.call_stack.pop()
+            s = self.call_stack.pop()
+            self.memory.activation_record = self.get_current_activation_record()
         elif operator == Operator.RETURN:
             value = self.memory.read(left_operand)
             self.memory.write(result, value)
-            self.call_stack.pop()
+            f = self.call_stack.pop()
+            self.memory.activation_record = self.get_current_activation_record()
 
     def get_current_activation_record(self):
         return self.call_stack[-1]
@@ -133,6 +136,8 @@ class VirtualMachine:
         # se estaba preparando al tope del call stack
         activation_record = self.activation_records_waiting.pop()
         self.call_stack.append(activation_record)
+        self.memory.activation_record = activation_record
+
 
     def get_quad_index(self):
         current_activation_record = self.get_current_activation_record()
@@ -145,3 +150,8 @@ class VirtualMachine:
     def jump_to_quadruple(self, quadruple_index):
         current_activation_record = self.get_current_activation_record()
         current_activation_record.current_quad_index = quadruple_index
+
+    def print_call_stack(self):
+        for ar in self.call_stack:
+            print(id(ar), ",", end="")
+        print("")

@@ -1,28 +1,19 @@
 program Main;
 
-func sumaTres(A int, B int, C int) -> int {
+func sumaUno(A int) -> int {
     var result int;
-    result = A + B + C;
-    return result;
-}
-
-func sumaCuatro(A int, B int, C int, D int) -> int {
-    var result int;
-    result = A + B + C + D;
+    result = A + 1;
     return result;
 }
 
 main () {
     var A int;
-    var B int;
-    var C int;
-    var sum3 int;
-    var sum4 int;
+    var sum1 int;
+    var sum2 int;
     input(A);
-    input(B);
-    input(C);
-    sum3 = sumaTres(A, B, C);
-    sum4 = sumaCuatro(A, B, C, sum3);
-    print(sum3);
-    print(sum4);
+    sum1 = sumaUno(A);
+    print(sum1);
+    sum2 = sumaUno(sum1);
+    print(sum1);
+    print(sum2);
 }

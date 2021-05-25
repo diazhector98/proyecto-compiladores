@@ -8,6 +8,7 @@ def handle_arithmetic_operator(quadruple, memory):
 
     if operator == Operator.ASSIGN:
         value = memory.read(left_operand)
+        prev_value = memory.read(result)
         memory.write(result, value)
         return
 
