@@ -12,7 +12,6 @@ def handle_arithmetic_operator(quadruple, memory):
             memory.write(result, left_operand)
         else:
             value = memory.read(left_operand)
-            prev_value = memory.read(result)
             memory.write(result, value)
         return
 
@@ -20,10 +19,7 @@ def handle_arithmetic_operator(quadruple, memory):
     right_operand_value = memory.read(right_operand)
 
     if operator == Operator.SUM:
-        #print("left_operand_value",left_operand_value)
-        #print("right_operand_value",right_operand_value)
         operation_outcome = left_operand_value + right_operand_value
-        #print("operation_outcome",operation_outcome)
         memory.write(result, operation_outcome)
     if operator == Operator.MULTIPLY:
         operation_outcome = left_operand_value * right_operand_value
