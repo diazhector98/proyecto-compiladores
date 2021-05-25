@@ -234,25 +234,20 @@ class SemanticHandler:
             # Validando que array_index_type sea int
             if array_index_type == VarType.INT:
                 if cube_result != "err":
-
                     # Agregando Verify
                     rows_address = self.constants_table.get(var.dimensions[0])
                     verify_quadruple = Quadruple(Operator.VERIFY, array_index_operand, None, rows_address)
                     self.quadruples.append(verify_quadruple)
 
-                    # Agregando suma de dirección base
-                    temp = self.create_temp_var(VarType.INT)
-                    temp_address = self.current_var_table[temp].address
-                    
-                    # Guardando direccion de base (direccion constante) del arreglo
+                    # Haciendo suma de direccion base
                     constant_address = self.get_constant(array_base_address)
-                    add_array_base_quadruple = Quadruple(Operator.SUM, array_index_operand, constant_address, temp_address)
+                    pointer_to_temp_address = self.memory.create_pointer_address(array_type)
+                    add_array_base_quadruple = Quadruple(Operator.SUM, array_index_operand, constant_address, pointer_to_temp_address)
                     self.quadruples.append(add_array_base_quadruple)
 
                     # Guardando direccion de temporal en direeccion de pointer
-                    pointer_to_temp_address = self.memory.create_pointer_address(array_type)
-                    temp_address_to_pointer_quadruple = Quadruple(Operator.ASSIGN, temp_address, None, pointer_to_temp_address)
-                    self.quadruples.append(temp_address_to_pointer_quadruple)
+                    assign_right_operand_to_pointer_quadruple = Quadruple(Operator.ASSIGN, right_operand, None, pointer_to_temp_address)
+                    self.quadruples.append(assign_right_operand_to_pointer_quadruple)
                 else:
                     print("type mismatch between operand", array_base_address, array_type,  "and", right_operand, right_operand_type)
             else:
