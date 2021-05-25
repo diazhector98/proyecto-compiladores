@@ -1,28 +1,37 @@
 # proyecto-compiladores
 
-#Avance 6
+#Avance 7
 
-* Se agregó el operador GOTO para detectar la función “main”, también se agregaron los operadores de funciones y se agregó la funcionalidad para guardar el objeto función.
-* Se agregó el campo de los parámetros al objeto de la función, también se agregó el cuádruplo ERA y se arregló un bug de floats.
-* Se agregó el campo de la dirección al objeto de la función, también se agregó el cuádruplo ENDFUNC y se agregaron nuevos casos de ejemplo.
-* Se agregó la funcionalidad para regresar los parámetros en la llamada a función, también se agregaron cuadrupulos PARAMETER y GOSUB al llamar la función.
-* Se agregó la funcionalidad para validar el tipo y la cantidad de argumentos en la llamada a función, también se agregó el cuádruplo RETURN y la validación del retorno de la función.
-* Se crearon las clases para el manejo de la memoria virtual, tomando en cuenta la estructura de memoria que se utilizará para su uso. 
-* Se dividió la manera de guardar los operandos, haciendo la diferenciación si son constantes o variables.
-* Se agregó la dirección de memoria a las variables constantes y se modificaron los cuádruplos para guardar dicha memoria. Dichas direcciones también se agregaron a la tabla de constantes.
-* Se mejoró la impresión de los cuádruplos para mejorar la manera de trabajar en el proyecto.
-* Se implementó una función para imprimir las variables constantes.
-* Se agregó la dirección de memoria a las variables globales y se modificaron los cuádruplos para guardar dicha memoria.
-* Se agregó la dirección de memoria a las variables locales y los temporales.
-* Se agregaron campos en el objeto de la función para contabilizar el número de temporales y variables locales.
-* Se contabilizó el número de temporales utilizados en una función.
-* Se creó una clase para leer el archivo de compilación
-* Se creó la tabla de constantes en el parseo de la máquina virtual.
-* Se creó una clase especial de cuádruplos para la máquina virtual y se parsearon los cuádruplos.
-* Se parsearon las funciones para la máquina virtual.
-* Se creó la clase para la máquina virtual
-* Se contabilizó los tamaños de las variables locales
-* Se agregó la dirección de memoria a los parámetros de una función
-* Se implementó la funcionalidad para realizar el reset de la memoria local y temporal al terminar la funció
-* Se crearon archivos para el manejo de la máquina virtual.
+* Se creo la clase para crear archivo de output de compilación
+* Se parsearon al archivo el directorio de funciones, los cuadruplos, y las constantes
+* Se valido la direccion de la constante para determinar su tipo
+* Se trabajo la logica para aceptar las declaraciones de arreglos y matrices 
+* Se acepto la lectura de los indices de declaracion de arreglos
+* Se modificaron las reglas de sintaxis para el uso de arreglos y matrices
+* Se agregaron metodos para escribir/leer una direccion
+* Se agrego el campo de direccion para variables
+* Se guardaron las dimensiones de arreglos
+* Se agrego el parametro de bloque al momento de crear una direccion para calcular su bloque de memoria
+* Se agrego el operador verify para arreglos y matrices
+* Se agrego funcion no void a tabla de variables globales
+* Se agrego el cuadruplo para guardar el resultado de una funcion no void
+* Se creo una clase de operadores para maquina virtual
+* Se agrego la escritura en memoria
+* Se agrego la lectura en memoria
+* Se agrego el manejo de los operadores read, print en la maquina virtual
+* Se agrego el manejo del los operadores suma, resta, multiplicacion y division en la maquina virtual
+* Se creo una funcion para determinar si el operador es tipo jump
+* Se agrego el manejo de operadores booleanos en la maquina virtual
+* Se agrego el manejo de los operadores if,else, while a la maquina virtual
+* Se agrego el operador de asignacion para asignaciones de operadores aritmeticos en la maquina virtual
+* Se agrego el operador verify a asignacion de arreglo
+* Se agrego la validacion del indice del arreglo con su respectivo cuadruplo
+* Se agrego el cuadruplo para sumar la direccion base a arreglo
+* Se agrego la validacion del indice del arreglo
+* Se agrego la direccion base del arreglo a tabla de constantes
+* Se agrego bloque de memoria para apuntadores
+* Se agregaron registros de activaciones para guardar memoria local y temporal
+* Se agrego el manejo del operador era en la maquina virtual
+* Se agrego el uso de la direccion de los parametros en lugar de su nombre
+* Se agrego el manejo de los operadores gosub, endfunc, return en la maquina virtual
 
