@@ -6,12 +6,6 @@ func foo(C int, D float, A float) -> void {
 
 main () {
     var array[10] int;
-    var matrix[5][30] float;
-    var arrayIndex int;
-    var qty float;
-    array[0 + 25] = 30 * 78 + 17;
-    print(array);
-    print(matrix);
-    print(arrayIndex);
-    print(qty);
+    array[1] = 1;
+    
 }

@@ -58,6 +58,18 @@ class VirtualMachineMemoryBlock:
             else: 
                 print("La direccion de constante a la que se desea accesar es erronea.") 
         
+        elif block_type == BlockType.POINTER:
+            if address >= 20000 and address < 21250:
+                return self.write_int_address(address - 20000)
+            elif address >= 21250 and address < 22500:
+                return self.write_float_address(address - 21250)  
+            elif address >= 22500 and address < 23750:
+                return self.write_char_address(address - 22500)
+            elif address >= 23750 and address <= 25000:
+                return self.write_bool_address(address - 23750)
+            else: 
+                print("La direccion de pointer que desea leer es erronea.") 
+
         else:
             print("La direccion de memoria: ", address, "no es valida.")
 
@@ -110,6 +122,18 @@ class VirtualMachineMemoryBlock:
                 return self.read_bool_address(address - 18750)
             else: 
                 print("La direccion de constante que desea leer es erronea.") 
+            
+        elif block_type == BlockType.POINTER:
+            if address >= 20000 and address < 21250:
+                return self.read_int_address(address - 20000)
+            elif address >= 21250 and address < 22500:
+                return self.read_float_address(address - 21250)  
+            elif address >= 22500 and address < 23750:
+                return self.read_char_address(address - 22500)
+            elif address >= 23750 and address <= 25000:
+                return self.read_bool_address(address - 23750)
+            else: 
+                print("La direccion de pointer que desea leer es erronea.") 
         
         else:
             print("La direccion de memoria: ", address, "no es valida.")

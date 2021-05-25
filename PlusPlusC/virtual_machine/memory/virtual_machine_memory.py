@@ -28,8 +28,11 @@ class VirtualMachineMemory:
                 self.activation_record.local_block.write(address, value, block_type)
         elif address >= 10000 and address < 15000:
                 self.activation_record.temp_block.write(address, value, block_type)
-        elif address >= 15000 and address <= 20000:
+        elif address >= 15000 and address < 20000:
                 self.constants_block.write(address, value, block_type)
+        elif address >= 20000 and address < 25000:
+                address_saved_in_pointer = self.pointers_block.read(address, block_type)
+                self.write(address_saved_in_pointer, value)
         else:
             print("La direccion de memoria: ", address, "es invalida. No se puede acceder para modificar el valor en ella.")
 
@@ -41,9 +44,13 @@ class VirtualMachineMemory:
                 return self.activation_record.local_block.read(address, block_type)
         elif address >= 10000 and address < 15000:
                 return self.activation_record.temp_block.read(address, block_type)
-        elif address >= 15000 and address <= 20000:
+        elif address >= 15000 and address < 20000:
                 return self.constants_block.read(address, block_type)
         # TODO: Agregar rango de apuntadores y hacer 2 reads
+        elif address >= 20000 and address <= 25000:
+                address_saved_in_pointer = self.pointers_block.read(address, block_type)
+                print("address_saved_in_pointer",address_saved_in_pointer)
+                return self.read(address_saved_in_pointer)
         else:
             print("La direccion de memoria: ", address, "es invalida. No se puede leer el valor guardado en ella.")
 
@@ -54,8 +61,10 @@ class VirtualMachineMemory:
                 return BlockType.LOCAL
         elif address >= 10000 and address < 15000:
                 return BlockType.TEMP
-        elif address >= 15000 and address <= 20000:
+        elif address >= 15000 and address < 20000:
                 return BlockType.CONSTANTS
+        elif address >= 20000 and address <= 25000:
+                return BlockType.POINTER
         else:
             print("La direccion de memoria: ", address, "es invalida.")
     

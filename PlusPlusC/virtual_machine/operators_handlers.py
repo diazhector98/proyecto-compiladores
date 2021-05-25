@@ -8,15 +8,22 @@ def handle_arithmetic_operator(quadruple, memory):
 
     if operator == Operator.ASSIGN:
         value = memory.read(left_operand)
-        prev_value = memory.read(result)
-        memory.write(result, value)
+
+        if result >= 20000:
+            memory.write(result, value)
+        else:
+            prev_value = memory.read(result)
+            memory.write(result, value)
         return
 
     left_operand_value = memory.read(left_operand)
     right_operand_value = memory.read(right_operand)
 
     if operator == Operator.SUM:
+        #print("left_operand_value",left_operand_value)
+        #print("right_operand_value",right_operand_value)
         operation_outcome = left_operand_value + right_operand_value
+        #print("operation_outcome",operation_outcome)
         memory.write(result, operation_outcome)
     if operator == Operator.MULTIPLY:
         operation_outcome = left_operand_value * right_operand_value

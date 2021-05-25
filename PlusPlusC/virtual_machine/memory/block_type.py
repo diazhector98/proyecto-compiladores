@@ -5,3 +5,4 @@ class BlockType(Enum):
     CONSTANTS = "CONSTANTS"
     LOCAL = "LOCAL"
     TEMP = "TEMP"
+    POINTER = "POINTER"
