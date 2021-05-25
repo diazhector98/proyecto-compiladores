@@ -44,8 +44,8 @@ class VirtualMachine:
                 capture = input("Waiting input: ")
                 self.memory.write(result, capture)
                 self.go_to_next_quadruple()
-            # elif operator == Operator.VERIFY:
-            #     self.handle_array_matrix_operator(quadruple)
+            elif operator == Operator.VERIFY:
+                self.handle_array_matrix_operator(quadruple)
             else:
                 self.go_to_next_quadruple()
 
@@ -140,16 +140,18 @@ class VirtualMachine:
         self.call_stack.append(activation_record)
         self.memory.activation_record = activation_record
 
-    # def handle_array_matrix_operator(self, quadruple):
-    #     operator = quadruple.operator
-    #     left_operand = quadruple.left_operand
-    #     result = quadruple.result
+    def handle_array_matrix_operator(self, quadruple):
+        operator = quadruple.operator
+        left_operand = quadruple.left_operand
+        result = quadruple.result
 
-    #     if operator == Operator.VERIFY:
-    #         left_operand_value = self.memory.read(left_operand)
-    #         result_value = self.memory.read(result)
-    #         if not 0 <= left_operand_value <= result_value:
-    #             print("Error: index out bounds")
+        if operator == Operator.VERIFY:
+            left_operand_value = self.memory.read(left_operand)
+            result_value = self.memory.read(result)
+            if not 0 <= left_operand_value <= result_value:
+                print("Error: index out bounds")
+            self.go_to_next_quadruple()
+
 
     def get_quad_index(self):
         current_activation_record = self.get_current_activation_record()
