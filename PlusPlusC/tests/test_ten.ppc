@@ -1,0 +1,26 @@
+program Main;
+
+func sumaUno(A int) -> int {
+    var result int;
+    result = A + 1;
+    return result;
+}
+
+func imprimeTres(A int, B int, C int) -> void {
+    print(A);
+    print(B);
+    print(C);
+}
+
+main () {
+    var A int;
+    var sum1 int;
+    var sum2 int;
+    input(A);
+    sum1 = sumaUno(A);
+    print(sum1);
+    sum2 = sumaUno(sum1);
+    print(sum1);
+    print(sum2);
+    imprimeTres(8, 9, 10);
+}

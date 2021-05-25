@@ -6,15 +6,14 @@ Clase para manejar la memoria virtual en el proceso de semántica.
 Guarda los bloques de memoria para globales, locales, temporales y constantes
 """
 class VirtualMachineMemory:
-    def __init__(self, constants):
+    def __init__(self, constants, activation_record):
         memory_size = 25000
         self.block_size = memory_size // 5
         self.gloabl_block = VirtualMachineMemoryBlock(0, self.block_size)
-        self.local_block = VirtualMachineMemoryBlock(self.block_size, self.block_size)
-        self.temp_block = VirtualMachineMemoryBlock(self.block_size * 2, self.block_size)
         self.constants_block = VirtualMachineMemoryBlock(self.block_size * 3, self.block_size)
         self.pointers_block = VirtualMachineMemoryBlock(self.block_size * 4, self.block_size)
-
+        # Guarda memoria local y temporal
+        self.activation_record = activation_record
         # Escribiendo constantes a bloque de constantes
         for address in constants:
                 value = constants[address]
@@ -26,9 +25,9 @@ class VirtualMachineMemory:
         if address >= 0 and address < 5000:
                 self.gloabl_block.write(address, value, block_type)
         elif address >= 5000 and address < 10000:
-                self.local_block.write(address, value, block_type)
+                self.activation_record.local_block.write(address, value, block_type)
         elif address >= 10000 and address < 15000:
-                self.temp_block.write(address, value, block_type)
+                self.activation_record.temp_block.write(address, value, block_type)
         elif address >= 15000 and address <= 20000:
                 self.constants_block.write(address, value, block_type)
         else:
@@ -39,9 +38,9 @@ class VirtualMachineMemory:
         if address >= 0 and address < 5000:
                 return self.gloabl_block.read(address, block_type)
         elif address >= 5000 and address < 10000:
-                return self.local_block.read(address, block_type)
+                return self.activation_record.local_block.read(address, block_type)
         elif address >= 10000 and address < 15000:
-                return self.temp_block.read(address, block_type)
+                return self.activation_record.temp_block.read(address, block_type)
         elif address >= 15000 and address <= 20000:
                 return self.constants_block.read(address, block_type)
         # TODO: Agregar rango de apuntadores y hacer 2 reads
