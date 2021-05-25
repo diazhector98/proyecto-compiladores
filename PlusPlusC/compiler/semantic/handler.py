@@ -46,6 +46,7 @@ class SemanticHandler:
         self.current_function = func_name
 
     def set_parametros(self, parametros):
+        parametros.reverse()
         for (param_name, param_var_type) in parametros:
             address = self.memory.create_local_address(param_var_type)
             self.functions_directory[self.current_function].add_param((param_name, param_var_type, address))

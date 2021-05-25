@@ -6,6 +6,12 @@ func sumaUno(A int) -> int {
     return result;
 }
 
+func imprimeTres(A int, B int, C int) -> void {
+    print(A);
+    print(B);
+    print(C);
+}
+
 main () {
     var A int;
     var sum1 int;
@@ -16,4 +22,5 @@ main () {
     sum2 = sumaUno(sum1);
     print(sum1);
     print(sum2);
+    imprimeTres(8, 9, 10);
 }
