@@ -1,4 +1,6 @@
 from virtual_machine.common.operator import Operator
+from virtual_machine.memory.block_type import BlockType
+
 
 def handle_arithmetic_operator(quadruple, memory):
     operator = quadruple.operator
@@ -8,8 +10,14 @@ def handle_arithmetic_operator(quadruple, memory):
 
     if operator == Operator.ASSIGN:
 
-        if result >= 20000:
-            memory.write(result, left_operand)
+        if address_is_pointer(left_operand):
+            address = memory.read(left_operand)
+            value = memory.read(address)
+
+        if address_is_pointer(result):
+            address_of_pointer = memory.pointers_block.read(result, BlockType.POINTER)
+            left_operand_value = memory.read(left_operand)
+            memory.write(address_of_pointer, left_operand_value)
         else:
             value = memory.read(left_operand)
             memory.write(result, value)
@@ -58,3 +66,6 @@ def handle_boolean_operator(quadruple, memory):
         operation_outcome = left_operand_value or right_operand_value
         
     memory.write(result, operation_outcome)
+
+def address_is_pointer(address):
+    return address >= 20000

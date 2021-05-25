@@ -7,8 +7,12 @@ func foo(C int, D float, A float) -> void {
 main () {
     var array[10] int;
     var result int;
+    var otherResult int;
     array[1] = 20;
-    result = array[1];
-    print(7);
+    array[2] = 25;
+    array[3] = 30;
+    result = array[2];
     print(result);
+    otherResult = result + 1;
+    print(otherResult);
 }
