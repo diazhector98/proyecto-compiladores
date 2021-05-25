@@ -112,7 +112,6 @@ class SemanticHandler:
         base_address = var.address
         index_address = index_operand[0]
         index_type = index_operand[1]
-        print("entre consume_array")
         # Verificar que el indice este en rango
         rows_address = self.constants_table.get(var.dimensions[0])
         verify_quadruple = Quadruple(Operator.VERIFY, index_address, None, rows_address)
