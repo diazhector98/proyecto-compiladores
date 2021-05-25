@@ -6,6 +6,5 @@ func foo(C int, D float, A float) -> void {
 
 main () {
     var array[10] int;
-    array[1] = 1;
-    
+    array[1] = 20;
 }

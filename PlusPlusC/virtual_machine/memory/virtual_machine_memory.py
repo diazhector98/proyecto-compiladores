@@ -31,8 +31,7 @@ class VirtualMachineMemory:
         elif address >= 15000 and address < 20000:
                 self.constants_block.write(address, value, block_type)
         elif address >= 20000 and address < 25000:
-                address_saved_in_pointer = self.pointers_block.read(address, block_type)
-                self.write(address_saved_in_pointer, value)
+                self.pointers_block.write(address, value, block_type)
         else:
             print("La direccion de memoria: ", address, "es invalida. No se puede acceder para modificar el valor en ella.")
 
@@ -49,7 +48,6 @@ class VirtualMachineMemory:
         # TODO: Agregar rango de apuntadores y hacer 2 reads
         elif address >= 20000 and address <= 25000:
                 address_saved_in_pointer = self.pointers_block.read(address, block_type)
-                print("address_saved_in_pointer",address_saved_in_pointer)
                 return self.read(address_saved_in_pointer)
         else:
             print("La direccion de memoria: ", address, "es invalida. No se puede leer el valor guardado en ella.")

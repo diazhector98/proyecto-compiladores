@@ -7,11 +7,11 @@ def handle_arithmetic_operator(quadruple, memory):
     result = quadruple.result
 
     if operator == Operator.ASSIGN:
-        value = memory.read(left_operand)
 
         if result >= 20000:
-            memory.write(result, value)
+            memory.write(result, left_operand)
         else:
+            value = memory.read(left_operand)
             prev_value = memory.read(result)
             memory.write(result, value)
         return

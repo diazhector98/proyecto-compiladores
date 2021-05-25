@@ -60,13 +60,13 @@ class VirtualMachineMemoryBlock:
         
         elif block_type == BlockType.POINTER:
             if address >= 20000 and address < 21250:
-                return self.write_int_address(address - 20000)
+                self.write_int_address(address - 20000, value)
             elif address >= 21250 and address < 22500:
-                return self.write_float_address(address - 21250)  
+                self.write_float_address(address - 21250, value)  
             elif address >= 22500 and address < 23750:
-                return self.write_char_address(address - 22500)
+                self.write_char_address(address - 22500, value)
             elif address >= 23750 and address <= 25000:
-                return self.write_bool_address(address - 23750)
+                self.write_bool_address(address - 23750, value)
             else: 
                 print("La direccion de pointer que desea leer es erronea.") 
 
