@@ -138,7 +138,7 @@ class PlusPlusCParser(Parser):
         self.semantic_actions.handle_return()
 
     #Asignacion
-    @_('asignacion_variable', 'asignacion_arreglo')
+    @_('asignacion_variable', 'asignacion_arreglo', 'asignacion_matrix')
     def asignacion(self, p):
         pass
 
@@ -151,6 +151,11 @@ class PlusPlusCParser(Parser):
     @_('ID "[" exp "]" ASSIGN expresion ";"')
     def asignacion_arreglo(self, p):
         self.semantic_actions.handle_array_assign(p[0])
+        pass
+
+    @_('ID "[" exp "]" "[" exp "]" ASSIGN expresion ";"')
+    def asignacion_matrix(self, p):
+        self.semantic_actions.handle_matrix_assign(p[0])
         pass
 
     #Declaracion

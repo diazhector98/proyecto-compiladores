@@ -112,7 +112,7 @@ class SemanticHandler:
         base_address = var.address
         index_address = index_operand[0]
         index_type = index_operand[1]
-
+        print("entre consume_array")
         # Verificar que el indice este en rango
         rows_address = self.constants_table.get(var.dimensions[0])
         verify_quadruple = Quadruple(Operator.VERIFY, index_address, None, rows_address)
@@ -274,6 +274,76 @@ class SemanticHandler:
                     print("type mismatch between operand", array_base_address, array_type,  "and", right_operand, right_operand_type)
             else:
                 print("Error: the array index type must be an integer.")
+
+    def handle_matrix_assign(self, var_name):
+        var = self.current_var_table[var_name]
+        if var is None:
+            print("var is not declared")
+        else:
+            self.consume_operand(var.name, var.type)
+            self.stack.operators.append(Operator.ASSIGN)
+
+            self.stack.operands.reverse()
+            self.stack.operators.reverse()
+            self.stack.types.reverse()
+
+            matrix_first_index_operand = self.stack.operands.pop()
+            matrix_second_index_operand = self.stack.operands.pop()
+            right_operand = self.stack.operands.pop()
+            matrix_base_address = self.stack.operands.pop()
+
+            matrix_first_index_type = self.stack.types.pop()
+            matrix_second_index_type = self.stack.types.pop()
+            right_operand_type = self.stack.types.pop()
+            matrix_type = self.stack.types.pop()
+
+            # Agregando direccion base a tabla de constantes
+            self.create_constant(matrix_base_address, matrix_type)
+            operator = Operator(self.stack.operators.pop())
+            cube_result = self.cube[right_operand_type][matrix_type][operator]
+
+            if matrix_first_index_type == VarType.INT and matrix_second_index_type == VarType.INT:
+                
+                if cube_result != "err":
+                    
+                    # Agregando Verify de la primera dimension
+                    rows_address = self.constants_table.get(var.dimensions[0])
+                    verify_quadruple = Quadruple(Operator.VERIFY, matrix_first_index_operand, None, rows_address)
+                    self.quadruples.append(verify_quadruple)
+
+                    # Agregando Multiply s1*m1
+                    m_one = int(((var.dimensions[0] + 1) * (var.dimensions[1] + 1)) / (var.dimensions[0] + 1))
+                    m_one_constant = self.create_constant(m_one, VarType.INT)
+                    m_one_constant_adress = self.get_constant(matrix_base_address)
+                    temp_multiply = self.create_temp_var(VarType.INT)
+                    temp_multiply_address = self.current_var_table[temp_multiply].address
+                    multiply_m_one_quadruple = Quadruple(Operator.MULTIPLY, matrix_first_index_operand, m_one_constant_adress, temp_multiply_address)
+                    self.quadruples.append(multiply_m_one_quadruple)
+
+                    # Agregando Verify de la segunda dimension s2
+                    columns_address = self.constants_table.get(var.dimensions[1])
+                    verify_quadruple = Quadruple(Operator.VERIFY, matrix_second_index_operand, None, columns_address)
+                    self.quadruples.append(verify_quadruple)
+                    
+                    # Sumando s1*m1 + s2
+                    temp_sum = self.create_temp_var(VarType.INT)
+                    temp_sum_address = self.current_var_table[temp_sum].address
+                    sum_quadruple = Quadruple(Operator.SUM, temp_multiply_address, matrix_second_index_operand, temp_sum_address)
+                    self.quadruples.append(sum_quadruple)
+
+                    # Haciendo suma de direccion base s1*m1 + s2 + dirBase
+                    matrix_constant_address = self.get_constant(matrix_base_address)
+                    pointer_to_temp_address = self.memory.create_pointer_address(matrix_type)
+                    add_matrix_base_quadruple = Quadruple(Operator.SUM, temp_sum_address, matrix_constant_address, pointer_to_temp_address)
+                    self.quadruples.append(add_matrix_base_quadruple)
+
+                    # Guardando direccion de temporal en direeccion de pointer
+                    assign_right_operand_to_pointer_quadruple = Quadruple(Operator.ASSIGN, right_operand, None, pointer_to_temp_address)
+                    self.quadruples.append(assign_right_operand_to_pointer_quadruple)
+                else:
+                    print("type mismatch between operand", matrix_base_address, matrix_type,  "and", right_operand, right_operand_type)
+            else:
+                print("Error: both matrix indices types must be integers.")
 
 
     def set_initial_if(self):
