@@ -7,13 +7,13 @@ Guarda los bloques de memoria para globales, locales, temporales y constantes
 """
 class VirtualMachineMemory:
     def __init__(self, constants, activation_record):
-        memory_size = 20000
-        self.block_size = memory_size // 4
-        self.gloabl_block = VirtualMachineMemoryBlock(0, self.block_size - 1)
+        memory_size = 25000
+        self.block_size = memory_size // 5
+        self.gloabl_block = VirtualMachineMemoryBlock(0, self.block_size)
         self.constants_block = VirtualMachineMemoryBlock(self.block_size * 3, self.block_size)
+        self.pointers_block = VirtualMachineMemoryBlock(self.block_size * 4, self.block_size)
         # Guarda memoria local y temporal
         self.activation_record = activation_record
-
         # Escribiendo constantes a bloque de constantes
         for address in constants:
                 value = constants[address]
