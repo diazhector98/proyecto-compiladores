@@ -117,13 +117,67 @@ class SemanticHandler:
         verify_quadruple = Quadruple(Operator.VERIFY, index_address, None, rows_address)
         self.quadruples.append(verify_quadruple)
 
+        # Haciendo suma de direccion base
         constant_address = self.get_constant(base_address)
         pointer_to_temp_address = self.memory.create_pointer_address(var.type)
         add_array_base_quadruple = Quadruple(Operator.SUM, index_address, constant_address, pointer_to_temp_address)
         self.quadruples.append(add_array_base_quadruple)
 
+        # Push pointer a stack de operandos
         self.stack.push_operand(pointer_to_temp_address, var.type)
 
+    def consume_matrix_usage(self, matrix_name, index_operand):
+        print("entre matrix usage")
+        var = self.var_lookup(matrix_name)
+
+        if var is None:
+            raise Exception("Matrix does not exist")
+       
+        matrix_base_address = var.address
+
+        matrix_first_index = index_operand[0]
+        matrix_second_index = index_operand[1]
+
+        # matrix_first_index_address y matrix_second_index_address Obtienen solamente la direccion
+        matrix_first_index_address = matrix_first_index[0]
+        matrix_second_index_address = matrix_second_index[0]
+        matrix_type = var.type
+        
+        print("matrix_first_index_adress",matrix_first_index_address)
+        print("matrix_second_index_adress", matrix_second_index_address)
+
+        # Agregando Verify de la primera dimension
+        matrix_row_address = self.constants_table.get(var.dimensions[0])
+        verify_quadruple = Quadruple(Operator.VERIFY, matrix_first_index_address, None, matrix_row_address)
+        self.quadruples.append(verify_quadruple)
+
+        # Agregando Multiply s1*m1
+        matrix_m_one = int(((var.dimensions[0] + 1) * (var.dimensions[1] + 1)) / (var.dimensions[0] + 1))
+        matrix_m_one_constant_address = self.get_constant(matrix_m_one)
+        matrix_temp_multiply = self.create_temp_var(VarType.INT)
+        matrix_temp_multiply_address = self.current_var_table[matrix_temp_multiply].address
+        multiply_m_one_quadruple = Quadruple(Operator.MULTIPLY, matrix_first_index_address, matrix_m_one_constant_address, matrix_temp_multiply_address)
+        self.quadruples.append(multiply_m_one_quadruple)
+        
+        # Agregando Verify de la segunda dimension s2
+        matrix_columns_address = self.constants_table.get(var.dimensions[1])
+        verify_quadruple = Quadruple(Operator.VERIFY, matrix_second_index_address, None, matrix_columns_address)
+        self.quadruples.append(verify_quadruple)
+
+        # Sumando s1*m1 + s2
+        temp_sum = self.create_temp_var(VarType.INT)
+        temp_sum_address = self.current_var_table[temp_sum].address
+        sum_quadruple = Quadruple(Operator.SUM, matrix_temp_multiply_address, matrix_second_index_address, temp_sum_address)
+        self.quadruples.append(sum_quadruple)
+
+        # Haciendo suma de direccion base s1*m1 + s2 + dirBase
+        matrix_constant_address = self.get_constant(matrix_base_address)
+        pointer_to_temp_address = self.memory.create_pointer_address(matrix_type)
+        add_matrix_base_quadruple = Quadruple(Operator.SUM, temp_sum_address, matrix_constant_address, pointer_to_temp_address)
+        self.quadruples.append(add_matrix_base_quadruple)
+
+        #Push pointer a stack de operandos
+        self.stack.push_operand(pointer_to_temp_address, matrix_type)
 
     # Buscar variable en tabla de variables locales y globales
     def var_lookup(self, var_name):
@@ -313,10 +367,10 @@ class SemanticHandler:
                     # Agregando Multiply s1*m1
                     m_one = int(((var.dimensions[0] + 1) * (var.dimensions[1] + 1)) / (var.dimensions[0] + 1))
                     m_one_constant = self.create_constant(m_one, VarType.INT)
-                    m_one_constant_adress = self.get_constant(matrix_base_address)
+                    m_one_constant_address = self.get_constant(m_one)
                     temp_multiply = self.create_temp_var(VarType.INT)
                     temp_multiply_address = self.current_var_table[temp_multiply].address
-                    multiply_m_one_quadruple = Quadruple(Operator.MULTIPLY, matrix_first_index_operand, m_one_constant_adress, temp_multiply_address)
+                    multiply_m_one_quadruple = Quadruple(Operator.MULTIPLY, matrix_first_index_operand, m_one_constant_address, temp_multiply_address)
                     self.quadruples.append(multiply_m_one_quadruple)
 
                     # Agregando Verify de la segunda dimension s2

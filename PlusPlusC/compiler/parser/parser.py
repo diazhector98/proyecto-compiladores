@@ -226,7 +226,7 @@ class PlusPlusCParser(Parser):
         matrix_name = p.uso_matriz[0]
         matrix_row_index = p.uso_matriz[1]
         matrix_column_index = p.uso_matriz[2]
-        self.semantic_actions.consume_operand(matrix_name, index=(matrix_row_index, matrix_column_index))
+        self.semantic_actions.consume_matrix_usage(matrix_name, (matrix_row_index, matrix_column_index))
 
     @_('ID "[" indice_uso_arreglo "]" ')
     def uso_arreglo(self, p):
