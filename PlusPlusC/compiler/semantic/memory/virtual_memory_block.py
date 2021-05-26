@@ -14,24 +14,24 @@ class VirtualMemoryBlock:
         self.char_partition = VirtualMemoryBlockPartition(start_address + partition_size * 2, partition_size - 1)
         self.bool_partition = VirtualMemoryBlockPartition(start_address+ partition_size * 3, partition_size - 1)
 
-    def create_address(self, t):
+    def create_address(self, t, size=1):
         if t == VarType.INT:
-            return self.create_int_address()
+            return self.create_int_address(size)
         if t == VarType.FLOAT:
-            return self.create_float_address()
+            return self.create_float_address(size)
         if t == VarType.CHAR:
-            return self.create_char_address()
+            return self.create_char_address(size)
         if t == VarType.BOOL:
-            return self.create_bool_address()
+            return self.create_bool_address(size)
 
-    def create_int_address(self):
-        return self.int_partition.create_address()
+    def create_int_address(self, size=1):
+        return self.int_partition.create_address(size=size)
 
-    def create_float_address(self):
-        return self.float_partition.create_address()
+    def create_float_address(self, size=1):
+        return self.float_partition.create_address(size=size)
 
-    def create_char_address(self):
-        return self.char_partition.create_address()
+    def create_char_address(self, size=1):
+        return self.char_partition.create_address(size=size)
 
-    def create_bool_address(self):
-        return self.bool_partition.create_address()
+    def create_bool_address(self, size=1):
+        return self.bool_partition.create_address(size=size)

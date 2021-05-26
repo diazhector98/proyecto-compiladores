@@ -46,9 +46,10 @@ class SemanticHandler:
         self.current_function = func_name
 
     def set_parametros(self, parametros):
+        parametros.reverse()
         for (param_name, param_var_type) in parametros:
             address = self.memory.create_local_address(param_var_type)
-            self.functions_directory[self.current_function].add_param((param_name, param_var_type))
+            self.functions_directory[self.current_function].add_param((param_name, param_var_type, address))
             self.current_var_table[param_name] = VariableTableRecord(
                 name = param_name,
                 type = param_var_type,
@@ -56,20 +57,34 @@ class SemanticHandler:
                 )
 
     def set_variable(self, var_name, var_type, rows=1, columns=1):
-        address = self.memory.create_local_address(var_type)
+        address = self.memory.create_local_address(var_type, size=(rows * columns))
         self.current_var_table[var_name] = VariableTableRecord(
             name = var_name,
             type = var_type,
             address = address,
             dimensions = (rows, columns)
             )
+        self.create_constant(rows, VarType.INT)
+        self.create_constant(columns, VarType.INT)
+
+    def create_constant(self, value, type):
+        constant_address = self.constants_table.get(value)
+        if not constant_address:
+            constant_address = self.memory.create_constant_address(type)
+            self.constants_table[value] = constant_address
     
+    def get_constant(self, value):
+        constant_address = self.constants_table.get(value)
+        if constant_address != None:
+            return constant_address
+        else:
+            print("Constant variable is not registered yet.")
+
     def consume_operator(self, operator):
         self.stack.push_operator(operator)
 
     def consume_operand(self, operand, var_type=None, is_constant=False, index=None):
         # Index para arreglos y matrices
-        print(index)
         if is_constant:
             self.consume_constant_operand(operand, var_type)
         else:
@@ -88,6 +103,77 @@ class SemanticHandler:
                 self.stack.push_operand(var.name, var.type)
         except Exception:
             print("variable", operand, "does not exist")
+
+    def consume_array_usage(self, array_name, index_operand):
+        var = self.var_lookup(array_name)
+        if var is None:
+            raise Exception("Array does not exist")
+        
+        base_address = var.address
+        index_address = index_operand[0]
+        index_type = index_operand[1]
+        # Verificar que el indice este en rango
+        rows_address = self.constants_table.get(var.dimensions[0])
+        verify_quadruple = Quadruple(Operator.VERIFY, index_address, None, rows_address)
+        self.quadruples.append(verify_quadruple)
+
+        # Haciendo suma de direccion base
+        constant_address = self.get_constant(base_address)
+        pointer_to_temp_address = self.memory.create_pointer_address(var.type)
+        add_array_base_quadruple = Quadruple(Operator.SUM, index_address, constant_address, pointer_to_temp_address)
+        self.quadruples.append(add_array_base_quadruple)
+
+        # Push pointer a stack de operandos
+        self.stack.push_operand(pointer_to_temp_address, var.type)
+
+    def consume_matrix_usage(self, matrix_name, index_operand):
+        var = self.var_lookup(matrix_name)
+
+        if var is None:
+            raise Exception("Matrix does not exist")
+       
+        matrix_base_address = var.address
+
+        matrix_first_index = index_operand[0]
+        matrix_second_index = index_operand[1]
+
+        # matrix_first_index_address y matrix_second_index_address Obtienen solamente la direccion
+        matrix_first_index_address = matrix_first_index[0]
+        matrix_second_index_address = matrix_second_index[0]
+        matrix_type = var.type
+
+        # Agregando Verify de la primera dimension
+        matrix_row_address = self.constants_table.get(var.dimensions[0])
+        verify_quadruple = Quadruple(Operator.VERIFY, matrix_first_index_address, None, matrix_row_address)
+        self.quadruples.append(verify_quadruple)
+
+        # Agregando Multiply s1*m1
+        matrix_m_one = int(((var.dimensions[0] + 1) * (var.dimensions[1] + 1)) / (var.dimensions[0] + 1))
+        matrix_m_one_constant_address = self.get_constant(matrix_m_one)
+        matrix_temp_multiply = self.create_temp_var(VarType.INT)
+        matrix_temp_multiply_address = self.current_var_table[matrix_temp_multiply].address
+        multiply_m_one_quadruple = Quadruple(Operator.MULTIPLY, matrix_first_index_address, matrix_m_one_constant_address, matrix_temp_multiply_address)
+        self.quadruples.append(multiply_m_one_quadruple)
+        
+        # Agregando Verify de la segunda dimension s2
+        matrix_columns_address = self.constants_table.get(var.dimensions[1])
+        verify_quadruple = Quadruple(Operator.VERIFY, matrix_second_index_address, None, matrix_columns_address)
+        self.quadruples.append(verify_quadruple)
+
+        # Sumando s1*m1 + s2
+        temp_sum = self.create_temp_var(VarType.INT)
+        temp_sum_address = self.current_var_table[temp_sum].address
+        sum_quadruple = Quadruple(Operator.SUM, matrix_temp_multiply_address, matrix_second_index_address, temp_sum_address)
+        self.quadruples.append(sum_quadruple)
+
+        # Haciendo suma de direccion base s1*m1 + s2 + dirBase
+        matrix_constant_address = self.get_constant(matrix_base_address)
+        pointer_to_temp_address = self.memory.create_pointer_address(matrix_type)
+        add_matrix_base_quadruple = Quadruple(Operator.SUM, temp_sum_address, matrix_constant_address, pointer_to_temp_address)
+        self.quadruples.append(add_matrix_base_quadruple)
+
+        #Push pointer a stack de operandos
+        self.stack.push_operand(pointer_to_temp_address, matrix_type)
 
     # Buscar variable en tabla de variables locales y globales
     def var_lookup(self, var_name):
@@ -154,7 +240,7 @@ class SemanticHandler:
                 self.quadruples.append(quadruple)
                 self.consume_operand(temp, cube_result)
             else:
-                print("type mismatch between operand", left_operand, "and", right_operand)
+                print("Setting Quadruple: type mismatch between operand", left_operand, "and", right_operand)
         else:
             print("Error: Not enough operands")
 
@@ -175,6 +261,7 @@ class SemanticHandler:
 
             self.stack.operands.reverse()
             self.stack.operators.reverse()
+            self.stack.types.reverse()
 
             right_operand = self.stack.operands.pop()
             left_operand = self.stack.operands.pop()
@@ -186,7 +273,127 @@ class SemanticHandler:
                 quadruple = Quadruple(Operator(operator), right_operand, None, left_operand)
                 self.quadruples.append(quadruple)
             else:
-                print("type mismatch between operand", left_operand, left_operand_type,  "and", right_operand, right_operand_type)
+                print("Adding var operand: type mismatch between operand", left_operand, left_operand_type,  "and", right_operand, right_operand_type)
+
+    def handle_array_assign(self, var_name):
+        var = self.current_var_table[var_name]
+        if var is None:
+            print("var is not declared")
+        else:
+            self.consume_operand(var.name, var.type)
+            self.stack.operators.append(Operator.ASSIGN)
+
+            self.stack.operands.reverse()
+            self.stack.operators.reverse()
+            self.stack.types.reverse()
+
+            array_index_operand = self.stack.operands.pop()
+            right_operand = self.stack.operands.pop()
+            array_base_address = self.stack.operands.pop()
+
+
+            array_index_type = self.stack.types.pop()
+            right_operand_type = self.stack.types.pop()
+            array_type = self.stack.types.pop()
+
+            # Agregando direccion base a tabla de constantes
+            self.create_constant(array_base_address, array_type)
+
+            operator = Operator(self.stack.operators.pop())
+            cube_result = self.cube[right_operand_type][array_type][operator]
+
+            # Validando que array_index_type sea int
+            if array_index_type == VarType.INT:
+                if cube_result != "err":
+                    # Agregando Verify
+                    rows_address = self.constants_table.get(var.dimensions[0])
+                    verify_quadruple = Quadruple(Operator.VERIFY, array_index_operand, None, rows_address)
+                    self.quadruples.append(verify_quadruple)
+
+                    # Haciendo suma de direccion base
+                    constant_address = self.get_constant(array_base_address)
+                    pointer_to_temp_address = self.memory.create_pointer_address(array_type)
+                    add_array_base_quadruple = Quadruple(Operator.SUM, array_index_operand, constant_address, pointer_to_temp_address)
+                    self.quadruples.append(add_array_base_quadruple)
+
+                    # Guardando direccion de temporal en direeccion de pointer
+                    assign_right_operand_to_pointer_quadruple = Quadruple(Operator.ASSIGN, right_operand, None, pointer_to_temp_address)
+                    self.quadruples.append(assign_right_operand_to_pointer_quadruple)
+                else:
+                    print("type mismatch between operand", array_base_address, array_type,  "and", right_operand, right_operand_type)
+            else:
+                print("Error: the array index type must be an integer.")
+
+    def handle_matrix_assign(self, var_name):
+        var = self.current_var_table[var_name]
+        if var is None:
+            print("var is not declared")
+        else:
+            self.consume_operand(var.name, var.type)
+            self.stack.operators.append(Operator.ASSIGN)
+
+            self.stack.operands.reverse()
+            self.stack.operators.reverse()
+            self.stack.types.reverse()
+
+            matrix_first_index_operand = self.stack.operands.pop()
+            matrix_second_index_operand = self.stack.operands.pop()
+            right_operand = self.stack.operands.pop()
+            matrix_base_address = self.stack.operands.pop()
+
+            matrix_first_index_type = self.stack.types.pop()
+            matrix_second_index_type = self.stack.types.pop()
+            right_operand_type = self.stack.types.pop()
+            matrix_type = self.stack.types.pop()
+
+            # Agregando direccion base a tabla de constantes
+            self.create_constant(matrix_base_address, matrix_type)
+            operator = Operator(self.stack.operators.pop())
+            cube_result = self.cube[right_operand_type][matrix_type][operator]
+
+            if matrix_first_index_type == VarType.INT and matrix_second_index_type == VarType.INT:
+                
+                if cube_result != "err":
+                    
+                    # Agregando Verify de la primera dimension
+                    rows_address = self.constants_table.get(var.dimensions[0])
+                    verify_quadruple = Quadruple(Operator.VERIFY, matrix_first_index_operand, None, rows_address)
+                    self.quadruples.append(verify_quadruple)
+
+                    # Agregando Multiply s1*m1
+                    m_one = int(((var.dimensions[0] + 1) * (var.dimensions[1] + 1)) / (var.dimensions[0] + 1))
+                    m_one_constant = self.create_constant(m_one, VarType.INT)
+                    m_one_constant_address = self.get_constant(m_one)
+                    temp_multiply = self.create_temp_var(VarType.INT)
+                    temp_multiply_address = self.current_var_table[temp_multiply].address
+                    multiply_m_one_quadruple = Quadruple(Operator.MULTIPLY, matrix_first_index_operand, m_one_constant_address, temp_multiply_address)
+                    self.quadruples.append(multiply_m_one_quadruple)
+
+                    # Agregando Verify de la segunda dimension s2
+                    columns_address = self.constants_table.get(var.dimensions[1])
+                    verify_quadruple = Quadruple(Operator.VERIFY, matrix_second_index_operand, None, columns_address)
+                    self.quadruples.append(verify_quadruple)
+                    
+                    # Sumando s1*m1 + s2
+                    temp_sum = self.create_temp_var(VarType.INT)
+                    temp_sum_address = self.current_var_table[temp_sum].address
+                    sum_quadruple = Quadruple(Operator.SUM, temp_multiply_address, matrix_second_index_operand, temp_sum_address)
+                    self.quadruples.append(sum_quadruple)
+
+                    # Haciendo suma de direccion base s1*m1 + s2 + dirBase
+                    matrix_constant_address = self.get_constant(matrix_base_address)
+                    pointer_to_temp_address = self.memory.create_pointer_address(matrix_type)
+                    add_matrix_base_quadruple = Quadruple(Operator.SUM, temp_sum_address, matrix_constant_address, pointer_to_temp_address)
+                    self.quadruples.append(add_matrix_base_quadruple)
+
+                    # Guardando direccion de temporal en direeccion de pointer
+                    assign_right_operand_to_pointer_quadruple = Quadruple(Operator.ASSIGN, right_operand, None, pointer_to_temp_address)
+                    self.quadruples.append(assign_right_operand_to_pointer_quadruple)
+                else:
+                    print("type mismatch between operand", matrix_base_address, matrix_type,  "and", right_operand, right_operand_type)
+            else:
+                print("Error: both matrix indices types must be integers.")
+
 
     def set_initial_if(self):
         self.set_conditional_block()
@@ -271,7 +478,8 @@ class SemanticHandler:
         
                     arguments.reverse()
                     for index, (argument, argument_type) in enumerate(arguments):
-                        param_quad = Quadruple(Operator.PARAMETER, argument, None, f"p{index}")
+                        param_address = function.params[index][2]
+                        param_quad = Quadruple(Operator.PARAMETER, argument, None, param_address)
                         self.quadruples.append(param_quad)
 
                     gosub_quad = Quadruple(Operator.GOSUB, None, None, func_name)
@@ -281,19 +489,19 @@ class SemanticHandler:
                     #guardar temp en direccion de funcion
                     if function.return_type != FuncReturnType.VOID:
 
-                        if FuncReturnType.INT:
+                        if function.return_type == FuncReturnType.INT:
                             temp = self.create_temp_var(VarType.INT)
                             self.functions_directory[self.current_function].temp_var_int_size += 1
 
-                        if FuncReturnType.FLOAT:
+                        if function.return_type == FuncReturnType.FLOAT:
                             temp = self.create_temp_var(VarType.FLOAT)
                             self.functions_directory[self.current_function].temp_var_float_size += 1
 
-                        if FuncReturnType.CHAR:
+                        if function.return_type == FuncReturnType.CHAR:
                             temp = self.create_temp_var(VarType.CHAR)
                             self.functions_directory[self.current_function].temp_var_char_size += 1
 
-                        if FuncReturnType.BOOL:
+                        if function.return_type == FuncReturnType.BOOL:
                             temp = self.create_temp_var(VarType.BOOL)
                             self.functions_directory[self.current_function].temp_var_bool_size += 1
 
@@ -318,10 +526,11 @@ class SemanticHandler:
         operand_type = self.stack.types.pop()
 
         if function.return_type.name == operand_type.name:
-            quad = Quadruple(Operator.RETURN, None, None, operand)
+            function_global_address = self.global_var_table[function.name].address
+            quad = Quadruple(Operator.RETURN, operand, None, function_global_address)
             self.quadruples.append(quad)
         else:
-            print("El tipo de retorno que la función espera es incorrecto.")
+            raise Exception("El tipo de retorno que la función espera es incorrecto.")
         
     # Método de debugging
     def print_quadruples(self):

@@ -1,31 +1,31 @@
-foo 1 [2,0,0,3] [0,0,0,0]
+factorial 1 [4,0,0,1] [5,0,0,1]
 %%
-15000 10
-16250 10.1
-16251 10.2
+15000 0
 15001 1
-15002 2
-%%
-GOTO         -1         -1         1         
-ERA          -1         -1         foo       
-PARAMETER    15000      -1         p0        
-PARAMETER    16250      -1         p1        
-PARAMETER    16251      -1         p2        
-GOSUB        -1         -1         foo       
-ASSIGN       15001      -1         5002      
-EQUAL        5002       15001      13750     
-GOTOF        13750      -1         23        
-READ         -1         -1         5004      
-READ         -1         -1         5005      
-READ         -1         -1         5003      
-EQUAL        5003       15001      13751     
-GOTOF        13751      -1         16        
-SUM          5004       5005       10000     
-ASSIGN       10000      -1         5006      
-EQUAL        5003       15002      13752     
-GOTOF        13752      -1         20        
-MULTIPLY     5004       5005       10001     
-ASSIGN       10001      -1         5006      
-PRINT        -1         -1         5006      
-READ         -1         -1         5002      
-GOTO         -1         -1         7         
+%%   
+READ         -1         -1         5000      
+ERA          -1         -1         factorial 
+PARAMETER    5000       -1         5000      
+GOSUB        -1         -1         factorial 
+ASSIGN       0          -1         10000     
+ASSIGN       10000      -1         5001      
+PRINT        -1         -1         5001      
+VERIFY       15000      -1         15001     
+SUM          15000      15003      20000     
+ASSIGN       15002      -1         20000     
+VERIFY       15000      -1         15001     
+SUM          15000      15003      20001     
+ASSIGN       20001      -1         5010      
+VERIFY       15005      -1         15004     
+MULTIPLY     15005      15009      10000     
+VERIFY       15006      -1         15004     
+SUM          10000      15006      10001     
+SUM          10001      15008      20002     
+ASSIGN       15007      -1         20002     
+VERIFY       15005      -1         15004     
+MULTIPLY     15005      15009      10002     
+VERIFY       15006      -1         15004     
+SUM          10002      15006      10003     
+SUM          10003      15008      20003     
+ASSIGN       20003      -1         5010      
+PRINT        -1         -1         5010      

@@ -56,25 +56,22 @@ class PlusPlusCParser(Parser):
     def funciones(self, p):
         pass
 
-    @_('declaracion_funcion bloque'
-    )
+    @_('declaracion_funcion bloque', 'declaracion_funcion_void bloque')
     def funcion(self, p):
         self.semantic_actions.end_func()
         pass
-
-    # TODO: Manejar funciones tipo void para manejo de funciones...(como la de arriba)
-    @_(
-    'FUNC ID "(" parametros ")" ARROW VOID bloque'
-    )
-    def funcion(self, p):
-        self.semantic_actions.set_init_func(p.ID, FuncReturnType.VOID)
-        self.semantic_actions.set_parametros(p.parametros)
 
     @_('FUNC ID "(" parametros ")" ARROW tipo')
     def declaracion_funcion(self, p):
         self.semantic_actions.set_init_func(p.ID, FuncReturnType(p.tipo))
         self.semantic_actions.set_parametros(p.parametros)
         self.semantic_actions.add_global(p.ID, VarType(p.tipo))
+        pass
+
+    @_('FUNC ID "(" parametros ")" ARROW VOID')
+    def declaracion_funcion_void(self, p):
+        self.semantic_actions.set_init_func(p.ID, FuncReturnType.VOID)
+        self.semantic_actions.set_parametros(p.parametros)
         pass
 
     @_('ID tipo')
@@ -141,9 +138,24 @@ class PlusPlusCParser(Parser):
         self.semantic_actions.handle_return()
 
     #Asignacion
-    @_('ID ASSIGN expresion ";"')
+    @_('asignacion_variable', 'asignacion_arreglo', 'asignacion_matrix')
     def asignacion(self, p):
+        pass
+
+
+    @_('ID ASSIGN expresion ";"')
+    def asignacion_variable(self, p):
         self.semantic_actions.add_var_operand(p[0])
+        pass
+
+    @_('ID "[" exp "]" ASSIGN expresion ";"')
+    def asignacion_arreglo(self, p):
+        self.semantic_actions.handle_array_assign(p[0])
+        pass
+
+    @_('ID "[" exp "]" "[" exp "]" ASSIGN expresion ";"')
+    def asignacion_matrix(self, p):
+        self.semantic_actions.handle_matrix_assign(p[0])
         pass
 
     #Declaracion
@@ -171,7 +183,7 @@ class PlusPlusCParser(Parser):
         return p[0]
 
     #Expresion
-    @_('exp', 'llamada_funcion')
+    @_('exp')
     def expresion(self, p):
         pass
 
@@ -203,18 +215,22 @@ class PlusPlusCParser(Parser):
     def factor(self, p):
         self.semantic_actions.consume_operand(p[0])
 
+    @_('llamada_funcion')
+    def factor(self, p):
+        pass
+
     @_('uso_arreglo')
     def factor(self, p):
         array_name = p.uso_arreglo[0]
         array_index = p.uso_arreglo[1]
-        self.semantic_actions.consume_operand(array_name, index=array_index)
+        self.semantic_actions.consume_array_usage(array_name, array_index)
 
     @_('uso_matriz')
     def factor(self, p):
         matrix_name = p.uso_matriz[0]
         matrix_row_index = p.uso_matriz[1]
         matrix_column_index = p.uso_matriz[2]
-        self.semantic_actions.consume_operand(matrix_name, index=(matrix_row_index, matrix_column_index))
+        self.semantic_actions.consume_matrix_usage(matrix_name, (matrix_row_index, matrix_column_index))
 
     @_('ID "[" indice_uso_arreglo "]" ')
     def uso_arreglo(self, p):
