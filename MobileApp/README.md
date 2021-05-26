@@ -22,7 +22,7 @@ virtualenv env
 ```
 2. Activar env
 ```
-source env
+source env/bin/activate
 ```
 3. Instalar kivy y sus ejemplos
 ```
