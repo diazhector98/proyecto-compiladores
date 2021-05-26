@@ -183,7 +183,7 @@ class PlusPlusCParser(Parser):
         return p[0]
 
     #Expresion
-    @_('exp', 'llamada_funcion')
+    @_('exp')
     def expresion(self, p):
         pass
 
@@ -214,6 +214,10 @@ class PlusPlusCParser(Parser):
     @_('ID')
     def factor(self, p):
         self.semantic_actions.consume_operand(p[0])
+
+    @_('llamada_funcion')
+    def factor(self, p):
+        pass
 
     @_('uso_arreglo')
     def factor(self, p):

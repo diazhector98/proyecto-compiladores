@@ -1,20 +1,19 @@
-factorial 1 [4,0,0,1] [6,0,0,1]
+factorial 1 [4,0,0,1] [5,0,0,1]
 %%
 15000 0
 15001 1
 %%
-GOTO         -1         -1         15        
+GOTO         -1         -1         14        
 EQUAL        5000       15000      13750     
 GOTOF        13750      -1         5         
 RETURN       15001      -1         0         
-GOTO         -1         -1         14        
+GOTO         -1         -1         13        
 MINUS        5000       15001      10000     
 ERA          -1         -1         factorial 
 PARAMETER    10000      -1         5000      
 GOSUB        -1         -1         factorial 
 ASSIGN       0          -1         10001     
-ASSIGN       10001      -1         5002      
-MULTIPLY     5000       5002       10002     
+MULTIPLY     5000       10001      10002     
 ASSIGN       10002      -1         5001      
 RETURN       5001       -1         0         
 ENDFUNC      -1         -1         -1        
