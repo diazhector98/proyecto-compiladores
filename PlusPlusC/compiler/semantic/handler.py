@@ -127,7 +127,6 @@ class SemanticHandler:
         self.stack.push_operand(pointer_to_temp_address, var.type)
 
     def consume_matrix_usage(self, matrix_name, index_operand):
-        print("entre matrix usage")
         var = self.var_lookup(matrix_name)
 
         if var is None:
@@ -142,9 +141,6 @@ class SemanticHandler:
         matrix_first_index_address = matrix_first_index[0]
         matrix_second_index_address = matrix_second_index[0]
         matrix_type = var.type
-        
-        print("matrix_first_index_adress",matrix_first_index_address)
-        print("matrix_second_index_adress", matrix_second_index_address)
 
         # Agregando Verify de la primera dimension
         matrix_row_address = self.constants_table.get(var.dimensions[0])
