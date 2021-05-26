@@ -13,6 +13,8 @@ python3 -m pip install --user virtualenv
 2. Estar en la terminal dentro de la carpeta de MobileApp (hacer algo como cd MobileApp)
 
 ---
+## Pasos
+
 
 1. Crear un virtual environment dentro de esta carpeta
 ```
