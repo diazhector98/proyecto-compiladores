@@ -1,0 +1,22 @@
+program Main;
+
+func factorial(A int) -> int {
+    if A == 0 {
+        return 1;
+    } else {
+        var result int;
+        var nextFactorial int;
+        nextFactorial = factorial(A - 1);
+        result = A * nextFactorial;
+        return result;
+    }
+}
+
+main () {
+    var i int;
+    input(i);
+    var fact int;
+
+    fact = factorial(i);
+    print(fact);
+}

@@ -1,24 +1,27 @@
-foo 1 [0,0,0,0] [2,1,0,0]
+factorial 1 [4,0,0,1] [6,0,0,1]
 %%
-15000 1
-15001 10
-15002 30
-15003 5000
-15004 5
-15005 3
-15006 2
-15007 50
-15008 5010
-15009 6
+15000 0
+15001 1
 %%
-GOTO         -1         -1         2         
+GOTO         -1         -1         15        
+EQUAL        5000       15000      13750     
+GOTOF        13750      -1         5         
+RETURN       15001      -1         0         
+GOTO         -1         -1         14        
+MINUS        5000       15001      10000     
+ERA          -1         -1         factorial 
+PARAMETER    10000      -1         5000      
+GOSUB        -1         -1         factorial 
+ASSIGN       0          -1         10001     
+ASSIGN       10001      -1         5002      
+MULTIPLY     5000       5002       10002     
+ASSIGN       10002      -1         5001      
+RETURN       5001       -1         0         
 ENDFUNC      -1         -1         -1        
-VERIFY       15000      -1         15001     
-SUM          15000      15003      20000     
-ASSIGN       15002      -1         20000     
-VERIFY       15005      -1         15004     
-MULTIPLY     15005      15008      10000     
-VERIFY       15006      -1         15004     
-SUM          10000      15006      10001     
-SUM          10001      15008      20001     
-ASSIGN       15007      -1         20001     
+READ         -1         -1         5000      
+ERA          -1         -1         factorial 
+PARAMETER    5000       -1         5000      
+GOSUB        -1         -1         factorial 
+ASSIGN       0          -1         10000     
+ASSIGN       10000      -1         5001      
+PRINT        -1         -1         5001      

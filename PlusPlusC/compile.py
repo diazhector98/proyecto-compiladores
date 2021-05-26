@@ -8,7 +8,7 @@ if __name__ == '__main__':
     lexer = PlusPlusCLexer()
     parser = PlusPlusCParser()
     
-    file_name = "tests/test_eleven.ppc"
+    file_name = "tests/recursion.ppc"
     input_file = open(file_name, "r")
     text = input_file.read()
     parser.parse(lexer.tokenize(text))
