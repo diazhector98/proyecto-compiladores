@@ -6,6 +6,7 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from kivy.lang import Builder
 
+
 Builder.load_file("compiladores.kv")
 
 class Compiladores(Widget):
@@ -13,10 +14,10 @@ class Compiladores(Widget):
         super(Compiladores, self).__init__(**kwargs)
         
     def compile_button_pressed(self):
-        self.output_text.text = "Compile pressed"
-
+        self.output_text.text = self.input_text.text
+        
     def run_button_pressed(self):
-        self.output_text.text = "Run pressed"
+        self.output_text.text = self.input_text.text
     
 
 class CompiladoresApp(App):

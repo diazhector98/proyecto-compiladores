@@ -2,7 +2,8 @@
     compile_button: c_button
     run_button: r_button
     output_text: o_text
-
+    input_text: i_text
+    
     FloatLayout:
         cols: 1
         size: root.width, root.height
@@ -23,6 +24,7 @@
             hint_text: "Insert your code here..."
             markup:True
             font_size: 14
+            id: i_text
         
         TextInput:
             pos_hint: {"x":0.1,"top":0.40}
