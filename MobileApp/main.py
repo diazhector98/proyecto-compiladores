@@ -9,7 +9,14 @@ from kivy.lang import Builder
 Builder.load_file("compiladores.kv")
 
 class Compiladores(Widget):
-    pass
+    def __init__(self, **kwargs):
+        super(Compiladores, self).__init__(**kwargs)
+        
+    def compile_button_pressed(self):
+        self.compile_button.text = "Compile pressed"
+
+    def run_button_pressed(self):
+        self.run_button.text = "Run pressed"
 
 
 class CompiladoresApp(App):

@@ -1,4 +1,6 @@
 <Compiladores>
+    compile_button: c_button
+    run_button: r_button
 
     FloatLayout:
         cols: 1
@@ -31,11 +33,14 @@
             font_size: 14
         
         Button:
+            
             pos_hint: {"x":0.15,"top":0.11}
             size_hint: 0.3, 0.06
             font_size: 20
             text: "[b]Compile[/b]"
             markup:True
+            id: c_button
+            on_press: root.compile_button_pressed()
         
         Button:
             pos_hint: {"x":0.55,"top":0.11}
@@ -43,3 +48,5 @@
             font_size: 20
             text: "[b]Run[/b]"
             markup:True
+            id: r_button
+            on_press: root.run_button_pressed()
