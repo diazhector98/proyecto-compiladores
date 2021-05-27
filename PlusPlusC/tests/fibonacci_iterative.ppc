@@ -1,0 +1,37 @@
+program Main;
+
+func fibonacci(A int) -> int {
+    var a int;
+    var b int;
+    var c int;
+    var counter int;
+    
+    a = 0;
+    b = 1;
+    counter = 1;
+
+    if A == 0 {
+        return 0;
+    }
+    
+    if A == 1 {
+        return 1;
+    } else {
+        while counter < A {
+            c = a + b;
+            a = b;
+            b = c;
+            counter = counter + 1;
+        }
+        return b;
+    }
+}
+
+main () {
+    var i int;
+    input(i);
+    var fib int;
+
+    fib = fibonacci(i);
+    print(fib);
+}
