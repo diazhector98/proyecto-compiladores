@@ -1,0 +1,63 @@
+program Main;
+
+func sort(A int) -> int {
+}
+
+main () {
+    var A[10] int;
+    var i int;
+    var j int;
+    var n int;
+    var value int;
+    var temp_value int;
+    var seccionTerminoArray int;
+    seccionTerminoArray = 9999999999999999999999999999999999;
+    i = 0;
+    j = 0;
+    n = 10;
+    A[0] = 9;
+    A[1] = 7;
+    A[2] = 4;
+    A[3] = 3;
+    A[4] = 10;
+    A[5] = 5;
+    A[6] = 6;
+    A[7] = 2;
+    A[8] = 1;
+    A[9] = 8;
+
+    while i < 10 {
+        value = A[i];
+        print(value);
+        i = i + 1;
+    }
+    print(seccionTerminoArray);
+    i = 0;
+
+    var n_minus_one int;
+    var n_minus_i_minus_one int;
+
+    n_minus_one = n - 1;
+
+    while i < n_minus_one {
+        j = 0;
+        n_minus_i_minus_one = n_minus_one - i;
+        while j < n_minus_i_minus_one {
+            if A[j] > A[j+1] {
+                temp_value = A[j];
+                A[j] = A[j+1];
+                A[j+1] = temp_value;
+            }
+            j = j + 1;
+        }
+        i = i + 1;
+    }
+
+    i = 0;
+
+    while i < 10 {
+        value = A[i];
+        print(value);
+        i = i + 1;
+    }
+}

@@ -1,0 +1,97 @@
+program Main;
+
+func matrix(A int) -> int {
+}
+
+main () {
+    var first_matrix[3][3] int;
+    var rows_first int;
+    var columns_first int;
+
+    var second_matrix[3][3] int;
+    var rows_second int;
+    var columns_second int;
+
+    var result[3][3] int;
+    var result_value int;
+    var i int;
+    var j int;
+    var k int;
+
+    rows_first = 3;
+    columns_first = 3;
+
+    rows_second = 3;
+    columns_second = 3;
+    
+    first_matrix[0][0] = 1;
+    first_matrix[0][1] = 2;
+    first_matrix[0][2] = 3;
+
+    first_matrix[1][0] = 1;
+    first_matrix[1][1] = 2;
+    first_matrix[1][2] = 3;
+
+    first_matrix[2][0] = 1;
+    first_matrix[2][1] = 2;
+    first_matrix[2][2] = 3;
+
+    second_matrix[0][0] = 1;
+    second_matrix[0][1] = 2;
+    second_matrix[0][2] = 3;
+
+    second_matrix[1][0] = 1;
+    second_matrix[1][1] = 2;
+    second_matrix[1][2] = 3;
+
+    second_matrix[2][0] = 1;
+    second_matrix[2][1] = 2;
+    second_matrix[2][2] = 3;
+
+
+    if columns_first != columns_second {
+        print(0);
+    } else {
+        i = 0;
+        j = 0;
+        
+        while i < rows_first {
+            j = 0;
+            while j < columns_second {
+                result[i][j] = 0;
+                j = j + 1;
+            }
+            i = i + 1;
+        }
+
+        i = 0;
+        j = 0;
+        k = 0;
+        
+        while i < rows_first {
+            j = 0;
+            while j < columns_second {
+                k = 0;
+                while k < columns_first {
+                    result[i][j] = result[i][j] + first_matrix[i][k] * second_matrix[k][j];
+                    k = k + 1;
+                }
+                j = j + 1;
+            } 
+            i = i + 1;
+        }
+
+        i = 0;
+        j = 0;
+
+        while i < rows_first {
+            j = 0;
+            while j < columns_second {
+                result_value = result[i][j];
+                print(result_value);
+                j = j + 1;
+            }
+            i = i + 1;
+        }
+    }
+}

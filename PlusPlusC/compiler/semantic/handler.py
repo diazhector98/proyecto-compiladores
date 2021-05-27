@@ -148,7 +148,7 @@ class SemanticHandler:
         self.quadruples.append(verify_quadruple)
 
         # Agregando Multiply s1*m1
-        matrix_m_one = int(((var.dimensions[0] + 1) * (var.dimensions[1] + 1)) / (var.dimensions[0] + 1))
+        matrix_m_one = int(((var.dimensions[0]) * (var.dimensions[1])) / (var.dimensions[0]))
         matrix_m_one_constant_address = self.get_constant(matrix_m_one)
         matrix_temp_multiply = self.create_temp_var(VarType.INT)
         matrix_temp_multiply_address = self.current_var_table[matrix_temp_multiply].address
@@ -361,7 +361,7 @@ class SemanticHandler:
                     self.quadruples.append(verify_quadruple)
 
                     # Agregando Multiply s1*m1
-                    m_one = int(((var.dimensions[0] + 1) * (var.dimensions[1] + 1)) / (var.dimensions[0] + 1))
+                    m_one = int(((var.dimensions[0]) * (var.dimensions[1])) / (var.dimensions[0]))
                     m_one_constant = self.create_constant(m_one, VarType.INT)
                     m_one_constant_address = self.get_constant(m_one)
                     temp_multiply = self.create_temp_var(VarType.INT)
