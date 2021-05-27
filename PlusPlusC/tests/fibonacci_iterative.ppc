@@ -1,15 +1,6 @@
 program Main;
 
 func fibonacci(A int) -> int {
-    var a int;
-    var b int;
-    var c int;
-    var counter int;
-    
-    a = 0;
-    b = 1;
-    counter = 1;
-
     if A == 0 {
         return 0;
     }
@@ -17,6 +8,16 @@ func fibonacci(A int) -> int {
     if A == 1 {
         return 1;
     } else {
+
+        var a int;
+        var b int;
+        var c int;
+        var counter int;
+    
+        a = 0;
+        b = 1;
+        counter = 1;
+
         while counter < A {
             c = a + b;
             a = b;
