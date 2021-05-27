@@ -67,13 +67,7 @@ main () {
         i = 0;
         j = 0;
         k = 0;
-
-        var k_accumulated int;
-        var first_k int;
-        var second_k int;
-        var seccion int;
-        seccion = 9999999999999999999999999999;
-
+        
         while i < rows_first {
             j = 0;
             while j < columns_second {
