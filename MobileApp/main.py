@@ -13,11 +13,11 @@ class Compiladores(Widget):
         super(Compiladores, self).__init__(**kwargs)
         
     def compile_button_pressed(self):
-        self.compile_button.text = "Compile pressed"
+        self.output_text.text = "Compile pressed"
 
     def run_button_pressed(self):
-        self.run_button.text = "Run pressed"
-
+        self.output_text.text = "Run pressed"
+    
 
 class CompiladoresApp(App):
     def build(self):
