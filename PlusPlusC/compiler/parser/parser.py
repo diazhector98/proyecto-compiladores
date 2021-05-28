@@ -33,7 +33,7 @@ class PlusPlusCParser(Parser):
         print("--------------")
         self.semantic_actions.print_constants_table()
         output_generator = OutputGenerator(self.semantic_actions)
-        output_generator.generate()
+        self.output = output_generator.generate()
 
     @_('PROGRAM ID')
     def inicio_programa(self, p):

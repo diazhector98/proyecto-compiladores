@@ -412,7 +412,7 @@ class SemanticHandler:
                 self.quadruples.append(quadruple)
                 jump_index = len(self.quadruples) - 1
                 self.jumps_stack.append(jump_index)
-                raise Exception("set_conditional_block", "jump:", jump_index)
+                print("set_conditional_block", "jump:", jump_index)
             else:
                 raise TypeError("Error: Type of operation must be of type BOOL")
         else:

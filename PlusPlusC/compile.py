@@ -12,3 +12,4 @@ if __name__ == '__main__':
     input_file = open(file_name, "r")
     text = input_file.read()
     parser.parse(lexer.tokenize(text))
+    compiler_output = parser.output
