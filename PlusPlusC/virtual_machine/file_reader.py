@@ -41,7 +41,7 @@ class FileReader:
             elif address >= 18750 and address <= 20000:
                 value = bool(string_value)
             else:
-                print("La direccion de memoria: ", string_address, "que corresponde al valor: ", value, "no es valida.")
+                raise Exception("La direccion de memoria: ", string_address, "que corresponde al valor: ", value, "no es valida.")
 
             table[address] = value
 

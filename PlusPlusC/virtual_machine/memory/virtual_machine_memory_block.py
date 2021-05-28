@@ -20,7 +20,7 @@ class VirtualMachineMemoryBlock:
             elif address >= 3750 and address < 5000:
                 self.write_bool_address(address - 3750, value)
             else: 
-                print("La direccion global a la que se desea accesar es erronea.")
+                raise Exception("La direccion global a la que se desea accesar es erronea.")
 
         elif block_type == BlockType.LOCAL:
             if address >= 5000 and address < 6250:
@@ -32,7 +32,7 @@ class VirtualMachineMemoryBlock:
             elif address >= 8750 and address < 10000:
                 self.write_bool_address(address - 8750, value) 
             else: 
-                print("La direccion local a la que se desea accesar es erronea.") 
+                raise Exception("La direccion local a la que se desea accesar es erronea.") 
 
         elif block_type == BlockType.TEMP:
             if address >= 10000 and address < 11250:
@@ -44,7 +44,7 @@ class VirtualMachineMemoryBlock:
             elif address >= 13750 and address < 15000:
                 self.write_bool_address(address - 13750, value)  
             else: 
-                print("La direccion temporal a la que se desea accesar es erronea.")
+                ("La direccion temporal a la que se desea accesar es erronea.")
             
         elif block_type == BlockType.CONSTANTS:
             if address >= 15000 and address < 16250:
@@ -56,7 +56,7 @@ class VirtualMachineMemoryBlock:
             elif address >= 18750 and address <= 20000:
                 self.write_bool_address(address - 18750, value)
             else: 
-                print("La direccion de constante a la que se desea accesar es erronea.") 
+                raise Exception("La direccion de constante a la que se desea accesar es erronea.") 
         
         elif block_type == BlockType.POINTER:
             if address >= 20000 and address < 21250:
@@ -68,10 +68,10 @@ class VirtualMachineMemoryBlock:
             elif address >= 23750 and address <= 25000:
                 self.write_bool_address(address - 23750, value)
             else: 
-                print("La direccion de pointer que desea leer es erronea.") 
+                raise Exception("La direccion de pointer que desea leer es erronea.") 
 
         else:
-            print("La direccion de memoria: ", address, "no es valida.")
+            raise Exception("La direccion de memoria: ", address, "no es valida.")
 
     
     def read(self, address, block_type):
@@ -85,7 +85,7 @@ class VirtualMachineMemoryBlock:
             elif address >= 3750 and address < 5000:
                 return self.read_bool_address(address - 3750)
             else: 
-                print("La direccion global que desea leer es erronea.")
+                raise Exception("La direccion global que desea leer es erronea.")
 
         elif block_type == BlockType.LOCAL:
             if address >= 5000 and address < 6250:
@@ -97,7 +97,7 @@ class VirtualMachineMemoryBlock:
             elif address >= 8750 and address < 10000:
                 return self.read_bool_address(address - 8750) 
             else: 
-                print("La direccion local que se desea leer es erronea.") 
+                raise Exception("La direccion local que se desea leer es erronea.") 
 
         elif block_type == BlockType.TEMP:
             if address >= 10000 and address < 11250:
@@ -109,7 +109,7 @@ class VirtualMachineMemoryBlock:
             elif address >= 13750 and address < 15000:
                 return self.read_bool_address(address - 13750)  
             else: 
-                print("La direccion temporal que desea leer es erronea.")
+                raise Exception("La direccion temporal que desea leer es erronea.")
             
         elif block_type == BlockType.CONSTANTS:
             if address >= 15000 and address < 16250:
@@ -121,7 +121,7 @@ class VirtualMachineMemoryBlock:
             elif address >= 18750 and address <= 20000:
                 return self.read_bool_address(address - 18750)
             else: 
-                print("La direccion de constante que desea leer es erronea.") 
+                raise Exception("La direccion de constante que desea leer es erronea.") 
             
         elif block_type == BlockType.POINTER:
             if address >= 20000 and address < 21250:
@@ -133,10 +133,10 @@ class VirtualMachineMemoryBlock:
             elif address >= 23750 and address <= 25000:
                 return self.read_bool_address(address - 23750)
             else: 
-                print("La direccion de pointer que desea leer es erronea.") 
+                raise Exception("La direccion de pointer que desea leer es erronea.") 
         
         else:
-            print("La direccion de memoria: ", address, "no es valida.")
+            raise Exception("La direccion de memoria: ", address, "no es valida.")
 
 
     def write_int_address(self, address, value):

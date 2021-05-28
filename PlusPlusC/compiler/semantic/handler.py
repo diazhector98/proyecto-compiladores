@@ -78,7 +78,7 @@ class SemanticHandler:
         if constant_address != None:
             return constant_address
         else:
-            print("Constant variable is not registered yet.")
+            raise Exception("Constant variable is not registered yet.")
 
     def consume_operator(self, operator):
         self.stack.push_operator(operator)
@@ -102,7 +102,7 @@ class SemanticHandler:
             else:
                 self.stack.push_operand(var.name, var.type)
         except Exception:
-            print("variable", operand, "does not exist")
+            raise Exception("variable", operand, "does not exist")
 
     def consume_array_usage(self, array_name, index_operand):
         var = self.var_lookup(array_name)
@@ -240,21 +240,21 @@ class SemanticHandler:
                 self.quadruples.append(quadruple)
                 self.consume_operand(temp, cube_result)
             else:
-                print("Setting Quadruple: type mismatch between operand", left_operand, "and", right_operand)
+                raise Exception("Setting Quadruple: type mismatch between operand", left_operand, "and", right_operand)
         else:
-            print("Error: Not enough operands")
+            raise Exception("Error: Not enough operands")
 
     def get_variable(self, var_name):
         var = self.current_var_table[var_name]
         if var is None:
-            print("var is not declared")
+            raise Exception("var is not declared")
         return var
 
 
     def add_var_operand(self, var_name):
         var = self.current_var_table[var_name]
         if var is None:
-            print("var is not declared")
+            raise Exception("var is not declared")
         else:
             self.consume_operand(var.name, var.type)
             self.stack.operators.append(Operator.ASSIGN)
@@ -273,12 +273,12 @@ class SemanticHandler:
                 quadruple = Quadruple(Operator(operator), right_operand, None, left_operand)
                 self.quadruples.append(quadruple)
             else:
-                print("Adding var operand: type mismatch between operand", left_operand, left_operand_type,  "and", right_operand, right_operand_type)
+                raise Exception("Adding var operand: type mismatch between operand", left_operand, left_operand_type,  "and", right_operand, right_operand_type)
 
     def handle_array_assign(self, var_name):
         var = self.current_var_table[var_name]
         if var is None:
-            print("var is not declared")
+            raise Exception("var is not declared")
         else:
             self.consume_operand(var.name, var.type)
             self.stack.operators.append(Operator.ASSIGN)
@@ -320,14 +320,14 @@ class SemanticHandler:
                     assign_right_operand_to_pointer_quadruple = Quadruple(Operator.ASSIGN, right_operand, None, pointer_to_temp_address)
                     self.quadruples.append(assign_right_operand_to_pointer_quadruple)
                 else:
-                    print("type mismatch between operand", array_base_address, array_type,  "and", right_operand, right_operand_type)
+                    raise Exception("type mismatch between operand", array_base_address, array_type,  "and", right_operand, right_operand_type)
             else:
-                print("Error: the array index type must be an integer.")
+                raise Exception("Error: the array index type must be an integer.")
 
     def handle_matrix_assign(self, var_name):
         var = self.current_var_table[var_name]
         if var is None:
-            print("var is not declared")
+            raise Exception("var is not declared")
         else:
             self.consume_operand(var.name, var.type)
             self.stack.operators.append(Operator.ASSIGN)
@@ -390,9 +390,9 @@ class SemanticHandler:
                     assign_right_operand_to_pointer_quadruple = Quadruple(Operator.ASSIGN, right_operand, None, pointer_to_temp_address)
                     self.quadruples.append(assign_right_operand_to_pointer_quadruple)
                 else:
-                    print("type mismatch between operand", matrix_base_address, matrix_type,  "and", right_operand, right_operand_type)
+                    raise Exception("type mismatch between operand", matrix_base_address, matrix_type,  "and", right_operand, right_operand_type)
             else:
-                print("Error: both matrix indices types must be integers.")
+                raise Exception("Error: both matrix indices types must be integers.")
 
 
     def set_initial_if(self):
@@ -412,7 +412,7 @@ class SemanticHandler:
                 self.quadruples.append(quadruple)
                 jump_index = len(self.quadruples) - 1
                 self.jumps_stack.append(jump_index)
-                print("set_conditional_block", "jump:", jump_index)
+                raise Exception("set_conditional_block", "jump:", jump_index)
             else:
                 raise TypeError("Error: Type of operation must be of type BOOL")
         else:
@@ -456,11 +456,11 @@ class SemanticHandler:
 
         #Revisar funcion en el directorio de funciones
         if function is None:
-            print("Funcion no se encuentra en directorio de funciones")
+            raise Exception("Funcion no se encuentra en directorio de funciones")
         else:
             #Revisar numero de parametros
             if len(arguments) != len(function.params):
-                print("El numero de parametros que la funcion:", function.name, "requiere es incorrecta.")
+                raise Exception("El numero de parametros que la funcion:", function.name, "requiere es incorrecta.")
             else:
                 #Revisar el tipo de parametros
                 for param in (function.params):
@@ -470,7 +470,7 @@ class SemanticHandler:
                     arguments_types.append(argument[1])
                     
                 if function_params_types != arguments_types:
-                    print("El tipo de parametros que la función espera es incorrecto.")
+                    raise Exception("El tipo de parametros que la función espera es incorrecto.")
                 else:
                     #Si todas las restricciones se cumplen
                     quadruple = Quadruple(Operator.ERA, None, None, func_name)

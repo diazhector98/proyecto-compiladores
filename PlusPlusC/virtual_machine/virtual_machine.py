@@ -20,7 +20,6 @@ class VirtualMachine:
             operator = quadruple.operator
             left_operand = quadruple.left_operand
             result = quadruple.result
-            # print(quad_index, ")", quadruple)
 
             if self.is_arithmetic_operator(operator):
                 handle_arithmetic_operator(quadruple, self.memory)
@@ -38,7 +37,6 @@ class VirtualMachine:
 
             elif operator == Operator.PRINT:
                 value = self.memory.read(result)
-                print(value)
                 self.go_to_next_quadruple()
             elif operator == Operator.READ:
                 capture = input("Waiting input: ")
@@ -149,7 +147,7 @@ class VirtualMachine:
             left_operand_value = self.memory.read(left_operand)
             result_value = self.memory.read(result)
             if not 0 <= left_operand_value <= result_value:
-                print("Error: index out bounds")
+                raise Exception("Error: index out bounds")
             self.go_to_next_quadruple()
 
 
