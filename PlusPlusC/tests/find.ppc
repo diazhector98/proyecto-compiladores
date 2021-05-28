@@ -1,0 +1,40 @@
+program Main;
+
+func find(element int) -> void {
+    var A int;
+}
+
+main () {
+    var element int;
+    var array[10] int;
+    var value int;
+    var value_exist int;
+    value_exist = 0;
+
+    array[0] = 5;
+    array[1] = 2;
+    array[2] = 3;
+    array[3] = 7;
+    array[4] = 12;
+    array[5] = 9;
+    array[6] = 15;
+    array[7] = 53;
+    array[8] = 47;
+    array[9] = 34;
+    input(element);
+
+    var index int;
+    index = 0;
+    while index < 10 {
+        if element == array[index] {
+            value_exist = 1;
+        }
+        index = index + 1;
+    }
+
+    if value_exist == 1 {
+        print(1);
+    } else {
+        print(0);
+    }
+}

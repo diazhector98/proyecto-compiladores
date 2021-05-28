@@ -1,0 +1,28 @@
+program Main;
+
+func fibonacci(A int) -> int {
+
+    if A == 0 {
+        return 0;
+    } 
+    
+    if A == 1 {
+        return 1;
+    }
+    if A == 2 {
+        return 1;
+    } else {
+        var result int;
+        result = fibonacci(A - 1) + fibonacci(A - 2);
+        return result;
+    }
+}
+
+main () {
+    var i int;
+    input(i);
+    var fib int;
+
+    fib = fibonacci(i);
+    print(fib);
+}
