@@ -4,8 +4,10 @@ from virtual_machine.common.operator import Operator
 from virtual_machine.operators_handlers import handle_arithmetic_operator, handle_boolean_operator
 from virtual_machine.activation_record import ActivationRecord
 class VirtualMachine:
-    def __init__(self, filename):
-        [functions, constants, quadruples] = FileReader(filename)
+    def __init__(self, input, read_file=True, terminal=True):
+        self.read_file = read_file
+        self.terminal = terminal
+        [functions, constants, quadruples] = FileReader(input, read_file=read_file)
         self.functions = functions
         self.constants = constants
         self.quadruples = quadruples
@@ -37,6 +39,7 @@ class VirtualMachine:
 
             elif operator == Operator.PRINT:
                 value = self.memory.read(result)
+                self.generate_output(value)
                 self.go_to_next_quadruple()
             elif operator == Operator.READ:
                 capture = input("Waiting input: ")
@@ -167,3 +170,9 @@ class VirtualMachine:
         for ar in self.call_stack:
             print(id(ar), ",", end="")
         print("")
+
+    def generate_output(self, value):
+        if self.terminal:
+            print(value)
+        else:
+            self.output += str(value) + "\n"

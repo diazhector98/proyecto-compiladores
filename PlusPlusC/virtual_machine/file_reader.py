@@ -2,9 +2,12 @@ from virtual_machine.common.quadruple import Quadruple
 from virtual_machine.common.function import Function
 
 class FileReader:
-    def __init__(self, filename):
-        self.file = open(filename, "r")
-        self.text = self.file.read()
+    def __init__(self, input, read_file=True):
+        if read_file:
+            self.file = open(input, "r")
+            self.text = self.file.read()
+        else:
+            self.text = input
         self.process()
 
     def process(self):
