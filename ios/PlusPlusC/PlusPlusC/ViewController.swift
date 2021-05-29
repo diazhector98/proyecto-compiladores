@@ -10,17 +10,19 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    // Variables que se conectan con la UI
     @IBOutlet weak var compileButton: UIButton!
     @IBOutlet weak var runButton: UIButton!
     @IBOutlet weak var cleanButton: UIButton!
     @IBOutlet weak var codeInputTextView: UITextView!
     @IBOutlet weak var outputTextView: UITextView!
     
-    //Flask API endpoints
+    // Flask API endpoints
     let APIUrl: String = "http://127.0.0.1:5000/"
     let APIUrlPOSTCompile: String = "http://127.0.0.1:5000/compileFile"
     let APIUrlPOSTRun: String = "http://127.0.0.1:5000/runFile"
     
+    // Metodo que se ejecuta al cargarse la vista principal de la App
     override func viewDidLoad() {
         super.viewDidLoad()
         let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
@@ -28,6 +30,7 @@ class ViewController: UIViewController {
         setUpElementsUI()
     }
     
+    // Set de UI de los componentes visuales
     private func setUpElementsUI() {
         compileButton.layer.cornerRadius = compileButton.frame.height/2
         runButton.layer.cornerRadius = runButton.frame.height/2
@@ -36,6 +39,12 @@ class ViewController: UIViewController {
         outputTextView.layer.cornerRadius = 10
     }
     
+    /*
+     Accion de boton compilar
+     codeInput: codigo escrito en la pantala, el cual que se manda a la API de Flask
+     url: el objeto que guarda la url de la API
+     URLSession.shared.dataTask: realiza la accion POST
+     */
     @IBAction func compileButtonPressed(_ sender: Any) {
         let codeInput = String(codeInputTextView.text)
         
@@ -74,14 +83,21 @@ class ViewController: UIViewController {
         }
     }
     
+    /*
+     Accion de boton ejecutar
+     outputResult: output que se genera al compilar el codigo escrito inicialmente en pantalla
+     url: el objeto que guarda la url de la API
+     URLSession.shared.dataTask: realiza la accion POST
+     */
+    
     @IBAction func runButtonPressed(_ sender: Any) {
+        let outputResult = String(outputTextView.text)
+        
         guard let url = URL(string: APIUrlPOSTRun) else {
             print("Error: Couldn't reach Flask API: APIUrlPOSTRun")
             return
         }
-        
-        let outputResult = String(outputTextView.text)
-        
+                
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
         
@@ -116,6 +132,8 @@ class ViewController: UIViewController {
         }
     }
     
+    
+    // Accion de boton para limpiar pantallas
     @IBAction func cleanButtonPressed(_ sender: Any) {
         codeInputTextView.text = ""
         outputTextView.text = ""
