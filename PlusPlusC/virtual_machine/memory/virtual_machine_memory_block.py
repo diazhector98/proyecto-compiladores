@@ -185,3 +185,11 @@ class VirtualMachineMemoryBlock:
 
     def read_bool_address(self, address):
         return self.bool_partition[address]
+
+    def print_sizes(self):
+        print(
+            "Ints:", len(self.int_partition), 
+            "Floats", len(self.float_partition),
+            "Chars", len(self.char_partition),
+            "Bools", len(self.bool_partition)
+        )
