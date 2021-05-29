@@ -161,7 +161,9 @@ class ViewController: UIViewController {
 
 extension ViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
-        codeInputTextView.text = ""
+        if codeInputTextView.text == "Insert your code here..." {
+            codeInputTextView.text = ""
+        }
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
