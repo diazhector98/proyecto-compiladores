@@ -50,7 +50,7 @@ class SemanticHandler:
             type = var_type,
             address = address
         )
-        self.add_current_function_local_var_size(var_type, 1)
+        self.add_current_function_local_var_size(var_type, 1, 'global')
 
     def set_init_func(self, func_name, t):
         self.functions_directory[func_name] = FunctionDirectoryRecord(
@@ -568,8 +568,9 @@ class SemanticHandler:
             address = self.global_var_table[key].address
             print ("{:<7} {:<12}".format(address, key))
 
-    def add_current_function_local_var_size(self, var_type, size):
-        function = self.functions_directory[self.current_function]
+    def add_current_function_local_var_size(self, var_type, size, func_name=None):
+        function_name = func_name if func_name != None else self.current_function
+        function = self.functions_directory[function_name]
         if var_type == VarType.INT:
             function.local_var_int_size += size
         elif var_type == VarType.FLOAT:

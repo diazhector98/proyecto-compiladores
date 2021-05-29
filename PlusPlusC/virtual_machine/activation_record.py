@@ -22,7 +22,7 @@ class ActivationRecord:
                 bools=function.local_var_bool_size
                 )
             self.temp_block: VirtualMachineMemoryBlock = VirtualMachineMemoryBlock(
-                5000, 
+                10000, 
                 5000,
                 ints=function.temp_var_int_size,
                 floats=function.temp_var_float_size,

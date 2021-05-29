@@ -17,7 +17,8 @@ class VirtualMachine:
         main_function = functions['main']
         self.call_stack = [ActivationRecord(main_function, main_function.start_quadruple_index)]
         self.activation_records_waiting = []
-        self.memory = VirtualMachineMemory(constants, constants_sizes, self.get_current_activation_record())
+        global_function = functions['global']
+        self.memory = VirtualMachineMemory(global_function, constants, constants_sizes, self.get_current_activation_record())
 
     global_output_variable = ""
 

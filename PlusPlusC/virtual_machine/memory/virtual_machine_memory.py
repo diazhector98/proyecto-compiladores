@@ -6,10 +6,18 @@ Clase para manejar la memoria virtual en el proceso de semántica.
 Guarda los bloques de memoria para globales, locales, temporales y constantes
 """
 class VirtualMachineMemory:
-    def __init__(self, constants,constants_sizes, activation_record):
+    def __init__(self, global_function, constants,constants_sizes, activation_record):
         memory_size = 25000
-        self.block_size = memory_size // 5
-        self.gloabl_block = VirtualMachineMemoryBlock(0, self.block_size)
+        self.block_size = memory_size // 5        
+        self.gloabl_block: VirtualMachineMemoryBlock = VirtualMachineMemoryBlock(
+                0, 
+                self.block_size,
+                ints=global_function.local_var_int_size,
+                floats=global_function.local_var_float_size,
+                chars=global_function.local_var_char_size,
+                bools=global_function.local_var_bool_size
+        )
+
         self.constants_block = VirtualMachineMemoryBlock(
                 self.block_size * 3, 
                 self.block_size,
