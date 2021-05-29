@@ -3,16 +3,22 @@ program Main;
 
 func foo(C int, D float) -> int {
     var A int;
-    var B int;
-    var F int;
     var C[10] int;
-    A = 1;
-    B = 2;
-    return A * B;
+    A = 9 + 8;
+    return A * 2;
+}
+
+func bar(F int) -> void {
+    var K int;
+    print(4);
+    print(F);
+    print(6);
 }
 
 main () {
     var C int;
+    var T int;
+    var U int;
     C = foo(8, 6.0);
     print(C);
     C = 1;

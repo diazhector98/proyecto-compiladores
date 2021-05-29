@@ -99,7 +99,7 @@ class PlusPlusCParser(Parser):
 
     @_('MAIN "(" ")"')
     def inicio_main(self, p):
-        self.semantic_actions.set_goto_main()
+        self.semantic_actions.set_init_main()
 
     #Bloque
     @_('"{" estatutos "}"', '"{" "}"')

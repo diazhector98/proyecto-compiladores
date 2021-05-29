@@ -25,9 +25,16 @@ class SemanticHandler:
         self.quadruples.append(goto_main)
         self.jumps_stack.append(0)
 
-    def set_goto_main(self):
+    def set_init_main(self):
         main_jump = self.jumps_stack.pop()
         self.set_final_jump(main_jump, len(self.quadruples))
+        main_function_name = 'main'
+        self.functions_directory[main_function_name] = FunctionDirectoryRecord(
+            name = main_function_name,
+            return_type=None,
+            address = len(self.quadruples)
+        )
+        self.current_function = main_function_name
 
     def add_global(self, var_name, var_type):
         address = self.memory.create_global_address(var_type)
@@ -55,6 +62,8 @@ class SemanticHandler:
                 type = param_var_type,
                 address = address
                 )
+            self.add_current_function_local_var_size(param_var_type, 1)
+            
 
     def set_variable(self, var_name, var_type, rows=1, columns=1):
         address = self.memory.create_local_address(var_type, size=(rows * columns))
@@ -64,6 +73,7 @@ class SemanticHandler:
             address = address,
             dimensions = (rows, columns)
             )
+        self.add_current_function_local_var_size(var_type, rows * columns)
         self.create_constant(rows, VarType.INT)
         self.create_constant(columns, VarType.INT)
 
@@ -550,23 +560,34 @@ class SemanticHandler:
             address = self.global_var_table[key].address
             print ("{:<7} {:<12}".format(address, key))
 
+    def add_current_function_local_var_size(self, var_type, size):
+        function = self.functions_directory[self.current_function]
+        if var_type == VarType.INT:
+            function.local_var_int_size += size
+        elif var_type == VarType.FLOAT:
+            function.local_var_float_size += size
+        elif var_type == VarType.CHAR:
+            function.local_var_char_size += size
+        elif var_type == VarType.BOOL:
+            function.local_var_bool_size += size
+
     def end_func(self):
         function = self.functions_directory[self.current_function]
         if function is None:
             raise Exception("Funcion no se encuentra en directorio de funciones")
         quadruple = Quadruple(Operator.ENDFUNC, None, None, None)
         self.quadruples.append(quadruple)
-        for var_name in self.current_var_table:
-            var = self.current_var_table[var_name]
-            local_type = var.type
-            size = var.dimensions[0] * var.dimensions[1]
-            #set el count de locales dependiendo el tipo
-            if local_type == VarType.INT:
-                function.local_var_int_size += size
-            elif local_type == VarType.FLOAT:
-                function.local_var_float_size += size
-            elif local_type == VarType.CHAR:
-                function.local_var_char_size += size
-            elif local_type == VarType.BOOL:
-                function.local_var_bool_size += size
+        # for var_name in self.current_var_table:
+        #     var = self.current_var_table[var_name]
+        #     local_type = var.type
+        #     size = var.dimensions[0] * var.dimensions[1]
+        #     #set el count de locales dependiendo el tipo
+        #     if local_type == VarType.INT:
+        #         function.local_var_int_size += size
+        #     elif local_type == VarType.FLOAT:
+        #         function.local_var_float_size += size
+        #     elif local_type == VarType.CHAR:
+        #         function.local_var_char_size += size
+        #     elif local_type == VarType.BOOL:
+        #         function.local_var_bool_size += size
         self.memory.reset_local_and_temp_memory()
