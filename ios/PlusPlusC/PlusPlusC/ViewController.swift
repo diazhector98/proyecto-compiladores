@@ -28,6 +28,8 @@ class ViewController: UIViewController {
         let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
         view.addGestureRecognizer(tap)
         setUpElementsUI()
+        codeInputTextView.delegate = self
+        outputTextView.delegate = self
     }
     
     // Set de UI de los componentes visuales
@@ -37,6 +39,13 @@ class ViewController: UIViewController {
         cleanButton.layer.cornerRadius = cleanButton.frame.height/2
         codeInputTextView.layer.cornerRadius = 10
         outputTextView.layer.cornerRadius = 10
+        
+        if codeInputTextView.text.isEmpty {
+            codeInputTextView.text = "Insert your code here..."
+        }
+        if outputTextView.text.isEmpty {
+            outputTextView.text = "See your output here..."
+        }
     }
     
     /*
@@ -135,8 +144,27 @@ class ViewController: UIViewController {
     
     // Accion de boton para limpiar pantallas
     @IBAction func cleanButtonPressed(_ sender: Any) {
-        codeInputTextView.text = ""
-        outputTextView.text = ""
+        if codeInputTextView.text != "Insert your code here..."  && outputTextView.text != "See your output here..." {
+            codeInputTextView.text = ""
+            outputTextView.text = ""
+        }
+        
     }
 }
 
+extension ViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        codeInputTextView.text = ""
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        
+        if codeInputTextView.text.isEmpty {
+            codeInputTextView.text = "Insert your code here..."
+        }
+        if outputTextView.text.isEmpty {
+            outputTextView.text = "See your output here..."
+        }
+        
+    }
+}

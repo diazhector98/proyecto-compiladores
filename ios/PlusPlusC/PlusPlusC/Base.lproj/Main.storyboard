@@ -27,7 +27,7 @@
                                 <fontDescription key="fontDescription" name="CourierNewPSMT" family="Courier New" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Resultado" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="QKG-Ug-uWh">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="QKG-Ug-uWh">
                                 <rect key="frame" x="20" y="436.66666666666669" width="374" height="150.00000000000006"/>
                                 <color key="backgroundColor" systemColor="systemGray2Color"/>
                                 <constraints>
