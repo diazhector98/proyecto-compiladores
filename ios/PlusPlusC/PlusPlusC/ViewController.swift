@@ -37,6 +37,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func compileButtonPressed(_ sender: Any) {
+        let codeInput = String(codeInputTextView.text)
         
         guard let url = URL(string: APIUrlPOSTCompile) else {
             print("Error: Couldn't reach Flask API")
@@ -46,7 +47,7 @@ class ViewController: UIViewController {
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
         
-        let params = ["code": String(codeInputTextView.text)]
+        let params = ["code": codeInput]
         
         do {
             let data = try JSONSerialization.data(withJSONObject: params, options: .init())
@@ -71,39 +72,6 @@ class ViewController: UIViewController {
         } catch {
             print("Error fetching data.")
         }
-
-//        print(codeInput!)
-//
-//        let parameters = ["code": codeInput]
-//        let url = URL(string: "www.thisismylink.com/postName.php")! //change the url
-//        let session = URLSession.shared
-//        var request = URLRequest(url: url)
-//        request.httpMethod = "POST"
-//        do {
-//            request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted) // pass dictionary to nsdata object and set it as request body
-//        } catch let error {
-//            print(error.localizedDescription)
-//        }
-//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//        request.addValue("application/json", forHTTPHeaderField: "Accept")
-//
-//        let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
-//            guard error == nil else {
-//                return
-//            }
-//            guard let data = data else {
-//                return
-//            }
-//            do {
-//                if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
-//                    print(json)
-//                }
-//            } catch let error {
-//                print(error.localizedDescription)
-//            }
-//        })
-//        task.resume()
-
     }
     
     @IBAction func runButtonPressed(_ sender: Any) {

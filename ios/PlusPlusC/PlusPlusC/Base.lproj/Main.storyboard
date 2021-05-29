@@ -89,6 +89,9 @@
                                 <state key="normal" title="Limpiar">
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="cleanButtonPressed:" destination="BYZ-38-t0r" eventType="touchDown" id="hcQ-Go-Tki"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
