@@ -468,7 +468,10 @@ class SemanticHandler:
 
                 for argument in arguments:
                     arguments_types.append(argument[1])
-                    
+
+                #TODO revisar más casos que no cause problemas por este reverse
+                arguments_types.reverse()
+
                 if function_params_types != arguments_types:
                     raise Exception("El tipo de parametros que la función espera es incorrecto.")
                 else:
