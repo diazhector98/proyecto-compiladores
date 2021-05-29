@@ -19,6 +19,7 @@ main () {
     var C int;
     var T int;
     var U int;
+    T = 67 + 98;
     C = foo(8, 6.0);
     print(C);
     C = 1;
