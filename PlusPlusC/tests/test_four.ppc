@@ -4,6 +4,8 @@ program Main;
 func foo(C int, D float) -> int {
     var A int;
     var B int;
+    var F int;
+    var C[10] int;
     A = 1;
     B = 2;
     return A * B;

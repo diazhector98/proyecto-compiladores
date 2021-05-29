@@ -557,14 +557,16 @@ class SemanticHandler:
         quadruple = Quadruple(Operator.ENDFUNC, None, None, None)
         self.quadruples.append(quadruple)
         for var_name in self.current_var_table:
-            local_type = self.current_var_table[var_name].type
+            var = self.current_var_table[var_name]
+            local_type = var.type
+            size = var.dimensions[0] * var.dimensions[1]
             #set el count de locales dependiendo el tipo
             if local_type == VarType.INT:
-                self.functions_directory[self.current_function].local_var_int_size += 1
+                function.local_var_int_size += size
             elif local_type == VarType.FLOAT:
-                self.functions_directory[self.current_function].local_var_float_size += 1
+                function.local_var_float_size += size
             elif local_type == VarType.CHAR:
-                self.functions_directory[self.current_function].local_var_char_size += 1
+                function.local_var_char_size += size
             elif local_type == VarType.BOOL:
-                self.functions_directory[self.current_function].local_var_bool_size += 1
+                function.local_var_bool_size += size
         self.memory.reset_local_and_temp_memory()
