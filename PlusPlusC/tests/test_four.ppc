@@ -5,14 +5,15 @@ func foo(C int, D float) -> int {
     var A int;
     var B int;
     A = 1;
-    A = 2;
     B = 2;
 }
 
 main () {
-    while 8 < 10 {
-        var C int;
+    var C int;
+    C = 1;
+    print(C);
+    if 8 < 10 {
         C = 0;
-    } 
-    foo(10, 19 * 76);
+    }
+    print(C);
 }
