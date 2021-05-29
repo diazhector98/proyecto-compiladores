@@ -1,13 +1,19 @@
 from virtual_machine.memory.block_type import BlockType
 
 class VirtualMachineMemoryBlock:
-    def __init__(self, start_address, size):
+    def __init__(self, start_address, size, ints=None, floats=None, chars=None, bools=None):
         partition_size = size // 4
         self.start_address = start_address
-        self.int_partition = [None] * partition_size
-        self.float_partition = [None] * partition_size
-        self.char_partition = [None] * partition_size
-        self.bool_partition = [None] * partition_size
+        
+        ints_size = ints if ints != None else partition_size
+        floats_size = floats if floats != None else partition_size
+        chars_size = chars if chars != None else partition_size
+        bools_size = bools if bools != None else partition_size
+        
+        self.int_partition = [None] * ints_size
+        self.float_partition = [None] * floats_size
+        self.char_partition = [None] * chars_size
+        self.bool_partition = [None] * bools_size
 
     def write(self, address, value, block_type):
         if block_type == BlockType.GLOBAL:

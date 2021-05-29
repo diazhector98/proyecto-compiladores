@@ -6,10 +6,13 @@ func foo(C int, D float) -> int {
     var B int;
     A = 1;
     B = 2;
+    return A * B;
 }
 
 main () {
     var C int;
+    C = foo(8, 6.0);
+    print(C);
     C = 1;
     print(C);
     if 8 < 10 {
