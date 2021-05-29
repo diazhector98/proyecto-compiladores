@@ -48,7 +48,7 @@
                                             <constraint firstAttribute="width" constant="90" id="DN9-oY-CwJ"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="20"/>
-                                        <state key="normal" title="Compilar">
+                                        <state key="normal" title="Compile">
                                             <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
@@ -63,7 +63,7 @@
                                             <constraint firstAttribute="height" constant="45" id="z92-A0-lj5"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="20"/>
-                                        <state key="normal" title="Ejecutar">
+                                        <state key="normal" title="Run">
                                             <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
@@ -86,7 +86,7 @@
                                     <constraint firstAttribute="width" constant="90" id="qpF-p1-TYO"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="20"/>
-                                <state key="normal" title="Limpiar">
+                                <state key="normal" title="Clean">
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
