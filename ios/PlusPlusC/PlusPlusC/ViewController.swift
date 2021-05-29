@@ -56,7 +56,7 @@ class ViewController: UIViewController {
      */
     @IBAction func compileButtonPressed(_ sender: Any) {
         
-        if codeInputTextView.text != "Insert your code here..." {
+        if codeInputTextView.text != "Insert your code here..." && !codeInputTextView.text.isEmpty {
             let codeInput = String(codeInputTextView.text)
             
             guard let url = URL(string: APIUrlPOSTCompile) else {
@@ -106,7 +106,7 @@ class ViewController: UIViewController {
     
     @IBAction func runButtonPressed(_ sender: Any) {
         
-        if codeInputTextView.text != "Insert your code here..." {
+        if codeInputTextView.text != "Insert your code here..." && !codeInputTextView.text.isEmpty {
             let outputResult = String(outputTextView.text)
             
             guard let url = URL(string: APIUrlPOSTRun) else {
