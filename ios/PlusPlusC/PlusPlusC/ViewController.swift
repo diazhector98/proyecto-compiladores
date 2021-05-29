@@ -55,40 +55,45 @@ class ViewController: UIViewController {
      URLSession.shared.dataTask: realiza la accion POST
      */
     @IBAction func compileButtonPressed(_ sender: Any) {
-        let codeInput = String(codeInputTextView.text)
         
-        guard let url = URL(string: APIUrlPOSTCompile) else {
-            print("Error: Couldn't reach Flask API: APIUrlPOSTCompile")
-            return
-        }
-        
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "POST"
-        
-        let params = ["code": codeInput]
-        
-        do {
-            let data = try JSONSerialization.data(withJSONObject: params, options: .init())
-            urlRequest.httpBody = data
-            urlRequest.setValue("application/json", forHTTPHeaderField: "content-type")
+        if codeInputTextView.text != "Insert your code here..." {
+            let codeInput = String(codeInputTextView.text)
             
-            URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
-                guard let data = data else { return }
-                do {
-                    let json = try JSONSerialization.jsonObject(with: data, options: [])
-                    if let dict = json as? [String: Any] {
-                        if let value = dict["compiler"] as? String {
-                            DispatchQueue.main.async {
-                                self.outputTextView.text = value
+            guard let url = URL(string: APIUrlPOSTCompile) else {
+                print("Error: Couldn't reach Flask API: APIUrlPOSTCompile")
+                return
+            }
+            
+            var urlRequest = URLRequest(url: url)
+            urlRequest.httpMethod = "POST"
+            
+            let params = ["code": codeInput]
+            
+            do {
+                let data = try JSONSerialization.data(withJSONObject: params, options: .init())
+                urlRequest.httpBody = data
+                urlRequest.setValue("application/json", forHTTPHeaderField: "content-type")
+                
+                URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+                    guard let data = data else { return }
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data, options: [])
+                        if let dict = json as? [String: Any] {
+                            if let value = dict["compiler"] as? String {
+                                DispatchQueue.main.async {
+                                    self.outputTextView.text = value
+                                }
                             }
                         }
+                    } catch {
+                        print("Error fetching key: value")
                     }
-                } catch {
-                    print("Error fetching key: value")
-                }
-            }.resume()
-        } catch {
-            print("Error fetching data.")
+                }.resume()
+            } catch {
+                print("Error fetching data.")
+            }
+        } else {
+            outputTextView.text = "You have not inserted any code. Please insert your code."
         }
     }
     
@@ -100,55 +105,57 @@ class ViewController: UIViewController {
      */
     
     @IBAction func runButtonPressed(_ sender: Any) {
-        let outputResult = String(outputTextView.text)
         
-        guard let url = URL(string: APIUrlPOSTRun) else {
-            print("Error: Couldn't reach Flask API: APIUrlPOSTRun")
-            return
-        }
-                
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "POST"
-        
-        let params = ["compilerResult": outputResult]
-        
-        do {
-            let data = try JSONSerialization.data(withJSONObject: params, options: .init())
-            urlRequest.httpBody = data
-            urlRequest.setValue("application/json", forHTTPHeaderField: "content-type")
+        if codeInputTextView.text != "Insert your code here..." {
+            let outputResult = String(outputTextView.text)
             
-            URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
-                guard let data = data else { return }
-                do {
-                    let json = try JSONSerialization.jsonObject(with: data, options: [])
-                    if let dict = json as? [String: Any] {
-                        if let value = dict["result"] as? String {
-                            self.outputTextView.text = ""
-                            DispatchQueue.main.async {
-                                if value == "" {
-                                    print("viene vacio")
+            guard let url = URL(string: APIUrlPOSTRun) else {
+                print("Error: Couldn't reach Flask API: APIUrlPOSTRun")
+                return
+            }
+            
+            var urlRequest = URLRequest(url: url)
+            urlRequest.httpMethod = "POST"
+            
+            let params = ["compilerResult": outputResult]
+            
+            do {
+                let data = try JSONSerialization.data(withJSONObject: params, options: .init())
+                urlRequest.httpBody = data
+                urlRequest.setValue("application/json", forHTTPHeaderField: "content-type")
+                
+                URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+                    guard let data = data else { return }
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data, options: [])
+                        if let dict = json as? [String: Any] {
+                            if let value = dict["result"] as? String {
+                                self.outputTextView.text = ""
+                                DispatchQueue.main.async {
+                                    self.outputTextView.text = value
                                 }
-                                self.outputTextView.text = value
                             }
                         }
+                    } catch {
+                        print("Error fetching key: value")
                     }
-                } catch {
-                    print("Error fetching key: value")
-                }
-            }.resume()
-        } catch {
-            print("Error fetching data.")
+                }.resume()
+            } catch {
+                print("Error fetching data.")
+            }
+        } else {
+            outputTextView.text = "You have not inserted any code. Please insert your code."
         }
     }
     
     
     // Accion de boton para limpiar pantallas
     @IBAction func cleanButtonPressed(_ sender: Any) {
-        if codeInputTextView.text != "Insert your code here..."  && outputTextView.text != "See your output here..." {
+        if codeInputTextView.text != "Insert your code here..."  && outputTextView.text != "See your output here..."
+        && outputTextView.text != "You have not inserted any code. Please insert your code." {
             codeInputTextView.text = ""
             outputTextView.text = ""
         }
-        
     }
 }
 
