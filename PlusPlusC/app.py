@@ -47,11 +47,12 @@ def run_File():
 
         file_result_text = file_result
         virtual_machine = VirtualMachine(file_result_text,read_file=False, terminal=False)
-        print("file_result2", file_result)
+        print("file_result_text")
+        print(file_result_text)
         
         #causa error aqui
         virtual_machine.run()
-        print("file_result3", file_result)
+        #print("file_result3", file_result_text)
 
         file_result_output = virtual_machine.output
 
