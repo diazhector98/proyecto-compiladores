@@ -47,12 +47,11 @@ def run_File():
 
         file_result_text = file_result
         virtual_machine = VirtualMachine(file_result_text,read_file=False, terminal=False)
-        print("file_result_text")
-        print(file_result_text)
+        print("file_result_text", file_result_text)
         
-        #causa error aqui
+        #causa error en esta sigueinte linea, no se imprime file_result3
         virtual_machine.run()
-        #print("file_result3", file_result_text)
+        print("file_result3", file_result_text)
 
         file_result_output = virtual_machine.output
 
