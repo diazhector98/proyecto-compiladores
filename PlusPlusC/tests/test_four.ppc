@@ -1,18 +1,22 @@
 program Main;
 
-
-func foo(C int, D float) -> int {
-    var A int;
-    var C[10] int;
-    A = 9 + 8;
-    return A * 2;
-}
+global G1 int;
+global G2 int;
+global G7 int;
+global G3 float;
 
 func bar(F int) -> void {
     var K int;
     print(4);
     print(F);
     print(6);
+}
+
+func foo(C int, D float) -> int {
+    var A int;
+    var C[10] int;
+    A = 9 + 8;
+    return A * 2;
 }
 
 main () {
