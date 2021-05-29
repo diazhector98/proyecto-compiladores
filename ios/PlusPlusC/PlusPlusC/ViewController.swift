@@ -130,8 +130,8 @@ class ViewController: UIViewController {
                         let json = try JSONSerialization.jsonObject(with: data, options: [])
                         if let dict = json as? [String: Any] {
                             if let value = dict["result"] as? String {
-                                self.outputTextView.text = ""
                                 DispatchQueue.main.async {
+                                    self.outputTextView.text = ""
                                     self.outputTextView.text = value
                                 }
                             }

@@ -3,7 +3,10 @@ from virtual_machine.memory.virtual_machine_memory import VirtualMachineMemory
 from virtual_machine.common.operator import Operator
 from virtual_machine.operators_handlers import handle_arithmetic_operator, handle_boolean_operator
 from virtual_machine.activation_record import ActivationRecord
+
+
 class VirtualMachine:
+
     def __init__(self, input, read_file=True, terminal=True):
         self.read_file = read_file
         self.terminal = terminal
@@ -14,7 +17,9 @@ class VirtualMachine:
         self.call_stack = [ActivationRecord()]
         self.activation_records_waiting = []
         self.memory = VirtualMachineMemory(constants, self.get_current_activation_record())
-        
+
+    global_output_variable = ""
+
     def run(self):
         while self.get_quad_index() < len(self.quadruples):
             quad_index = self.get_quad_index()
@@ -174,5 +179,7 @@ class VirtualMachine:
     def generate_output(self, value):
         if self.terminal:
             print(value)
+            self.global_output_variable += str(value) + "\n"
         else:
             self.output += str(value) + "\n"
+            self.global_output_variable += str(value) + "\n"
