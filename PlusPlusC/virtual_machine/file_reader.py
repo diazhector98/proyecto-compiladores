@@ -52,7 +52,7 @@ class FileReader:
                 value = bool(string_value)
                 constant_type = bool
             else:
-                raise Exception("Execution error: The constant memory address ", string_address, "’, which corresponds to value: ", value, " it’s not valid. ")
+                raise Exception("Execution error: The constant memory address: ", string_address, "’, which corresponds to value: ", value, " it’s not valid. ")
 
             table[address] = value
             return constant_type
