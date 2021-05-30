@@ -336,7 +336,7 @@ class PlusPlusCParser(Parser):
 
     def error(self, p):
         if p:
-            raise Exception("Syntax error at token", p.type, p.value)
+            raise Exception("Compilation error: Syntax error at token", p.type, p.value)
             self.contains_error = True
 
 if __name__ == '__main__':

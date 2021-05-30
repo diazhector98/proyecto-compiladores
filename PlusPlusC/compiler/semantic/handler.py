@@ -96,7 +96,7 @@ class SemanticHandler:
         if constant_address != None:
             return constant_address
         else:
-            raise Exception("Constant variable is not registered yet.")
+            raise Exception("Compilation eror: Constant variable, which value is:", value, " is not registered yet.")
 
     def consume_operator(self, operator):
         self.stack.push_operator(operator)
@@ -120,12 +120,12 @@ class SemanticHandler:
             else:
                 self.stack.push_operand(var.name, var.type)
         except Exception:
-            raise Exception("variable", operand, "does not exist")
+            raise Exception("Compilation error: Variable: ", operand, "does not exist.")
 
     def consume_array_usage(self, array_name, index_operand):
         var = self.var_lookup(array_name)
         if var is None:
-            raise Exception("Array does not exist")
+            raise Exception("Compilation error: Array: ",array_name ," does not exist. Can not be assign to a variable.")
         
         base_address = var.address
         index_address = index_operand[0]
@@ -148,7 +148,7 @@ class SemanticHandler:
         var = self.var_lookup(matrix_name)
 
         if var is None:
-            raise Exception("Matrix does not exist")
+            raise Exception("Compilation error: Matrix: ",matrix_name, " does not exist. Can not be assign to a variable")
        
         matrix_base_address = var.address
 
@@ -258,21 +258,21 @@ class SemanticHandler:
                 self.quadruples.append(quadruple)
                 self.consume_operand(temp, cube_result)
             else:
-                raise Exception("Setting Quadruple: type mismatch between operand", left_operand, "and", right_operand)
+                raise Exception("Compilation error: Setting quadruple: type mismatch between operand", left_operand, "and", right_operand)
         else:
-            raise Exception("Error: Not enough operands")
+            raise Exception("Compilation error: Not enough operands and operators to create quadruples.")
 
     def get_variable(self, var_name):
         var = self.current_var_table[var_name]
         if var is None:
-            raise Exception("var is not declared")
+            raise Exception("Compialtion error: The variable is not declared.")
         return var
 
 
     def add_var_operand(self, var_name):
         var = self.current_var_table[var_name]
         if var is None:
-            raise Exception("var is not declared")
+            raise Exception("Compilation error: The variable is not declared. Can not assign a value to this variable.")
         else:
             self.consume_operand(var.name, var.type)
             self.stack.operators.append(Operator.ASSIGN)
@@ -291,12 +291,12 @@ class SemanticHandler:
                 quadruple = Quadruple(Operator(operator), right_operand, None, left_operand)
                 self.quadruples.append(quadruple)
             else:
-                raise Exception("Adding var operand: type mismatch between operand", left_operand, left_operand_type,  "and", right_operand, right_operand_type)
+                raise Exception("Compilation error: Setting variable a value: type mismatch between operand ", left_operand, " type ", left_operand_type,  " and operand ", right_operand, " type ", right_operand_type)
 
     def handle_array_assign(self, var_name):
         var = self.current_var_table[var_name]
         if var is None:
-            raise Exception("var is not declared")
+            raise Exception("Compilation error: The array named: " ,var_name, " is not declared. Can not assign a variable this array.")
         else:
             self.consume_operand(var.name, var.type)
             self.stack.operators.append(Operator.ASSIGN)
@@ -338,14 +338,14 @@ class SemanticHandler:
                     assign_right_operand_to_pointer_quadruple = Quadruple(Operator.ASSIGN, right_operand, None, pointer_to_temp_address)
                     self.quadruples.append(assign_right_operand_to_pointer_quadruple)
                 else:
-                    raise Exception("type mismatch between operand", array_base_address, array_type,  "and", right_operand, right_operand_type)
+                    raise Exception("Compilation error: Can not assign variable to array because of type mismatch between operand ", array_base_address, " type " ,array_type,  "and operand ", right_operand, " type " ,right_operand_type)
             else:
-                raise Exception("Error: the array index type must be an integer.")
+                raise Exception("Compilation error: The array index type must be an integer. Can not assign a variable to this array.")
 
     def handle_matrix_assign(self, var_name):
         var = self.current_var_table[var_name]
         if var is None:
-            raise Exception("var is not declared")
+            raise Exception("Compilation error: The matrix named: " ,var_name, " is not declared. Can not assign a variable this matrix.")
         else:
             self.consume_operand(var.name, var.type)
             self.stack.operators.append(Operator.ASSIGN)
@@ -408,9 +408,9 @@ class SemanticHandler:
                     assign_right_operand_to_pointer_quadruple = Quadruple(Operator.ASSIGN, right_operand, None, pointer_to_temp_address)
                     self.quadruples.append(assign_right_operand_to_pointer_quadruple)
                 else:
-                    raise Exception("type mismatch between operand", matrix_base_address, matrix_type,  "and", right_operand, right_operand_type)
+                    raise Exception("Compilation error: Can not assign variable to matrix because of type mismatch between operand ", matrix_base_address, " type " ,matrix_type,  "and operand ", right_operand, " type " ,right_operand_type)
             else:
-                raise Exception("Error: both matrix indices types must be integers.")
+                raise Exception("Compilation error: Both matrix indexes types must be integers. Can not assign a variable to this matrix.")
 
 
     def set_initial_if(self):
