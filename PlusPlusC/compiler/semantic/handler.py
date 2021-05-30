@@ -432,9 +432,9 @@ class SemanticHandler:
                 self.jumps_stack.append(jump_index)
                 print("set_conditional_block", "jump:", jump_index)
             else:
-                raise TypeError("Error: Type of operation must be of type BOOL")
+                raise TypeError("Compilation error: The result of the conditional operation must be of type bool.")
         else:
-            raise Exception("Error: Not enough operands")
+            raise Exception("Compilation error: Not enough operands to resolve the conditional operation.")
 
     def set_end_of_if(self):
         if self.jumps_stack:
@@ -443,7 +443,7 @@ class SemanticHandler:
             print("end of if", "jump:", final_jump_index)
             self.set_final_jump(quadruple_index_to_set, final_jump_index)
         else:
-            raise Exception("Error: Jump stack is empty")
+            raise Exception("Compilation error: Jump stack is empty. Can not set the end of IF.")
 
     def set_end_of_while(self):
         end_jump_index = self.jumps_stack.pop()
@@ -465,7 +465,7 @@ class SemanticHandler:
             print("set_else", "jump:", len(self.quadruples) + 1)
             self.set_final_jump(quadruple_index_to_set, len(self.quadruples))
         else:
-            raise Exception("Jump stack error")
+            raise Exception("Compilation error: Jump stack is empty. Can not set the end of ELSE.")
 
     def set_function_call(self, func_name, arguments):
         function = self.functions_directory[func_name]
@@ -474,11 +474,11 @@ class SemanticHandler:
 
         #Revisar funcion en el directorio de funciones
         if function is None:
-            raise Exception("Funcion no se encuentra en directorio de funciones")
+            raise Exception("Compilation error: The function ", func_name ," is not declared. Can not use it.")
         else:
             #Revisar numero de parametros
             if len(arguments) != len(function.params):
-                raise Exception("El numero de parametros que la funcion:", function.name, "requiere es incorrecta.")
+                raise Exception("Compilation error: The number of parameters the function ", function.name, " requires is incorrect.")
             else:
                 #Revisar el tipo de parametros
                 for param in (function.params):
@@ -491,7 +491,7 @@ class SemanticHandler:
                 arguments_types.reverse()
 
                 if function_params_types != arguments_types:
-                    raise Exception("El tipo de parametros que la función espera es incorrecto.")
+                    raise Exception("Compilation error: The type of parameters the function ", function.name ," requires is incorrect.")
                 else:
                     #Si todas las restricciones se cumplen
                     quadruple = Quadruple(Operator.ERA, None, None, func_name)
@@ -551,7 +551,7 @@ class SemanticHandler:
             quad = Quadruple(Operator.RETURN, operand, None, function_global_address)
             self.quadruples.append(quad)
         else:
-            raise Exception("El tipo de retorno que la función espera es incorrecto.")
+            raise Exception("Compilation error: The return type the function requires is incorrect. Can not return this type of value.")
         
     # Método de debugging
     def print_quadruples(self):
@@ -583,7 +583,7 @@ class SemanticHandler:
     def end_func(self):
         function = self.functions_directory[self.current_function]
         if function is None:
-            raise Exception("Funcion no se encuentra en directorio de funciones")
+            print("The function is not declared. Have reached the end of the function and can not continue compiling.")
         quadruple = Quadruple(Operator.ENDFUNC, None, None, None)
         self.quadruples.append(quadruple)
         self.memory.reset_local_and_temp_memory()
