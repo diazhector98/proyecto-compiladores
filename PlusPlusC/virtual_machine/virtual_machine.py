@@ -157,7 +157,7 @@ class VirtualMachine:
             left_operand_value = self.memory.read(left_operand)
             result_value = self.memory.read(result)
             if not 0 <= left_operand_value <= result_value:
-                raise Exception("Error: index out bounds")
+                raise Exception("Execution error: Index out of bounds")
             self.go_to_next_quadruple()
 
 
