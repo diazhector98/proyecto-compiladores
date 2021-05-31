@@ -1,13 +1,19 @@
 from virtual_machine.memory.block_type import BlockType
 
 class VirtualMachineMemoryBlock:
-    def __init__(self, start_address, size):
+    def __init__(self, start_address, size, ints=None, floats=None, chars=None, bools=None):
         partition_size = size // 4
         self.start_address = start_address
-        self.int_partition = [None] * partition_size
-        self.float_partition = [None] * partition_size
-        self.char_partition = [None] * partition_size
-        self.bool_partition = [None] * partition_size
+        
+        ints_size = ints if ints != None else partition_size
+        floats_size = floats if floats != None else partition_size
+        chars_size = chars if chars != None else partition_size
+        bools_size = bools if bools != None else partition_size
+        
+        self.int_partition = [None] * ints_size
+        self.float_partition = [None] * floats_size
+        self.char_partition = [None] * chars_size
+        self.bool_partition = [None] * bools_size
 
     def write(self, address, value, block_type):
         if block_type == BlockType.GLOBAL:
@@ -20,7 +26,7 @@ class VirtualMachineMemoryBlock:
             elif address >= 3750 and address < 5000:
                 self.write_bool_address(address - 3750, value)
             else: 
-                print("La direccion global a la que se desea accesar es erronea.")
+                raise Exception("Execution error: The memory address ", address, " trying to access to in order to modify in the global memory block is invalid.")
 
         elif block_type == BlockType.LOCAL:
             if address >= 5000 and address < 6250:
@@ -32,7 +38,7 @@ class VirtualMachineMemoryBlock:
             elif address >= 8750 and address < 10000:
                 self.write_bool_address(address - 8750, value) 
             else: 
-                print("La direccion local a la que se desea accesar es erronea.") 
+                raise Exception("Execution error: The memory address ", address, " trying to access in order to modify it in the local memory block is invalid.")
 
         elif block_type == BlockType.TEMP:
             if address >= 10000 and address < 11250:
@@ -44,7 +50,7 @@ class VirtualMachineMemoryBlock:
             elif address >= 13750 and address < 15000:
                 self.write_bool_address(address - 13750, value)  
             else: 
-                print("La direccion temporal a la que se desea accesar es erronea.")
+                raise Exception("Execution error: The memory address ", address, " trying to access in order to modify it in the temporay memory block is invalid.")
             
         elif block_type == BlockType.CONSTANTS:
             if address >= 15000 and address < 16250:
@@ -56,7 +62,7 @@ class VirtualMachineMemoryBlock:
             elif address >= 18750 and address <= 20000:
                 self.write_bool_address(address - 18750, value)
             else: 
-                print("La direccion de constante a la que se desea accesar es erronea.") 
+                raise Exception("Execution error: The memory address ", address, " trying to access in order to modify it in the constants memory block is invalid.") 
         
         elif block_type == BlockType.POINTER:
             if address >= 20000 and address < 21250:
@@ -68,10 +74,10 @@ class VirtualMachineMemoryBlock:
             elif address >= 23750 and address <= 25000:
                 self.write_bool_address(address - 23750, value)
             else: 
-                print("La direccion de pointer que desea leer es erronea.") 
+                raise Exception("Execution error: The memory address ", address, " trying to access in order to modify it in the pointer memory block is invalid.") 
 
         else:
-            print("La direccion de memoria: ", address, "no es valida.")
+            raise Exception("Execution error: The memory address ", address, " trying to access in order to modify it in a memory block partition is invalid.")
 
     
     def read(self, address, block_type):
@@ -85,7 +91,7 @@ class VirtualMachineMemoryBlock:
             elif address >= 3750 and address < 5000:
                 return self.read_bool_address(address - 3750)
             else: 
-                print("La direccion global que desea leer es erronea.")
+                raise Exception("Execution error: The memory address ", address, " trying to access in order to read it in the global memory block is invalid.")
 
         elif block_type == BlockType.LOCAL:
             if address >= 5000 and address < 6250:
@@ -97,7 +103,7 @@ class VirtualMachineMemoryBlock:
             elif address >= 8750 and address < 10000:
                 return self.read_bool_address(address - 8750) 
             else: 
-                print("La direccion local que se desea leer es erronea.") 
+                raise Exception("Execution error: The memory address ", address, " trying to access in order to read it in the local memory block is invalid.") 
 
         elif block_type == BlockType.TEMP:
             if address >= 10000 and address < 11250:
@@ -109,7 +115,7 @@ class VirtualMachineMemoryBlock:
             elif address >= 13750 and address < 15000:
                 return self.read_bool_address(address - 13750)  
             else: 
-                print("La direccion temporal que desea leer es erronea.")
+                raise Exception("Execution error: The memory address ", address, " trying to access in order to read it in the temporary memory block is invalid.")
             
         elif block_type == BlockType.CONSTANTS:
             if address >= 15000 and address < 16250:
@@ -121,7 +127,7 @@ class VirtualMachineMemoryBlock:
             elif address >= 18750 and address <= 20000:
                 return self.read_bool_address(address - 18750)
             else: 
-                print("La direccion de constante que desea leer es erronea.") 
+                raise Exception("Execution error: The memory address ", address, " trying to access in order to read it in the constants memory block is invalid.") 
             
         elif block_type == BlockType.POINTER:
             if address >= 20000 and address < 21250:
@@ -133,10 +139,10 @@ class VirtualMachineMemoryBlock:
             elif address >= 23750 and address <= 25000:
                 return self.read_bool_address(address - 23750)
             else: 
-                print("La direccion de pointer que desea leer es erronea.") 
+                raise Exception("Execution error: The memory address ", address, " trying to access in order to read it in the pointers memory block is invalid.") 
         
         else:
-            print("La direccion de memoria: ", address, "no es valida.")
+            raise Exception("Execution error: The memory address ", address, " trying to access in order to read it in a memory block partition is invalid.")
 
 
     def write_int_address(self, address, value):
@@ -144,14 +150,14 @@ class VirtualMachineMemoryBlock:
             value = int(value)
             self.int_partition[address] = value
         except Exception:
-            raise Exception("Value cannot be converted to int")
+            raise Exception("Execution error: The integer value ", value, " trying to save in address ", address, " which corresponds to the integers memory block, can't be converted to integer.")
 
     def write_float_address(self, address, value):
         try:
             value = float(value)
             self.float_partition[address] = value
         except Exception:
-            raise Exception("Value cannot be converted to float")
+            raise Exception("Execution error: The integer value ", value, " trying to save in address ", address, " which corresponds to the integers memory block, can't be converted to float.")
 
     def write_char_address(self, address, value):
         try:
@@ -159,14 +165,14 @@ class VirtualMachineMemoryBlock:
             assert len(value) == 1
             self.char_partition[address] = value
         except Exception:
-            raise Exception("Value cannot be converted to char")
+            raise Exception("Execution error: The integer value ", value, " trying to save in address ", address, " which corresponds to the integers memory block, can't be converted to char.")
 
     def write_bool_address(self, address, value):
         try:
             value = bool(value)
             self.bool_partition[address] = value
         except Exception:
-            raise Exception("Value cannot be converted to bool")
+            raise Exception("Execution error: The integer value ", value, " trying to save in address ", address, " which corresponds to the integers memory block, can't be converted to bool.")
 
     def read_int_address(self, address):
         return self.int_partition[address]
@@ -179,3 +185,11 @@ class VirtualMachineMemoryBlock:
 
     def read_bool_address(self, address):
         return self.bool_partition[address]
+
+    def print_sizes(self):
+        print(
+            "Ints:", len(self.int_partition), 
+            "Floats", len(self.float_partition),
+            "Chars", len(self.char_partition),
+            "Bools", len(self.bool_partition)
+        )

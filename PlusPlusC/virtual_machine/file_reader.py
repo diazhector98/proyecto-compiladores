@@ -2,9 +2,12 @@ from virtual_machine.common.quadruple import Quadruple
 from virtual_machine.common.function import Function
 
 class FileReader:
-    def __init__(self, filename):
-        self.file = open(filename, "r")
-        self.text = self.file.read()
+    def __init__(self, input, read_file=True):
+        if read_file:
+            self.file = open(input, "r")
+            self.text = self.file.read()
+        else:
+            self.text = input
         self.process()
 
     def process(self):
@@ -14,7 +17,7 @@ class FileReader:
         quadruples_text = contents[2]
 
         self.functions = self.process_functions_text(functions_text)
-        self.constants_table = self.process_constants_text(constants_text)
+        (self.constants_table, self.constants_sizes) = self.process_constants_text(constants_text)
         self.quadruples = self.process_quadruples_text(quadruples_text)
     
     def process_functions_text(self, text):
@@ -28,27 +31,43 @@ class FileReader:
     def process_constants_text(self, text):
         lines = self.split_text(text)
         table = dict()
+        ints = 0
+        floats = 0
+        chars = 0
+        bools = 0
         def process_line(line):
             [string_address, string_value] = line.split(' ')
             address = int(string_address)
+            constant_type = int
             
             if address >= 15000 and address < 16250:
                 value = int(string_value)
             elif address >= 1650 and address < 17500:
                 value = float(string_value)
+                constant_type = float
             elif address >= 17500 and address < 18750:
                 value = str(string_value)
+                constant_type = str
             elif address >= 18750 and address <= 20000:
                 value = bool(string_value)
+                constant_type = bool
             else:
-                print("La direccion de memoria: ", string_address, "que corresponde al valor: ", value, "no es valida.")
+                raise Exception("Execution error: The constant memory address: ", string_address, "’, which corresponds to value: ", value, " it’s not valid. ")
 
             table[address] = value
+            return constant_type
 
         for l in lines:
-            process_line(l)
-        
-        return table
+            constant_type = process_line(l)
+            if constant_type == int:
+                ints += 1
+            if constant_type == float:
+                floats += 1
+            if constant_type == str:
+                chars += 1
+            if constant_type == bool:
+                bools += 1
+        return (table, [ints, floats, chars, bools])
 
     def process_quadruples_text(self, text):
         lines = self.split_text(text)
@@ -61,6 +80,6 @@ class FileReader:
         return lines
 
     def __iter__(self):
-        return iter((self.functions, self.constants_table, self.quadruples))
+        return iter((self.functions, self.constants_table,self.constants_sizes, self.quadruples))
         
     

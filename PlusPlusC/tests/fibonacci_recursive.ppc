@@ -20,9 +20,9 @@ func fibonacci(A int) -> int {
 
 main () {
     var i int;
-    input(i);
+    i = 9;
     var fib int;
 
     fib = fibonacci(i);
-    print(fib);
+    print(fib1);
 }

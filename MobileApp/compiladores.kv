@@ -1,0 +1,57 @@
+<Compiladores>
+    compile_button: c_button
+    run_button: r_button
+    output_text: o_text
+    input_text: i_text
+    
+    FloatLayout:
+        cols: 1
+        size: root.width, root.height
+
+        Label:
+            #[b][/b] to make it bold <- markup:True makes it possible
+            #pos_hint: {"x", "y", "top", "bottom", "left", "right"} values [0 ... 1]
+            pos_hint: {"x":0,"top":1.0}
+            size_hint: 1, 0.15
+            text: "[b]PLUS PLUS C[/b]"
+            font_size: 30
+            markup:True
+        
+        TextInput:
+            pos_hint: {"x":0.1,"top":0.88}
+            size_hint: 0.8,0.45
+            multiline:True
+            hint_text: "Insert your code here..."
+            markup:True
+            font_size: 14
+            id: i_text
+        
+        TextInput:
+            pos_hint: {"x":0.1,"top":0.40}
+            size_hint: 0.8,0.25
+            multiline:True
+            hint_text: "See your Output here"
+            disabled:True
+            markup:True
+            font_size: 14
+            id: o_text
+            
+        
+        Button:
+            
+            pos_hint: {"x":0.15,"top":0.11}
+            size_hint: 0.3, 0.06
+            font_size: 20
+            text: "[b]Compile[/b]"
+            markup:True
+            id: c_button
+            on_press: root.compile_button_pressed()
+        
+        Button:
+            pos_hint: {"x":0.55,"top":0.11}
+            size_hint: 0.3, 0.06
+            font_size: 20
+            text: "[b]Run[/b]"
+            markup:True
+            id: r_button
+            on_press: root.run_button_pressed()

@@ -17,6 +17,7 @@ class OutputGenerator:
         f.write(constants_section)
         f.write(separator)
         f.write(quadruples_section)
+        return functions_section + separator + constants_section + separator + quadruples_section
 
     def get_functions_section(self) -> str:
         result = ""

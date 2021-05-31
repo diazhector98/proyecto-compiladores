@@ -33,7 +33,7 @@ class PlusPlusCParser(Parser):
         print("--------------")
         self.semantic_actions.print_constants_table()
         output_generator = OutputGenerator(self.semantic_actions)
-        output_generator.generate()
+        self.output = output_generator.generate()
 
     @_('PROGRAM ID')
     def inicio_programa(self, p):
@@ -99,7 +99,7 @@ class PlusPlusCParser(Parser):
 
     @_('MAIN "(" ")"')
     def inicio_main(self, p):
-        self.semantic_actions.set_goto_main()
+        self.semantic_actions.set_init_main()
 
     #Bloque
     @_('"{" estatutos "}"', '"{" "}"')
@@ -336,7 +336,7 @@ class PlusPlusCParser(Parser):
 
     def error(self, p):
         if p:
-            print("Syntax error at token", p.type, p.value)
+            raise Exception("Compilation error: Syntax error at token", p.type, p.value)
             self.contains_error = True
 
 if __name__ == '__main__':

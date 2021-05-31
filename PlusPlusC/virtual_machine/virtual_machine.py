@@ -3,16 +3,25 @@ from virtual_machine.memory.virtual_machine_memory import VirtualMachineMemory
 from virtual_machine.common.operator import Operator
 from virtual_machine.operators_handlers import handle_arithmetic_operator, handle_boolean_operator
 from virtual_machine.activation_record import ActivationRecord
+
+
 class VirtualMachine:
-    def __init__(self, filename):
-        [functions, constants, quadruples] = FileReader(filename)
+
+    def __init__(self, input, read_file=True, terminal=True):
+        self.read_file = read_file
+        self.terminal = terminal
+        [functions, constants, constants_sizes, quadruples] = FileReader(input, read_file=read_file)
         self.functions = functions
         self.constants = constants
         self.quadruples = quadruples
-        self.call_stack = [ActivationRecord()]
+        main_function = functions['main']
+        self.call_stack = [ActivationRecord(main_function, main_function.start_quadruple_index)]
         self.activation_records_waiting = []
-        self.memory = VirtualMachineMemory(constants, self.get_current_activation_record())
-        
+        global_function = functions['global']
+        self.memory = VirtualMachineMemory(global_function, constants, constants_sizes, self.get_current_activation_record())
+
+    global_output_variable = ""
+
     def run(self):
         while self.get_quad_index() < len(self.quadruples):
             quad_index = self.get_quad_index()
@@ -20,7 +29,6 @@ class VirtualMachine:
             operator = quadruple.operator
             left_operand = quadruple.left_operand
             result = quadruple.result
-            # print(quad_index, ")", quadruple)
 
             if self.is_arithmetic_operator(operator):
                 handle_arithmetic_operator(quadruple, self.memory)
@@ -38,7 +46,7 @@ class VirtualMachine:
 
             elif operator == Operator.PRINT:
                 value = self.memory.read(result)
-                print(value)
+                self.generate_output(value)
                 self.go_to_next_quadruple()
             elif operator == Operator.READ:
                 capture = input("Waiting input: ")
@@ -149,7 +157,7 @@ class VirtualMachine:
             left_operand_value = self.memory.read(left_operand)
             result_value = self.memory.read(result)
             if not 0 <= left_operand_value <= result_value:
-                print("Error: index out bounds")
+                raise Exception("Execution error: Index out of bounds")
             self.go_to_next_quadruple()
 
 
@@ -169,3 +177,11 @@ class VirtualMachine:
         for ar in self.call_stack:
             print(id(ar), ",", end="")
         print("")
+
+    def generate_output(self, value):
+        if self.terminal:
+            print(value)
+            self.global_output_variable += str(value) + "\n"
+        else:
+            self.output += str(value) + "\n"
+            self.global_output_variable += str(value) + "\n"

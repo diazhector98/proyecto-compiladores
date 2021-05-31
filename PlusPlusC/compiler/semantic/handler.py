@@ -24,10 +24,24 @@ class SemanticHandler:
         goto_main = Quadruple(Operator.GOTO, None, None, None)
         self.quadruples.append(goto_main)
         self.jumps_stack.append(0)
+        global_function_name = 'global'
+        self.functions_directory[global_function_name] = FunctionDirectoryRecord(
+            name = global_function_name,
+            return_type=None,
+            address = 0
+        )
+        self.current_function = global_function_name
 
-    def set_goto_main(self):
+    def set_init_main(self):
         main_jump = self.jumps_stack.pop()
         self.set_final_jump(main_jump, len(self.quadruples))
+        main_function_name = 'main'
+        self.functions_directory[main_function_name] = FunctionDirectoryRecord(
+            name = main_function_name,
+            return_type=None,
+            address = len(self.quadruples)
+        )
+        self.current_function = main_function_name
 
     def add_global(self, var_name, var_type):
         address = self.memory.create_global_address(var_type)
@@ -36,6 +50,7 @@ class SemanticHandler:
             type = var_type,
             address = address
         )
+        self.add_current_function_local_var_size(var_type, 1, 'global')
 
     def set_init_func(self, func_name, t):
         self.functions_directory[func_name] = FunctionDirectoryRecord(
@@ -55,6 +70,8 @@ class SemanticHandler:
                 type = param_var_type,
                 address = address
                 )
+            self.add_current_function_local_var_size(param_var_type, 1)
+            
 
     def set_variable(self, var_name, var_type, rows=1, columns=1):
         address = self.memory.create_local_address(var_type, size=(rows * columns))
@@ -64,6 +81,7 @@ class SemanticHandler:
             address = address,
             dimensions = (rows, columns)
             )
+        self.add_current_function_local_var_size(var_type, rows * columns)
         self.create_constant(rows, VarType.INT)
         self.create_constant(columns, VarType.INT)
 
@@ -78,7 +96,7 @@ class SemanticHandler:
         if constant_address != None:
             return constant_address
         else:
-            print("Constant variable is not registered yet.")
+            raise Exception("Compilation eror: Constant variable, which value is:", value, " is not registered yet.")
 
     def consume_operator(self, operator):
         self.stack.push_operator(operator)
@@ -102,12 +120,12 @@ class SemanticHandler:
             else:
                 self.stack.push_operand(var.name, var.type)
         except Exception:
-            print("variable", operand, "does not exist")
+            raise Exception("Compilation error: Variable: ", operand, "does not exist.")
 
     def consume_array_usage(self, array_name, index_operand):
         var = self.var_lookup(array_name)
         if var is None:
-            raise Exception("Array does not exist")
+            raise Exception("Compilation error: Array: ",array_name ," does not exist. Can not be assign to a variable.")
         
         base_address = var.address
         index_address = index_operand[0]
@@ -130,7 +148,7 @@ class SemanticHandler:
         var = self.var_lookup(matrix_name)
 
         if var is None:
-            raise Exception("Matrix does not exist")
+            raise Exception("Compilation error: Matrix: ",matrix_name, " does not exist. Can not be assign to a variable")
        
         matrix_base_address = var.address
 
@@ -240,21 +258,21 @@ class SemanticHandler:
                 self.quadruples.append(quadruple)
                 self.consume_operand(temp, cube_result)
             else:
-                print("Setting Quadruple: type mismatch between operand", left_operand, "and", right_operand)
+                raise Exception("Compilation error: Setting quadruple: type mismatch between operand", left_operand, "and", right_operand)
         else:
-            print("Error: Not enough operands")
+            raise Exception("Compilation error: Not enough operands and operators to create quadruples.")
 
     def get_variable(self, var_name):
         var = self.current_var_table[var_name]
         if var is None:
-            print("var is not declared")
+            raise Exception("Compialtion error: The variable is not declared.")
         return var
 
 
     def add_var_operand(self, var_name):
         var = self.current_var_table[var_name]
         if var is None:
-            print("var is not declared")
+            raise Exception("Compilation error: The variable is not declared. Can not assign a value to this variable.")
         else:
             self.consume_operand(var.name, var.type)
             self.stack.operators.append(Operator.ASSIGN)
@@ -273,12 +291,12 @@ class SemanticHandler:
                 quadruple = Quadruple(Operator(operator), right_operand, None, left_operand)
                 self.quadruples.append(quadruple)
             else:
-                print("Adding var operand: type mismatch between operand", left_operand, left_operand_type,  "and", right_operand, right_operand_type)
+                raise Exception("Compilation error: Setting variable a value: type mismatch between operand ", left_operand, " type ", left_operand_type,  " and operand ", right_operand, " type ", right_operand_type)
 
     def handle_array_assign(self, var_name):
         var = self.current_var_table[var_name]
         if var is None:
-            print("var is not declared")
+            raise Exception("Compilation error: The array named: " ,var_name, " is not declared. Can not assign a variable this array.")
         else:
             self.consume_operand(var.name, var.type)
             self.stack.operators.append(Operator.ASSIGN)
@@ -320,14 +338,14 @@ class SemanticHandler:
                     assign_right_operand_to_pointer_quadruple = Quadruple(Operator.ASSIGN, right_operand, None, pointer_to_temp_address)
                     self.quadruples.append(assign_right_operand_to_pointer_quadruple)
                 else:
-                    print("type mismatch between operand", array_base_address, array_type,  "and", right_operand, right_operand_type)
+                    raise Exception("Compilation error: Can not assign variable to array because of type mismatch between operand ", array_base_address, " type " ,array_type,  "and operand ", right_operand, " type " ,right_operand_type)
             else:
-                print("Error: the array index type must be an integer.")
+                raise Exception("Compilation error: The array index type must be an integer. Can not assign a variable to this array.")
 
     def handle_matrix_assign(self, var_name):
         var = self.current_var_table[var_name]
         if var is None:
-            print("var is not declared")
+            raise Exception("Compilation error: The matrix named: " ,var_name, " is not declared. Can not assign a variable this matrix.")
         else:
             self.consume_operand(var.name, var.type)
             self.stack.operators.append(Operator.ASSIGN)
@@ -390,9 +408,9 @@ class SemanticHandler:
                     assign_right_operand_to_pointer_quadruple = Quadruple(Operator.ASSIGN, right_operand, None, pointer_to_temp_address)
                     self.quadruples.append(assign_right_operand_to_pointer_quadruple)
                 else:
-                    print("type mismatch between operand", matrix_base_address, matrix_type,  "and", right_operand, right_operand_type)
+                    raise Exception("Compilation error: Can not assign variable to matrix because of type mismatch between operand ", matrix_base_address, " type " ,matrix_type,  "and operand ", right_operand, " type " ,right_operand_type)
             else:
-                print("Error: both matrix indices types must be integers.")
+                raise Exception("Compilation error: Both matrix indexes types must be integers. Can not assign a variable to this matrix.")
 
 
     def set_initial_if(self):
@@ -414,9 +432,9 @@ class SemanticHandler:
                 self.jumps_stack.append(jump_index)
                 print("set_conditional_block", "jump:", jump_index)
             else:
-                raise TypeError("Error: Type of operation must be of type BOOL")
+                raise TypeError("Compilation error: The result of the conditional operation must be of type bool.")
         else:
-            raise Exception("Error: Not enough operands")
+            raise Exception("Compilation error: Not enough operands to resolve the conditional operation.")
 
     def set_end_of_if(self):
         if self.jumps_stack:
@@ -425,7 +443,7 @@ class SemanticHandler:
             print("end of if", "jump:", final_jump_index)
             self.set_final_jump(quadruple_index_to_set, final_jump_index)
         else:
-            raise Exception("Error: Jump stack is empty")
+            raise Exception("Compilation error: Jump stack is empty. Can not set the end of IF.")
 
     def set_end_of_while(self):
         end_jump_index = self.jumps_stack.pop()
@@ -447,7 +465,7 @@ class SemanticHandler:
             print("set_else", "jump:", len(self.quadruples) + 1)
             self.set_final_jump(quadruple_index_to_set, len(self.quadruples))
         else:
-            raise Exception("Jump stack error")
+            raise Exception("Compilation error: Jump stack is empty. Can not set the end of ELSE.")
 
     def set_function_call(self, func_name, arguments):
         function = self.functions_directory[func_name]
@@ -456,11 +474,11 @@ class SemanticHandler:
 
         #Revisar funcion en el directorio de funciones
         if function is None:
-            print("Funcion no se encuentra en directorio de funciones")
+            raise Exception("Compilation error: The function ", func_name ," is not declared. Can not use it.")
         else:
             #Revisar numero de parametros
             if len(arguments) != len(function.params):
-                print("El numero de parametros que la funcion:", function.name, "requiere es incorrecta.")
+                raise Exception("Compilation error: The number of parameters the function ", function.name, " requires is incorrect.")
             else:
                 #Revisar el tipo de parametros
                 for param in (function.params):
@@ -468,9 +486,12 @@ class SemanticHandler:
 
                 for argument in arguments:
                     arguments_types.append(argument[1])
-                    
+
+                #TODO revisar más casos que no cause problemas por este reverse
+                arguments_types.reverse()
+
                 if function_params_types != arguments_types:
-                    print("El tipo de parametros que la función espera es incorrecto.")
+                    raise Exception("Compilation error: The type of parameters the function ", function.name ," requires is incorrect.")
                 else:
                     #Si todas las restricciones se cumplen
                     quadruple = Quadruple(Operator.ERA, None, None, func_name)
@@ -530,7 +551,7 @@ class SemanticHandler:
             quad = Quadruple(Operator.RETURN, operand, None, function_global_address)
             self.quadruples.append(quad)
         else:
-            raise Exception("El tipo de retorno que la función espera es incorrecto.")
+            raise Exception("Compilation error: The return type the function requires is incorrect. Can not return this type of value.")
         
     # Método de debugging
     def print_quadruples(self):
@@ -547,21 +568,23 @@ class SemanticHandler:
             address = self.global_var_table[key].address
             print ("{:<7} {:<12}".format(address, key))
 
+    def add_current_function_local_var_size(self, var_type, size, func_name=None):
+        function_name = func_name if func_name != None else self.current_function
+        function = self.functions_directory[function_name]
+        if var_type == VarType.INT:
+            function.local_var_int_size += size
+        elif var_type == VarType.FLOAT:
+            function.local_var_float_size += size
+        elif var_type == VarType.CHAR:
+            function.local_var_char_size += size
+        elif var_type == VarType.BOOL:
+            function.local_var_bool_size += size
+
     def end_func(self):
         function = self.functions_directory[self.current_function]
         if function is None:
-            raise Exception("Funcion no se encuentra en directorio de funciones")
+            print("The function is not declared. Have reached the end of the function and can not continue compiling.")
         quadruple = Quadruple(Operator.ENDFUNC, None, None, None)
         self.quadruples.append(quadruple)
-        for var_name in self.current_var_table:
-            local_type = self.current_var_table[var_name].type
-            #set el count de locales dependiendo el tipo
-            if local_type == VarType.INT:
-                self.functions_directory[self.current_function].local_var_int_size += 1
-            elif local_type == VarType.FLOAT:
-                self.functions_directory[self.current_function].local_var_float_size += 1
-            elif local_type == VarType.CHAR:
-                self.functions_directory[self.current_function].local_var_char_size += 1
-            elif local_type == VarType.BOOL:
-                self.functions_directory[self.current_function].local_var_bool_size += 1
         self.memory.reset_local_and_temp_memory()
+        self.current_var_table = dict()

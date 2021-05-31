@@ -1,18 +1,35 @@
 program Main;
 
+global G1 int;
+global G2 int;
+global G7 int;
+global G3 float;
+
+func bar(F int) -> void {
+    var K int;
+    print(4);
+    print(F);
+    print(6);
+}
 
 func foo(C int, D float) -> int {
     var A int;
-    var B int;
-    A = 1;
-    A = 2;
-    B = 2;
+    var C[10] int;
+    A = 9 + 8;
+    return A * 2;
 }
 
 main () {
-    while 8 < 10 {
-        var C int;
+    var C int;
+    var T int;
+    var U int;
+    T = 67 + 98;
+    C = foo(8, 6.0);
+    print(C);
+    C = 1;
+    print(C);
+    if 8 < 10 {
         C = 0;
-    } 
-    foo(10, 19 * 76);
+    }
+    print(C);
 }

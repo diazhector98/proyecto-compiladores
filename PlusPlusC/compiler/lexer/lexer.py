@@ -114,7 +114,7 @@ class PlusPlusCLexer(Lexer):
         self.lineno += t.value.count('\n')
 
     def error(self, t):
-        print("Lexical error. Illegal character \" " + str(t.value[0]) + " \". Line #" + str(self.lineno) )
+        raise Exception("Compilaiton error: Lexical error. Illegal character \" " + str(t.value[0]) + " \". Line #" + str(self.lineno) )
         self.index += 1
 
 Tokens = PlusPlusCLexer.tokens

@@ -6,11 +6,26 @@ Clase para manejar la memoria virtual en el proceso de semántica.
 Guarda los bloques de memoria para globales, locales, temporales y constantes
 """
 class VirtualMachineMemory:
-    def __init__(self, constants, activation_record):
+    def __init__(self, global_function, constants,constants_sizes, activation_record):
         memory_size = 25000
-        self.block_size = memory_size // 5
-        self.gloabl_block = VirtualMachineMemoryBlock(0, self.block_size)
-        self.constants_block = VirtualMachineMemoryBlock(self.block_size * 3, self.block_size)
+        self.block_size = memory_size // 5        
+        self.gloabl_block: VirtualMachineMemoryBlock = VirtualMachineMemoryBlock(
+                0, 
+                self.block_size,
+                ints=global_function.local_var_int_size,
+                floats=global_function.local_var_float_size,
+                chars=global_function.local_var_char_size,
+                bools=global_function.local_var_bool_size
+        )
+
+        self.constants_block = VirtualMachineMemoryBlock(
+                self.block_size * 3, 
+                self.block_size,
+                ints=constants_sizes[0],
+                floats=constants_sizes[1],
+                chars=constants_sizes[2],
+                bools=constants_sizes[3]
+        )
         self.pointers_block = VirtualMachineMemoryBlock(self.block_size * 4, self.block_size)
         # Guarda memoria local y temporal
         self.activation_record = activation_record
@@ -33,7 +48,7 @@ class VirtualMachineMemory:
         elif address >= 20000 and address < 25000:
                 self.pointers_block.write(address, value, block_type)
         else:
-            print("La direccion de memoria: ", address, "es invalida. No se puede acceder para modificar el valor en ella.")
+            raise Exception("The memory address ", address, " is invalid. Can’t access it to modify its value.")
 
     def read(self, address):
         block_type = self.get_block_type(address)
@@ -45,12 +60,11 @@ class VirtualMachineMemory:
                 return self.activation_record.temp_block.read(address, block_type)
         elif address >= 15000 and address < 20000:
                 return self.constants_block.read(address, block_type)
-        # TODO: Agregar rango de apuntadores y hacer 2 reads
         elif address >= 20000 and address <= 25000:
                 address_saved_in_pointer = self.pointers_block.read(address, block_type)
                 return self.read(address_saved_in_pointer)
         else:
-            print("La direccion de memoria: ", address, "es invalida. No se puede leer el valor guardado en ella.")
+            raise Exception("The memory address ", address, " is invalid. Can’t access it to read its value.")
 
     def get_block_type(self, address):
         if address >= 0 and address < 5000:
@@ -64,5 +78,5 @@ class VirtualMachineMemory:
         elif address >= 20000 and address <= 25000:
                 return BlockType.POINTER
         else:
-            print("La direccion de memoria: ", address, "es invalida.")
+            raise Exception("The memory address ", address, " is invalid.")
     
