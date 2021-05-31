@@ -10,7 +10,7 @@ class VirtualMachine:
     def __init__(self, input, read_file=True, terminal=True):
         self.read_file = read_file
         self.terminal = terminal
-        [functions, constants, constants_sizes, quadruples] = FileReader(input, read_file=read_file)
+        [pointers, functions, constants, constants_sizes, quadruples] = FileReader(input, read_file=read_file)
         self.functions = functions
         self.constants = constants
         self.quadruples = quadruples
@@ -18,7 +18,7 @@ class VirtualMachine:
         self.call_stack = [ActivationRecord(main_function, main_function.start_quadruple_index)]
         self.activation_records_waiting = []
         global_function = functions['global']
-        self.memory = VirtualMachineMemory(global_function, constants, constants_sizes, self.get_current_activation_record())
+        self.memory = VirtualMachineMemory(pointers, global_function, constants, constants_sizes, self.get_current_activation_record())
 
     global_output_variable = ""
 
