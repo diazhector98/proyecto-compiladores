@@ -169,6 +169,8 @@ class SemanticHandler:
         matrix_m_one = int(((var.dimensions[0]) * (var.dimensions[1])) / (var.dimensions[0]))
         matrix_m_one_constant_address = self.get_constant(matrix_m_one)
         matrix_temp_multiply = self.create_temp_var(VarType.INT)
+        self.increment_current_function_temp_size(VarType.INT)
+
         matrix_temp_multiply_address = self.current_var_table[matrix_temp_multiply].address
         multiply_m_one_quadruple = Quadruple(Operator.MULTIPLY, matrix_first_index_address, matrix_m_one_constant_address, matrix_temp_multiply_address)
         self.quadruples.append(multiply_m_one_quadruple)
@@ -180,6 +182,7 @@ class SemanticHandler:
 
         # Sumando s1*m1 + s2
         temp_sum = self.create_temp_var(VarType.INT)
+        self.increment_current_function_temp_size(VarType.INT)
         temp_sum_address = self.current_var_table[temp_sum].address
         sum_quadruple = Quadruple(Operator.SUM, matrix_temp_multiply_address, matrix_second_index_address, temp_sum_address)
         self.quadruples.append(sum_quadruple)
@@ -245,15 +248,8 @@ class SemanticHandler:
                 temp_type = self.current_var_table[temp].type
 
                 #set el count de temporales dependiendo el tipo
-                if temp_type == VarType.INT:
-                    self.functions_directory[self.current_function].temp_var_int_size += 1
-                elif temp_type == VarType.FLOAT:
-                    self.functions_directory[self.current_function].temp_var_float_size += 1
-                elif temp_type == VarType.CHAR:
-                    self.functions_directory[self.current_function].temp_var_char_size += 1
-                elif temp_type == VarType.BOOL:
-                    self.functions_directory[self.current_function].temp_var_bool_size += 1
-
+                self.increment_current_function_temp_size(temp_type)
+                
                 quadruple = Quadruple(Operator(operator), left_operand, right_operand, temp_address)
                 self.quadruples.append(quadruple)
                 self.consume_operand(temp, cube_result)
@@ -383,6 +379,7 @@ class SemanticHandler:
                     m_one_constant = self.create_constant(m_one, VarType.INT)
                     m_one_constant_address = self.get_constant(m_one)
                     temp_multiply = self.create_temp_var(VarType.INT)
+                    self.increment_current_function_temp_size(VarType.INT)
                     temp_multiply_address = self.current_var_table[temp_multiply].address
                     multiply_m_one_quadruple = Quadruple(Operator.MULTIPLY, matrix_first_index_operand, m_one_constant_address, temp_multiply_address)
                     self.quadruples.append(multiply_m_one_quadruple)
@@ -394,6 +391,7 @@ class SemanticHandler:
                     
                     # Sumando s1*m1 + s2
                     temp_sum = self.create_temp_var(VarType.INT)
+                    self.increment_current_function_temp_size(VarType.INT)
                     temp_sum_address = self.current_var_table[temp_sum].address
                     sum_quadruple = Quadruple(Operator.SUM, temp_multiply_address, matrix_second_index_operand, temp_sum_address)
                     self.quadruples.append(sum_quadruple)
@@ -580,6 +578,16 @@ class SemanticHandler:
         elif var_type == VarType.BOOL:
             function.local_var_bool_size += size
 
+    def increment_current_function_temp_size(self, temp_type):
+        if temp_type == VarType.INT:
+            self.functions_directory[self.current_function].temp_var_int_size += 1
+        elif temp_type == VarType.FLOAT:
+            self.functions_directory[self.current_function].temp_var_float_size += 1
+        elif temp_type == VarType.CHAR:
+            self.functions_directory[self.current_function].temp_var_char_size += 1
+        elif temp_type == VarType.BOOL:
+            self.functions_directory[self.current_function].temp_var_bool_size += 1
+
     def end_func(self):
         function = self.functions_directory[self.current_function]
         if function is None:
@@ -588,3 +596,6 @@ class SemanticHandler:
         self.quadruples.append(quadruple)
         self.memory.reset_local_and_temp_memory()
         self.current_var_table = dict()
+
+    def get_number_of_pointers_used(self):
+        return self.memory.get_pointers_block_size()

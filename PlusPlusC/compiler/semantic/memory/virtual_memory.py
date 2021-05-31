@@ -33,3 +33,6 @@ class VirtualMemory:
     def reset_local_and_temp_memory(self):
         self.local_block = VirtualMemoryBlock(self.block_size, self.block_size)
         self.temp_block = VirtualMemoryBlock(self.block_size * 2, self.block_size)
+
+    def get_pointers_block_size(self):
+        return self.pointers_block.int_partition.get_size()

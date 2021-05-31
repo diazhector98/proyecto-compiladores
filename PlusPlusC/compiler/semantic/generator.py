@@ -5,6 +5,7 @@ class OutputGenerator:
         self.functions = semantic_handler.functions_directory
         self.constants = semantic_handler.constants_table
         self.quadruples = semantic_handler.quadruples
+        self.number_of_pointers = semantic_handler.get_number_of_pointers_used()
 
     def generate(self):
         f = open("output.txt", "w")
