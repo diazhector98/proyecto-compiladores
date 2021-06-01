@@ -18,8 +18,10 @@ class PlusPlusCParser(Parser):
         ('left', '*', '/'),
         )
 
-    def __init__(self):
+    def __init__(self, file_name=None):
         self.names = { }
+        print("File: ", file_name)
+        self.file_name = file_name
 
     @_('inicio_programa ";" globals funciones main')
     def program(self, p):
@@ -32,7 +34,7 @@ class PlusPlusCParser(Parser):
         print("Constantes")
         print("--------------")
         self.semantic_actions.print_constants_table()
-        output_generator = OutputGenerator(self.semantic_actions)
+        output_generator = OutputGenerator(self.semantic_actions, self.file_name)
         self.output = output_generator.generate()
 
     @_('PROGRAM ID')

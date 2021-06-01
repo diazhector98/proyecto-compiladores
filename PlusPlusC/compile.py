@@ -18,8 +18,7 @@ def get_absolute_path(path):
 if __name__ == '__main__':
 
     arguments = sys.argv
-    lexer = PlusPlusCLexer()
-    parser = PlusPlusCParser()
+    output_file_name = 'output.txt'
     input_file_name = "tests/test_two.ppc"
     
     if len(arguments) == 2:
@@ -28,9 +27,16 @@ if __name__ == '__main__':
     elif len(arguments) == 3:
         # TODO: Specifiy output file
         input_file_name = arguments[1]
+        output_file_name = arguments[2]
 
     input_abs_path = get_absolute_path(input_file_name)
+    output_abs_path = get_absolute_path(output_file_name)
+
     input_file = open(input_abs_path, "r")
     text = input_file.read()
+
+    lexer = PlusPlusCLexer()
+    parser = PlusPlusCParser(output_abs_path)
+
     parser.parse(lexer.tokenize(text))
     compiler_output = parser.output

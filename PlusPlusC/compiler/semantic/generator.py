@@ -1,14 +1,18 @@
 from compiler.semantic.handler import SemanticHandler
 
 class OutputGenerator:
-    def __init__(self, semantic_handler: SemanticHandler):
+    def __init__(self, semantic_handler: SemanticHandler, file_name=None):
         self.functions = semantic_handler.functions_directory
         self.constants = semantic_handler.constants_table
         self.quadruples = semantic_handler.quadruples
         self.number_of_pointers = semantic_handler.get_number_of_pointers_used()
+        if file_name:
+            self.file_name = file_name
+        else:
+            self.file_name = 'output.txt'
 
     def generate(self):
-        f = open("output.txt", "w")
+        f = open(self.file_name, "w")
         pointers_section = str(self.number_of_pointers) + "\n"
         functions_section = self.get_functions_section()
         constants_section = self.get_constants_section()
