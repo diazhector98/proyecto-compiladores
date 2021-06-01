@@ -428,7 +428,6 @@ class SemanticHandler:
                 self.quadruples.append(quadruple)
                 jump_index = len(self.quadruples) - 1
                 self.jumps_stack.append(jump_index)
-                print("set_conditional_block", "jump:", jump_index)
             else:
                 raise TypeError("Compilation error: The result of the conditional operation must be of type bool.")
         else:
@@ -438,7 +437,6 @@ class SemanticHandler:
         if self.jumps_stack:
             quadruple_index_to_set = self.jumps_stack.pop()
             final_jump_index = len(self.quadruples)
-            print("end of if", "jump:", final_jump_index)
             self.set_final_jump(quadruple_index_to_set, final_jump_index)
         else:
             raise Exception("Compilation error: Jump stack is empty. Can not set the end of IF.")

@@ -20,20 +20,10 @@ class PlusPlusCParser(Parser):
 
     def __init__(self, file_name=None):
         self.names = { }
-        print("File: ", file_name)
         self.file_name = file_name
 
     @_('inicio_programa ";" globals funciones main')
     def program(self, p):
-        print("Cuádruplos")
-        print("--------------")
-        self.semantic_actions.print_quadruples()
-        print("Globales")
-        print("--------------")
-        self.semantic_actions.print_globals_table()
-        print("Constantes")
-        print("--------------")
-        self.semantic_actions.print_constants_table()
         output_generator = OutputGenerator(self.semantic_actions, self.file_name)
         self.output = output_generator.generate()
 

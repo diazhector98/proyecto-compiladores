@@ -27,7 +27,6 @@ class SemanticCube:
         pass
 
     def __getitem__(self, first_operand):
-        print(first_operand)
         return self.cube[first_operand]
 
     
