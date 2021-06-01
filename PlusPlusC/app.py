@@ -59,3 +59,7 @@ def run_File():
         return {"result": str(result)}
     except:
         return 'Error: La key code para ejectuar codigo no funciono', 400
+
+
+if __name__ == "__main__":
+    app.run()
