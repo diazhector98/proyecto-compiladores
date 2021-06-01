@@ -1,5 +1,13 @@
 from dataclasses import dataclass
 
+"""
+Clase del objeto de un cuádruplo para crear la lista de cuádruplos
+operator: operador a utilizar
+left_operand: operando izquierdo
+right_operand: operando derecho
+temp_result: resultado del operando izquierdo con el derecho tomando
+en cuenta el 'operator'
+"""
 @dataclass
 class Quadruple:
     operator: str
