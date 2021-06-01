@@ -52,7 +52,7 @@ class PlusPlusCParser(Parser):
     def tipo(self, p):
         return p[0]
 
-    @_('funcion', 'funcion funciones')
+    @_('funcion funciones', 'epsilon')
     def funciones(self, p):
         pass
 

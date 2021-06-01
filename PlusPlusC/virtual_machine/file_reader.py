@@ -12,10 +12,12 @@ class FileReader:
 
     def process(self):
         contents = self.text.split('%%')
-        functions_text = contents[0]
-        constants_text = contents[1]
-        quadruples_text = contents[2]
-
+        pointers_text = contents[0]
+        functions_text = contents[1]
+        constants_text = contents[2]
+        quadruples_text = contents[3]
+        
+        self.pointers = int(pointers_text)
         self.functions = self.process_functions_text(functions_text)
         (self.constants_table, self.constants_sizes) = self.process_constants_text(constants_text)
         self.quadruples = self.process_quadruples_text(quadruples_text)
@@ -80,6 +82,6 @@ class FileReader:
         return lines
 
     def __iter__(self):
-        return iter((self.functions, self.constants_table,self.constants_sizes, self.quadruples))
+        return iter((self.pointers, self.functions, self.constants_table,self.constants_sizes, self.quadruples))
         
     

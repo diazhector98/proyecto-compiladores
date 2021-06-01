@@ -9,11 +9,6 @@ def handle_arithmetic_operator(quadruple, memory):
     result = quadruple.result
 
     if operator == Operator.ASSIGN:
-
-        if address_is_pointer(left_operand):
-            address = memory.read(left_operand)
-            value = memory.read(address)
-
         if address_is_pointer(result):
             address_of_pointer = memory.pointers_block.read(result, BlockType.POINTER)
             left_operand_value = memory.read(left_operand)

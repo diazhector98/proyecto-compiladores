@@ -5,19 +5,23 @@ class OutputGenerator:
         self.functions = semantic_handler.functions_directory
         self.constants = semantic_handler.constants_table
         self.quadruples = semantic_handler.quadruples
+        self.number_of_pointers = semantic_handler.get_number_of_pointers_used()
 
     def generate(self):
         f = open("output.txt", "w")
+        pointers_section = str(self.number_of_pointers) + "\n"
         functions_section = self.get_functions_section()
         constants_section = self.get_constants_section()
         quadruples_section = self.get_quadruples_section()
         separator = "%%\n"
+        f.write(pointers_section)
+        f.write(separator)
         f.write(functions_section)
         f.write(separator)
         f.write(constants_section)
         f.write(separator)
         f.write(quadruples_section)
-        return functions_section + separator + constants_section + separator + quadruples_section
+        return pointers_section + separator + functions_section + separator + constants_section + separator + quadruples_section
 
     def get_functions_section(self) -> str:
         result = ""

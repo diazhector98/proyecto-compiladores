@@ -14,3 +14,6 @@ class VirtualMemoryBlockPartition:
         address = self.current_address
         self.current_address += size
         return address
+    
+    def get_size(self):
+        return self.current_address - self.start_address
