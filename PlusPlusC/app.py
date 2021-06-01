@@ -2,6 +2,7 @@ import sys
 sys.path.insert(0, '.')
 
 from flask import Flask, request, json, jsonify
+from flask_cors import CORS, cross_origin
 from compiler.lexer.lexer import PlusPlusCLexer
 from compiler.parser.parser import PlusPlusCParser
 from virtual_machine.file_reader import FileReader
@@ -9,6 +10,7 @@ from virtual_machine.virtual_machine import VirtualMachine
 import run 
 
 app = Flask(__name__)
+cors = CORS(app)
 
 file_text = ""
 
@@ -17,6 +19,7 @@ def hello_world():
     return {"value": "Hello, World!"}
 
 @app.route('/compileFile', methods=['POST'])
+@cross_origin()
 def compile_File():
     lexer = PlusPlusCLexer()
     parser = PlusPlusCParser()
@@ -45,6 +48,7 @@ def compile_File():
 
 
 @app.route('/runFile', methods=['POST'])
+@cross_origin()
 def run_File():
     try:
         # Fetch la info que viene con la key "compilerResult"
