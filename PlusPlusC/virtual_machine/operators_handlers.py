@@ -1,8 +1,18 @@
 from virtual_machine.common.operator import Operator
 from virtual_machine.memory.block_type import BlockType
 
+"""
+Este archivo contiene funciones de ayuda para manejar cuádruplos aritméticos y booleanos
+El proposito de este archivo fue evitar sobrecargar el archvio de la clase VirtualMachine.
+
+"""
 
 def handle_arithmetic_operator(quadruple, memory):
+    """
+        Función que maneja las acciones para cuádruplos con operadores aritméticos.
+        param quadruple: cuádruplo con operador aritmético
+        param memory: memoria de la máquina virtual de tipo VirtualMachineMemory
+    """
     operator = quadruple.operator
     left_operand = quadruple.left_operand
     right_operand = quadruple.right_operand
@@ -35,6 +45,11 @@ def handle_arithmetic_operator(quadruple, memory):
         memory.write(result, operation_outcome)
 
 def handle_boolean_operator(quadruple, memory):
+    """
+        Función que maneja las acciones para cuádruplos con operadores booleanos.
+        param quadruple: cuádruplo con operador booleano
+        param memory: memoria de la máquina virtual de tipo VirtualMachineMemory
+    """
     operator = quadruple.operator
     left_operand = quadruple.left_operand
     right_operand = quadruple.right_operand
@@ -63,4 +78,10 @@ def handle_boolean_operator(quadruple, memory):
     memory.write(result, operation_outcome)
 
 def address_is_pointer(address):
+    """
+        Funcion que regresa True si la dirección dada corresponde a un apuntador.
+        Esta función es útil en el manejo de operadores aritméticos
+        para saber si leer UNA (solo valor) vez o DOS (dirección y valor) veces de memoria
+        param address: variable entera que representa una dirección de memoria
+    """
     return address >= 20000

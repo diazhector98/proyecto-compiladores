@@ -4,9 +4,23 @@ from virtual_machine.common.operator import Operator
 from virtual_machine.operators_handlers import handle_arithmetic_operator, handle_boolean_operator
 from virtual_machine.activation_record import ActivationRecord
 
+"""
+Esta clase maneja la ejecución del archivo de compilación. 
+Después de ser inicializada con los datos de entrada, 
+se pueden ejecutar los cuádruplos mediante el método "run".
 
+Esta clase tiene dos atributos importantes:
+
+1. El "call_stack", que maneja el contexto actual de ejecución
+2. La "memory", que maneja la escritura y lectura en la memoria
+"""
 class VirtualMachine:
-
+    """
+        param input: es por default el nombre del archivo de compilación.
+        param: read_file se pasa como negativo si se desea pasar una variable string como "input"
+        param: terminal se hace falso si se desea que el output de ejecuciónse 
+        guarde en una variable de la clase (self.output)
+    """
     def __init__(self, input, read_file=True, terminal=True):
         self.output = ''
         self.read_file = read_file
@@ -24,6 +38,10 @@ class VirtualMachine:
     global_output_variable = ""
 
     def run(self):
+        """
+            Esta función pasa por todos los cuádruplos por medio de un ciclo while y los ejecuta.
+            Checa el tipo de operador es y luego los ejecuta apropiadamente.
+        """
         while self.get_quad_index() < len(self.quadruples):
             quad_index = self.get_quad_index()
             quadruple = self.quadruples[quad_index]
@@ -35,7 +53,7 @@ class VirtualMachine:
                 handle_arithmetic_operator(quadruple, self.memory)
                 self.go_to_next_quadruple()
 
-            elif self.is_boolean_operator(operator):
+            elif self.is_conditional_operator(operator):
                 handle_boolean_operator(quadruple, self.memory)
                 self.go_to_next_quadruple()
 
@@ -54,11 +72,15 @@ class VirtualMachine:
                 self.memory.write(result, capture)
                 self.go_to_next_quadruple()
             elif operator == Operator.VERIFY:
-                self.handle_array_matrix_operator(quadruple)
+                self.handle_verify_operator(quadruple)
             else:
                 self.go_to_next_quadruple()
 
     def is_arithmetic_operator(self, operator):
+        """
+        param operator: tipo de operador de un cuádruplo 
+        return : regresa si el operador hace una operación aritmética
+        """
         return operator in [
             Operator.ASSIGN, 
             Operator.SUM, 
@@ -67,7 +89,11 @@ class VirtualMachine:
             Operator.DIVIDE
         ]
 
-    def is_boolean_operator(self, operator):
+    def is_conditional_operator(self, operator):
+        """
+        param operator: tipo de operador de un cuádruplo 
+        return : regresa si el operador es de tipo condicional y genera un booleano
+        """
         return operator in [
             Operator.LT, 
             Operator.GT, 
@@ -80,6 +106,10 @@ class VirtualMachine:
         ]
 
     def is_function_operator(self, operator):
+        """
+        param operator: tipo de operador de un cuádruplo 
+        return : regresa si el operador funciona para el manejo de funciones.
+        """
         return operator in [
             Operator.ERA,
             Operator.PARAMETER,
@@ -89,12 +119,23 @@ class VirtualMachine:
         ]
 
     def is_jump_operator(self, operator):
+        """
+        param operator: tipo de operador de un cuádruplo 
+        return : regresa si el operador genera un salto
+        """
         return operator in [
             Operator.GOTO,
             Operator.GOTOF
         ]
             
     def handle_jump_operator(self, quadruple):
+        """
+            Función que maneja operadores que generan un salto de cuádruplos.
+            Se lee la dirección del operador izquierdo y se salta apropiadamente
+            según su valor booleano.
+            param operator: cuádruplo con operador GOTOF o GOTO
+        """
+
         operator = quadruple.operator
         left_operand = quadruple.left_operand
         result = quadruple.result
@@ -111,6 +152,11 @@ class VirtualMachine:
             self.go_to_next_quadruple()
 
     def handle_function_operator(self, quadruple):
+        """
+            Función que maneja operadores relacionados a funciones.
+            Aquí se genera un nuevo ActivationRecord al procesar el operador ERA.
+            param operator: cuádruplo con operador relacionado al manejo de funciones
+        """
         operator = quadruple.operator
         left_operand = quadruple.left_operand
         result = quadruple.result
@@ -137,19 +183,38 @@ class VirtualMachine:
             self.memory.activation_record = self.get_current_activation_record()
 
     def get_current_activation_record(self):
+        """
+            return: Se regresa el ActivationRecord arriba de la pila de ejecución.
+        """
         return self.call_stack[-1]
 
     def get_next_activation_record(self):
+        """
+            return: Se regresa el ActivationRecord que se esta preparando 
+            para pasar a la pila de ejecución. Esta función se usa para procesar 
+            el operador de PARAMETER y saber en que memoria local/temporal escribir
+            el valor de los parámetros.
+        """
         return self.activation_records_waiting[-1]
 
     def handle_gosub(self):
-        # El gosub mueve el activation record que 
-        # se estaba preparando al tope del call stack
+        """
+            Funcion que hace lo necesario para procesar el operador GOSUB.
+            1. Obtiene el último ActivationRecord del que se llamo el operador ERA
+            2. Se agrega a la pila de ejecución.
+            3. Se establece que la memoria local/temporal es ahora de ese ActivationRecord
+        """
         activation_record = self.activation_records_waiting.pop()
         self.call_stack.append(activation_record)
         self.memory.activation_record = activation_record
 
-    def handle_array_matrix_operator(self, quadruple):
+    def handle_verify_operator(self, quadruple):
+        """
+            Función que maneja el operador VERIFY, que verifica que la posición
+            del arreglo esta dentro de sus rangos.
+
+            param quadruple: cuádruplo con operador VERIFY
+        """
         operator = quadruple.operator
         left_operand = quadruple.left_operand
         result = quadruple.result
@@ -163,23 +228,39 @@ class VirtualMachine:
 
 
     def get_quad_index(self):
+        """
+            Función que obtiene el índice actual de los cuádruplos en la ejecución.
+            Se obtiene del ActivationRecord de la pila de ejecución.
+
+            return: índice de ejecución actual de los cuádruplos
+        """
         current_activation_record = self.get_current_activation_record()
         return current_activation_record.current_quad_index
 
     def go_to_next_quadruple(self):
+        """
+            Función que avanza el índice de ejecución actual de los cuádruplos.
+            Obtiene el ActivtionRecord de la pila de ejecución y se incrementa
+            su atributo de current_quad_index
+        """
         current_activation_record = self.get_current_activation_record()
         current_activation_record.current_quad_index += 1
 
     def jump_to_quadruple(self, quadruple_index):
+        """
+            Función que cambia el índice de ejecución de los cuádruplos.
+            param quadruple_index : indíce de cuádruplos a donde se quiere cambiar el flujo actual de ejecución
+        """
         current_activation_record = self.get_current_activation_record()
         current_activation_record.current_quad_index = quadruple_index
 
-    def print_call_stack(self):
-        for ar in self.call_stack:
-            print(id(ar), ",", end="")
-        print("")
-
     def generate_output(self, value):
+        """
+            Función que maneja la salida de algún valor en ejecución.
+            Dependiendo de cómo se específico en la inicialización de la clase,
+            se imprime en consola o solo se agrega a la variable de la clase
+            donde se almacena todo el output de ejecución.
+        """
         if self.terminal:
             print(value)
             self.global_output_variable += str(value) + "\n"
