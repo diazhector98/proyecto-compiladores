@@ -22,8 +22,8 @@ class SemanticHandler:
 
     def initialize_program(self):
         goto_main = Quadruple(Operator.GOTO, None, None, None)
-        self.quadruples.append(goto_main)
-        self.jumps_stack.append(0)
+        self.quadruples = [goto_main]
+        self.jumps_stack = [0]
         global_function_name = 'global'
         self.functions_directory[global_function_name] = FunctionDirectoryRecord(
             name = global_function_name,
