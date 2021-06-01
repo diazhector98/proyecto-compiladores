@@ -8,6 +8,7 @@ from virtual_machine.activation_record import ActivationRecord
 class VirtualMachine:
 
     def __init__(self, input, read_file=True, terminal=True):
+        self.output = ''
         self.read_file = read_file
         self.terminal = terminal
         [pointers, functions, constants, constants_sizes, quadruples] = FileReader(input, read_file=read_file)

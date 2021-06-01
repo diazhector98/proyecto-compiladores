@@ -49,12 +49,9 @@ def run_File():
     try:
         # Fetch la info que viene con la key "compilerResult"
         req_data = request.get_json()
-        file_result = req_data["compilerResult"]
-        
+        file_result = req_data["compilerResult"]  
         # Ejectuta el codigo y guardalo en variable result
-        run.run_virtual_machine()
-        result = run.virtual_machine_output
-       
+        result = run.run_virtual_machine(file_result)       
         # Regresa el resultado con la key "result"
         return {"result": str(result)}
     except:
