@@ -1,10 +1,8 @@
 
 """
 Clase para manejar las pilas de la semántica. Se utiliza para generar los cuadruplos
-
-
+Pila de operandos, operadores y tipos.
 """
-
 class SemanticStack:
     operators = []
     operands = []

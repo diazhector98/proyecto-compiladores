@@ -1,5 +1,11 @@
 from compiler.semantic.handler import SemanticHandler
 
+
+"""
+Clase para generar el archivo resultante: output.txt ,el cual, es el 
+resultado del proceso de compilacion del compilador, y el que
+la maquina virtual utiliza para ejecutar el código.
+"""
 class OutputGenerator:
     def __init__(self, semantic_handler: SemanticHandler, file_name=None):
         self.functions = semantic_handler.functions_directory
