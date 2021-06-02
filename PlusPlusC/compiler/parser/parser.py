@@ -11,7 +11,6 @@ class PlusPlusCParser(Parser):
     tokens = PlusPlusCLexer.tokens
 
     start = 'program'
-    semantic_actions = SemanticHandler()
 
     precedence = (
         ('left', '+', '-'),
@@ -21,6 +20,7 @@ class PlusPlusCParser(Parser):
     def __init__(self, file_name=None):
         self.names = { }
         self.file_name = file_name
+        self.semantic_actions = SemanticHandler()
 
     # Programa
     @_('inicio_programa ";" globals funciones main')
