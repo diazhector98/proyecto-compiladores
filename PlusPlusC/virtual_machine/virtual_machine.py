@@ -15,13 +15,13 @@ Esta clase tiene dos atributos importantes:
 2. La "memory", que maneja la escritura y lectura en la memoria
 """
 class VirtualMachine:
-    """
+    def __init__(self, input, read_file=True, terminal=True):
+        """
         param input: es por default el nombre del archivo de compilación.
         param: read_file se pasa como negativo si se desea pasar una variable string como "input"
         param: terminal se hace falso si se desea que el output de ejecuciónse 
         guarde en una variable de la clase (self.output)
-    """
-    def __init__(self, input, read_file=True, terminal=True):
+        """
         self.output = ''
         self.read_file = read_file
         self.terminal = terminal
