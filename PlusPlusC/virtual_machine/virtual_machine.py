@@ -144,6 +144,9 @@ class VirtualMachine:
         result = quadruple.result
         
         if operator == Operator.GOTOF:
+            # Si el operador es GOTOF
+            # primero se obtiene el valor del operando izquierdo
+            # y luego se checa si es falso
             left_operand_value = self.memory.read(left_operand)
             if left_operand_value == False:
                 self.jump_to_quadruple(result)
