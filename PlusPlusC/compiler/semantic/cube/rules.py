@@ -1,6 +1,11 @@
 from compiler.semantic.common.DirectorioFunciones import VarType
 from compiler.semantic.common.operators import Operator
 
+"""
+Reglas del cubo semántico para determinar el resultado de la 
+operacion entre dos variables
+"""
+
 ERROR = "err"
 
 INTEGER_RULES = {

@@ -5,6 +5,18 @@ from compiler.semantic.stack import SemanticStack
 from compiler.semantic.common.quadruple import Quadruple
 from compiler.semantic.memory.virtual_memory import VirtualMemory
 
+"""
+Clase para manejar los puntos neurálgicos en las acciones semánticas.
+    temp_index: guarda el índice del temporal a utilizar en una funcion
+    global_var_table = guarda las variables globales 
+    current_var_table = guarda las variables de una funcion
+    constants_table = guarda las variables constantes de una funcion
+    functions_directory = guarda las funciones utilizadas en el programa
+    quadruples: guarda la lista de cuadruplos generados
+    jumps_stack = pila de saltos 
+    current_function = guarda la funcion en la que se encuentra el compilador
+    durante el proceso de compilaciónn,
+"""
 class SemanticHandler:
     temp_index = 0
     global_var_table = dict()   
@@ -21,6 +33,10 @@ class SemanticHandler:
         self.memory = VirtualMemory()
 
     def initialize_program(self):
+        """
+        Función que inicializa la lista de cuadruplos y la pila de saltos
+        y agrega la funcion global al directorio de funciones
+        """
         goto_main = Quadruple(Operator.GOTO, None, None, None)
         self.quadruples = [goto_main]
         self.jumps_stack = [0]
@@ -33,6 +49,10 @@ class SemanticHandler:
         self.current_function = global_function_name
 
     def set_init_main(self):
+        """
+        Función que rellena el GOTO del cuadruplo main y agrega
+        la funcion main al directorio de funciones
+        """
         main_jump = self.jumps_stack.pop()
         self.set_final_jump(main_jump, len(self.quadruples))
         main_function_name = 'main'
@@ -44,6 +64,10 @@ class SemanticHandler:
         self.current_function = main_function_name
 
     def add_global(self, var_name, var_type):
+        """
+        Función que agrega una variable global a la tabla de
+        variables globales
+        """
         address = self.memory.create_global_address(var_type)
         self.global_var_table[var_name] = VariableTableRecord(
             name = var_name,
@@ -53,6 +77,9 @@ class SemanticHandler:
         self.add_current_function_local_var_size(var_type, 1, 'global')
 
     def set_init_func(self, func_name, t):
+        """
+        Función que agrega una funcion declarada al directorio de funciones
+        """
         self.functions_directory[func_name] = FunctionDirectoryRecord(
             name = func_name,
             return_type= t,
@@ -61,6 +88,10 @@ class SemanticHandler:
         self.current_function = func_name
 
     def set_parametros(self, parametros):
+        """
+        Función que agrega los parametros a la funcion actual 
+        que se esta procesando en compilación
+        """
         parametros.reverse()
         for (param_name, param_var_type) in parametros:
             address = self.memory.create_local_address(param_var_type)
@@ -74,6 +105,10 @@ class SemanticHandler:
             
 
     def set_variable(self, var_name, var_type, rows=1, columns=1):
+        """
+        Función que agrega una variable declarada a la
+        tabla de variables
+        """
         address = self.memory.create_local_address(var_type, size=(rows * columns))
         self.current_var_table[var_name] = VariableTableRecord(
             name = var_name,
@@ -86,12 +121,21 @@ class SemanticHandler:
         self.create_constant(columns, VarType.INT)
 
     def create_constant(self, value, type):
+        """
+        Función que crea una constante en caso de no encontrarse en
+        la tabla de variables constantes. Si ya esta declarada en la tabla
+        de variables constantes, regresa su direccion de memoria
+        """
         constant_address = self.constants_table.get(value)
         if not constant_address:
             constant_address = self.memory.create_constant_address(type)
             self.constants_table[value] = constant_address
     
     def get_constant(self, value):
+        """
+        Función que regresa una variable constante de la tabla de
+        variables constantes
+        """
         constant_address = self.constants_table.get(value)
         if constant_address != None:
             return constant_address
@@ -99,9 +143,16 @@ class SemanticHandler:
             raise Exception("Compilation eror: Constant variable, which value is:", value, " is not registered yet.")
 
     def consume_operator(self, operator):
+        """
+        Función que agrega un operador a la pila de operadores
+        """
         self.stack.push_operator(operator)
 
     def consume_operand(self, operand, var_type=None, is_constant=False, index=None):
+        """
+        Función que agrega un operando a la pila de operandos
+        tomando en cuenta si dicha variable es constante o no
+        """
         # Index para arreglos y matrices
         if is_constant:
             self.consume_constant_operand(operand, var_type)
@@ -109,12 +160,14 @@ class SemanticHandler:
             self.consume_var_operand(operand, index=index)
 
     def consume_var_operand(self, operand, index=None):
+        """
+        Función que agrega una variable a la pila de operandos
+        """
         if index != None:
             # Hacer algo para los arreglos
             pass
         try:
             var = self.var_lookup(operand)
-            # TODO: En el futuro, todas deberían tener direcciones
             if var.address:
                 self.stack.push_operand(var.address, var.type)
             else:
@@ -123,10 +176,13 @@ class SemanticHandler:
             raise Exception("Compilation error: Variable: ", operand, "does not exist.")
 
     def consume_array_usage(self, array_name, index_operand):
+        """
+        Función que se encarga de agregar el valor de un indice de un arreglo
+        a una variable.         
+        """
         var = self.var_lookup(array_name)
         if var is None:
             raise Exception("Compilation error: Array: ",array_name ," does not exist. Can not be assign to a variable.")
-        
         base_address = var.address
         index_address = index_operand[0]
         index_type = index_operand[1]
@@ -145,6 +201,10 @@ class SemanticHandler:
         self.stack.push_operand(pointer_to_temp_address, var.type)
 
     def consume_matrix_usage(self, matrix_name, index_operand):
+        """
+        Función que se encarga de agregar el valor de una casilla de una matriz
+        a una variable.         
+        """
         var = self.var_lookup(matrix_name)
 
         if var is None:
@@ -198,6 +258,11 @@ class SemanticHandler:
 
     # Buscar variable en tabla de variables locales y globales
     def var_lookup(self, var_name):
+        """
+        Función que se encarga de buscar si una variable esta 
+        declarada, ya sea en la tabla de variables globales o 
+        en la tabla de variables locales      
+        """
         var = self.current_var_table.get(var_name)
         if var:
             return var
@@ -205,25 +270,40 @@ class SemanticHandler:
         return var
 
     def consume_constant_operand(self, constant, var_type):
+        """
+        Función que agrega un operando constante a la pila de 
+        operandos
+        """
         constant_address = self.constants_table.get(constant)
         if not constant_address:
             constant_address = self.memory.create_constant_address(var_type)
             self.constants_table[constant] = constant_address
         self.stack.push_operand(constant_address, var_type)
 
-    # Por lo pronto, solo guardamos el cuadruplo con el nombre de la variable
     def handle_read(self, id):
+        """
+        Función que agrega el cuadruplo con el operador READ a la 
+        lista de cuadruplos
+        """
         var = self.var_lookup(id)
         quadruple = Quadruple(Operator.READ, None, None, var.address)
         self.quadruples.append(quadruple)
 
     def handle_print(self):
+        """
+        Función que agrega el cuadruplo el operador PRINT a la 
+        lista de cuadruplos
+        """
         if self.stack.operands:
             var_name = self.stack.operands.pop()
             quadruple = Quadruple(Operator.PRINT, None, None, var_name)
             self.quadruples.append(quadruple)
 
     def create_temp_var(self, vtype):
+        """
+        Función que crea una variable temporal y la agrega
+        a la tabla de variables locales 
+        """
         name = "temp_" + str(self.temp_index)
         address = self.memory.create_temporal_address(vtype)
         self.current_var_table[name] = VariableTableRecord(
@@ -235,6 +315,10 @@ class SemanticHandler:
         return name
 
     def set_quadruple(self):
+        """
+        Función que crea una cuadruplo y lo añade a la 
+        lista de cuadruplos
+        """
         if len(self.stack.operands) >= 2 and len(self.stack.operators) >= 1:
             right_operand = self.stack.operands.pop()
             left_operand = self.stack.operands.pop()
@@ -242,12 +326,14 @@ class SemanticHandler:
             right_operand_type = self.stack.types.pop()
             left_operand_type = self.stack.types.pop()
             cube_result = self.cube[right_operand_type][left_operand_type][operator]
+
+            # Si el resultado del cubo semantico no es error, crea el cuadruplo
             if cube_result != "err":
                 temp = self.create_temp_var(cube_result)
                 temp_address = self.current_var_table[temp].address
                 temp_type = self.current_var_table[temp].type
 
-                #set el count de temporales dependiendo el tipo
+                # Actualiza el count de temporales dependiendo el tipo
                 self.increment_current_function_temp_size(temp_type)
                 
                 quadruple = Quadruple(Operator(operator), left_operand, right_operand, temp_address)
@@ -266,6 +352,9 @@ class SemanticHandler:
 
 
     def add_var_operand(self, var_name):
+        """
+        Función que asigna un valor a una variable
+        """
         var = self.current_var_table[var_name]
         if var is None:
             raise Exception("Compilation error: The variable is not declared. Can not assign a value to this variable.")
@@ -283,6 +372,7 @@ class SemanticHandler:
             right_operand_type = self.stack.types.pop()
             left_operand_type = self.stack.types.pop()
             cube_result = self.cube[right_operand_type][left_operand_type][operator]
+            # Si el resultado del cubo semantico no es error, crea el cuadruplo
             if cube_result != "err":
                 quadruple = Quadruple(Operator(operator), right_operand, None, left_operand)
                 self.quadruples.append(quadruple)
@@ -290,6 +380,9 @@ class SemanticHandler:
                 raise Exception("Compilation error: Setting variable a value: type mismatch between operand ", left_operand, " type ", left_operand_type,  " and operand ", right_operand, " type ", right_operand_type)
 
     def handle_array_assign(self, var_name):
+        """
+        Función que asigna un valor a un índice de un arreglo
+        """
         var = self.current_var_table[var_name]
         if var is None:
             raise Exception("Compilation error: The array named: " ,var_name, " is not declared. Can not assign a variable this array.")
@@ -339,6 +432,9 @@ class SemanticHandler:
                 raise Exception("Compilation error: The array index type must be an integer. Can not assign a variable to this array.")
 
     def handle_matrix_assign(self, var_name):
+        """
+        Función que asigna un valor a una casilla de una matriz
+        """
         var = self.current_var_table[var_name]
         if var is None:
             raise Exception("Compilation error: The matrix named: " ,var_name, " is not declared. Can not assign a variable this matrix.")
@@ -458,7 +554,6 @@ class SemanticHandler:
         if self.jumps_stack:
             quadruple_index_to_set = self.jumps_stack.pop()
             self.jumps_stack.append(len(self.quadruples) - 1)
-            print("set_else", "jump:", len(self.quadruples) + 1)
             self.set_final_jump(quadruple_index_to_set, len(self.quadruples))
         else:
             raise Exception("Compilation error: Jump stack is empty. Can not set the end of ELSE.")

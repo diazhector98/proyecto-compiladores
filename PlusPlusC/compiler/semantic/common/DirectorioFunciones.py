@@ -1,6 +1,11 @@
 from dataclasses import dataclass, field
 from enum import Enum
 
+"""
+Estos Enums se utilizan para crear los objetos de las variables y funciones
+Dichos objetos se utilzan para hacer posible las tablas de variables y el
+directorio de funciones
+"""
 class VarType(Enum):
     INT = 'int'
     FLOAT = 'float'
@@ -18,8 +23,9 @@ class FuncReturnType(Enum):
 Clase para guardar datos de una funcion.
 Objetos de esta clase se guardan en el directorio de funciones.
 name: Nombre de la función
-return_type: Tipo de retorno (void, int, char, etc...)
-param_types: Lista de los tipos de parametros esperados
+return_type: tipo de retorno (void, int, char, etc...)
+param_types: lista de los tipos de parametros esperados
+address: direccion de memoria asignada a la funcion
 """
 @dataclass
 class FunctionDirectoryRecord:
@@ -48,6 +54,8 @@ Clase para guardar datos de una registro de variable.
 Objetos de esta clase se guardan en la tabla de variables
 name: nombre de la variable
 type: tipo de la variable
+address: direccion de memoria asignada a la variable
+dimensions: dimensiones de la variable
 """
 @dataclass
 class VariableTableRecord:

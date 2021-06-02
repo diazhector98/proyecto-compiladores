@@ -1,5 +1,9 @@
 from enum import Enum
 
+"""
+Clase para declarar los operadores que se utilizarán en el proceso
+de compilación para crear los cuadruplos
+"""
 class Operator(Enum):
     SUM = "+"
     MINUS = "-"

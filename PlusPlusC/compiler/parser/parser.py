@@ -22,6 +22,7 @@ class PlusPlusCParser(Parser):
         self.names = { }
         self.file_name = file_name
 
+    # Programa
     @_('inicio_programa ";" globals funciones main')
     def program(self, p):
         output_generator = OutputGenerator(self.semantic_actions, self.file_name)
@@ -31,6 +32,7 @@ class PlusPlusCParser(Parser):
     def inicio_programa(self, p):
         self.semantic_actions.initialize_program()
 
+    # Globals
     @_('global_aux globals', 'epsilon')
     def globals(self, p):
         pass
@@ -40,10 +42,12 @@ class PlusPlusCParser(Parser):
         self.semantic_actions.add_global(p.ID, VarType(p.tipo))
         pass
     
+    # Tipo
     @_('INT_TYPE', 'FLOAT_TYPE', 'CHAR_TYPE', 'BOOL_TYPE')
     def tipo(self, p):
         return p[0]
 
+    # Funciones
     @_('funcion funciones', 'epsilon')
     def funciones(self, p):
         pass
@@ -65,7 +69,8 @@ class PlusPlusCParser(Parser):
         self.semantic_actions.set_init_func(p.ID, FuncReturnType.VOID)
         self.semantic_actions.set_parametros(p.parametros)
         pass
-
+    
+    # Parametros
     @_('ID tipo')
     def parametros(self, p):
         return [(p[0], VarType(p.tipo))]
@@ -79,12 +84,12 @@ class PlusPlusCParser(Parser):
     def parametros(self, p):
         return []
 
-    #Epsilon
+    # Epsilon
     @_('')
     def epsilon(self, p):
         pass
 
-    #Main
+    # Main
     @_('inicio_main bloque')
     def main(self, p):
         pass
@@ -93,7 +98,7 @@ class PlusPlusCParser(Parser):
     def inicio_main(self, p):
         self.semantic_actions.set_init_main()
 
-    #Bloque
+    # Bloque
     @_('"{" estatutos "}"', '"{" "}"')
     def bloque(self, p):
         pass
@@ -102,12 +107,12 @@ class PlusPlusCParser(Parser):
     def estatutos(self, p):
         pass
 
-    #Estatuto
+    # Estatuto
     @_('escritura', 'lectura', 'retorno', 'asignacion', 'ciclo_while', 'condicion', 'declaracion', 'llamada_funcion ";"')
     def estatuto(self, p):
         pass
 
-    #Escritura
+    # Escritura
     @_('PRINT "(" constante ")" ";"')
     def escritura(self, p):
         self.semantic_actions.handle_print()
@@ -119,21 +124,20 @@ class PlusPlusCParser(Parser):
         self.semantic_actions.handle_print()
         pass
 
-    #Lectura
+    # Lectura
     @_('INPUT "(" ID ")" ";"')
     def lectura(self, p):
         self.semantic_actions.handle_read(p.ID)
 
-    #Retorno
+    # Retorno
     @_('RETURN expresion ";"')
     def retorno(self, p):
         self.semantic_actions.handle_return()
 
-    #Asignacion
+    # Asignacion
     @_('asignacion_variable', 'asignacion_arreglo', 'asignacion_matrix')
     def asignacion(self, p):
         pass
-
 
     @_('ID ASSIGN expresion ";"')
     def asignacion_variable(self, p):
@@ -150,7 +154,7 @@ class PlusPlusCParser(Parser):
         self.semantic_actions.handle_matrix_assign(p[0])
         pass
 
-    #Declaracion
+    # Declaracion
     @_('declaracion_variable', 'declaracion_arreglo', 'declaracion_matriz')
     def declaracion(self, p):
         pass
@@ -174,7 +178,7 @@ class PlusPlusCParser(Parser):
     def indice_arreglo(self, p):
         return p[0]
 
-    #Expresion
+    # Expresion
     @_('exp')
     def expresion(self, p):
         pass
@@ -183,6 +187,7 @@ class PlusPlusCParser(Parser):
     def expresion(self, p):
         self.semantic_actions.set_quadruple()
 
+    # Exp
     @_('termino')
     def exp(self, p):
         pass
@@ -191,6 +196,7 @@ class PlusPlusCParser(Parser):
     def exp(self, p):
         self.semantic_actions.set_quadruple()
 
+    # Termino
     @_('factor')
     def termino(self, p):
         pass
@@ -199,6 +205,7 @@ class PlusPlusCParser(Parser):
     def termino(self, p):
         self.semantic_actions.set_quadruple()
 
+    # Factor
     @_('"(" expresion ")"', 'operador_termino constante', 'constante')
     def factor(self, p):
         pass
@@ -238,6 +245,7 @@ class PlusPlusCParser(Parser):
         tipo = self.semantic_actions.stack.types.pop()
         return (operando, tipo)
 
+    # Constante
     @_('C_INTEGER')
     def constante(self, p):
         self.semantic_actions.consume_operand(p[0], VarType.INT, is_constant=True)
@@ -265,7 +273,7 @@ class PlusPlusCParser(Parser):
     def operador_factor(self, p):
         self.semantic_actions.consume_operator(p[0])
 
-    #If
+    # If
     @_('if_inicial bloque condicion_aux')
     def condicion(self, p):
         self.semantic_actions.set_end_of_if()
@@ -285,7 +293,7 @@ class PlusPlusCParser(Parser):
         self.semantic_actions.set_else()
         pass
 
-    #While
+    # While
     @_('while_inicial bloque')
     def ciclo_while(self, p):
         self.semantic_actions.set_end_of_while()

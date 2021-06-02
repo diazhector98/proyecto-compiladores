@@ -1,9 +1,5 @@
 program Main;
 
-func find(element int) -> void {
-    var A int;
-}
-
 main () {
     var element int;
     var array[10] int;
@@ -21,7 +17,7 @@ main () {
     array[7] = 53;
     array[8] = 47;
     array[9] = 34;
-    input(element);
+    element = 9;
 
     var index int;
     index = 0;

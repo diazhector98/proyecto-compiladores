@@ -10,37 +10,38 @@ class PlusPlusCLexer(Lexer):
         MAIN,
         GLOBAL,
 
-        #For variables
+        # Variables
         VAR,
 
-        # For variable types
+        # Tipos de variables
         INT_TYPE,
         FLOAT_TYPE,
         CHAR_TYPE,
         BOOL_TYPE,
 
-        # For constant variable values
+        # Variables constantes
         C_INTEGER,
         C_FLOAT,
         C_CHAR,
 
-        #For functions
+        # Funciones
         FUNC,
         RETURN,
         VOID,
         ARROW,
 
-        #For Actions
+        # Entradas y Salidas
         INPUT,
         PRINT,
 
-        #For conditionals
+        # Condicionales
         IF,
         ELSE,
 
-        #For cycles
+        # Ciclos
         WHILE,
 
+        # Operadores condicionales
         AND,
         OR,
         EQUAL,

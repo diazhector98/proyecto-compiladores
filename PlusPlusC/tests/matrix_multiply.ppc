@@ -1,8 +1,5 @@
 program Main;
 
-func matrix(A int) -> int {
-}
-
 main () {
     var first_matrix[3][3] int;
     var rows_first int;
