@@ -18,8 +18,14 @@ def handle_arithmetic_operator(quadruple, memory):
     right_operand = quadruple.right_operand
     result = quadruple.result
 
+    # Si el operador es ASSIGN, se debe
+    # checar si la dirección a donde se escribe es
+    # un apuntador
     if operator == Operator.ASSIGN:
         if address_is_pointer(result):
+            # Si la dirección a donde se escribe es un apuntador
+            # primero se obtiene la dirección que almacena
+            # del apuntador
             address_of_pointer = memory.pointers_block.read(result, BlockType.POINTER)
             left_operand_value = memory.read(left_operand)
             memory.write(address_of_pointer, left_operand_value)
