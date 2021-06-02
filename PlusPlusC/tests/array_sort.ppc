@@ -1,8 +1,5 @@
 program Main;
 
-func sort(A int) -> int {
-}
-
 main () {
     var A[10] int;
     var i int;
