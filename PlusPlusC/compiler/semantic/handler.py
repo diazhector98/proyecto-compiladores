@@ -67,6 +67,8 @@ class SemanticHandler:
         """
             Función que agrega una variable global a la tabla de
             variables globales
+            param var_name: nombre de la variable global
+            param var_type: tipo de la variable global
         """
         address = self.memory.create_global_address(var_type)
         self.global_var_table[var_name] = VariableTableRecord(
@@ -79,6 +81,8 @@ class SemanticHandler:
     def set_init_func(self, func_name, t):
         """
             Función que agrega una funcion declarada al directorio de funciones
+            param func_name: nombre de la función
+            param t: tipo de retorno de la función(incluido void)
         """
         self.functions_directory[func_name] = FunctionDirectoryRecord(
             name = func_name,
@@ -87,13 +91,15 @@ class SemanticHandler:
         )
         self.current_function = func_name
 
-    def set_parametros(self, parametros):
+    def set_parameters(self, parameters):
         """
             Función que agrega los parametros a la funcion actual 
             que se esta procesando en compilación
+
+            param parameters: lista de parametros con estructura (nombre de parametro, tipo de parametro)
         """
-        parametros.reverse()
-        for (param_name, param_var_type) in parametros:
+        parameters.reverse()
+        for (param_name, param_var_type) in parameters:
             address = self.memory.create_local_address(param_var_type)
             self.functions_directory[self.current_function].add_param((param_name, param_var_type, address))
             self.current_var_table[param_name] = VariableTableRecord(
@@ -107,7 +113,13 @@ class SemanticHandler:
     def set_variable(self, var_name, var_type, rows=1, columns=1):
         """
             Función que agrega una variable declarada a la
-            tabla de variables
+            tabla de variables. Se calcula el tamaño de la variable
+            multiplicando rows y columns(que por default es 1)
+
+            param var_name: nombre de la variable
+            para var_type: tipo de la variable
+            param rows: usado si es un arreglo o matriz
+            param columns: usado si es una matriz
         """
         address = self.memory.create_local_address(var_type, size=(rows * columns))
         self.current_var_table[var_name] = VariableTableRecord(
@@ -125,6 +137,9 @@ class SemanticHandler:
             Función que crea una constante en caso de no encontrarse en
             la tabla de variables constantes. Si ya esta declarada en la tabla
             de variables constantes, regresa su direccion de memoria
+
+            param value: valor de la constante
+            param type: tipo de la constante
         """
         constant_address = self.constants_table.get(value)
         if not constant_address:
@@ -133,8 +148,10 @@ class SemanticHandler:
     
     def get_constant(self, value):
         """
-            Función que regresa una variable constante de la tabla de
-            variables constantes
+            Función que regresa la dirección de una variable 
+            constante de la tabla de variables constantes
+
+            param value: valor de la constante
         """
         constant_address = self.constants_table.get(value)
         if constant_address != None:
@@ -145,27 +162,44 @@ class SemanticHandler:
     def consume_operator(self, operator):
         """
             Función que agrega un operador a la pila de operadores
+
+            param operator: el operador que se requiere agregar, de tipo Operator
         """
         self.stack.push_operator(operator)
 
-    def consume_operand(self, operand, var_type=None, is_constant=False, index=None):
+    def consume_operand(self, operand, var_type=None, is_constant=False):
         """
             Función que agrega un operando a la pila de operandos
             tomando en cuenta si dicha variable es constante o no
+
+            param operand: el nombre del operando o el valor(en caso de que sea constante)
+            param is_constant: indica si el operando es constante
         """
-        # Index para arreglos y matrices
         if is_constant:
             self.consume_constant_operand(operand, var_type)
         else:
-            self.consume_var_operand(operand, index=index)
+            self.consume_var_operand(operand)
 
-    def consume_var_operand(self, operand, index=None):
+    def consume_constant_operand(self, constant, c_type):
+        """
+            Función que agrega un operando constante a la pila de 
+            operandos
+
+            param constant: valor del constante
+            param c_type: tipo de constante
+        """
+        constant_address = self.constants_table.get(constant)
+        if not constant_address:
+            constant_address = self.memory.create_constant_address(c_type)
+            self.constants_table[constant] = constant_address
+        self.stack.push_operand(constant_address, c_type)
+
+    def consume_var_operand(self, operand):
         """
             Función que agrega una variable a la pila de operandos
+
+            param operand: nombre de la variable (el operando)
         """
-        if index != None:
-            # Hacer algo para los arreglos
-            pass
         try:
             var = self.var_lookup(operand)
             if var.address:
@@ -178,7 +212,11 @@ class SemanticHandler:
     def consume_array_usage(self, array_name, index_operand):
         """
             Función que se encarga de agregar el valor de un indice de un arreglo
-            a una variable.         
+            a una variable.
+
+            param array_name: nombre del arreglo
+            para index_operand: tupla con informácion del índice que se pide del arreglo
+                con forma (dirección de memoria del índice, tipo de variable del índice)         
         """
         var = self.var_lookup(array_name)
         if var is None:
@@ -203,7 +241,11 @@ class SemanticHandler:
     def consume_matrix_usage(self, matrix_name, index_operand):
         """
             Función que se encarga de agregar el valor de una casilla de una matriz
-            a una variable.         
+            a una variable.
+
+            param matrix_name: nombre de la matriz
+            param index_operando: tupla conteniendo el operando del índice de
+                la fila y la columna de la matriz.  
         """
         var = self.var_lookup(matrix_name)
 
@@ -261,7 +303,9 @@ class SemanticHandler:
         """
             Función que se encarga de buscar si una variable esta 
             declarada, ya sea en la tabla de variables globales o 
-            en la tabla de variables locales      
+            en la tabla de variables locales   
+
+            param var_name: nombre de la variable   
         """
         var = self.current_var_table.get(var_name)
         if var:
@@ -269,21 +313,12 @@ class SemanticHandler:
         var = self.global_var_table[var_name]
         return var
 
-    def consume_constant_operand(self, constant, var_type):
-        """
-            Función que agrega un operando constante a la pila de 
-            operandos
-        """
-        constant_address = self.constants_table.get(constant)
-        if not constant_address:
-            constant_address = self.memory.create_constant_address(var_type)
-            self.constants_table[constant] = constant_address
-        self.stack.push_operand(constant_address, var_type)
-
     def handle_read(self, id):
         """
             Función que agrega el cuadruplo con el operador READ a la 
             lista de cuadruplos
+
+            param id: nombre de la variable
         """
         var = self.var_lookup(id)
         quadruple = Quadruple(Operator.READ, None, None, var.address)
@@ -299,16 +334,18 @@ class SemanticHandler:
             quadruple = Quadruple(Operator.PRINT, None, None, var_name)
             self.quadruples.append(quadruple)
 
-    def create_temp_var(self, vtype):
+    def create_temp_var(self, t_type):
         """
             Función que crea una variable temporal y la agrega
             a la tabla de variables locales 
+            
+            param t_type: tipo de variable temporal
         """
         name = "temp_" + str(self.temp_index)
-        address = self.memory.create_temporal_address(vtype)
+        address = self.memory.create_temporal_address(t_type)
         self.current_var_table[name] = VariableTableRecord(
             name = name,
-            type = vtype,
+            type = t_type,
             address = address
         )
         self.temp_index = self.temp_index + 1
@@ -354,6 +391,8 @@ class SemanticHandler:
     def add_var_operand(self, var_name):
         """
             Función que asigna un valor a una variable
+
+            param var_name: nombre de la variable
         """
         var = self.current_var_table[var_name]
         if var is None:
@@ -382,6 +421,8 @@ class SemanticHandler:
     def handle_array_assign(self, var_name):
         """
             Función que asigna un valor a un índice de un arreglo
+
+            param var_name: nombre del arreglo
         """
         var = self.current_var_table[var_name]
         if var is None:
@@ -434,6 +475,8 @@ class SemanticHandler:
     def handle_matrix_assign(self, var_name):
         """
             Función que asigna un valor a una casilla de una matriz
+
+            param var_name: nombre de la matriz
         """
         var = self.current_var_table[var_name]
         if var is None:
