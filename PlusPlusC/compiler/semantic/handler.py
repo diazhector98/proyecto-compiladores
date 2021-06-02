@@ -22,7 +22,6 @@ class SemanticHandler:
     global_var_table = dict()   
     current_var_table = dict()
     constants_table = dict()
-    functions_directory = dict()
     quadruples: [Quadruple] = []
     jumps_stack = []
     current_function = None
@@ -31,6 +30,7 @@ class SemanticHandler:
         self.cube = SemanticCube()
         self.stack = SemanticStack()
         self.memory = VirtualMemory()
+        self.functions_directory = dict()
 
     def initialize_program(self):
         """
