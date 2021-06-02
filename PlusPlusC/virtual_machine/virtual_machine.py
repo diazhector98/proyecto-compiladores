@@ -35,8 +35,6 @@ class VirtualMachine:
         global_function = functions['global']
         self.memory = VirtualMachineMemory(pointers, global_function, constants, constants_sizes, self.get_current_activation_record())
 
-    global_output_variable = ""
-
     def run(self):
         """
             Esta función pasa por todos los cuádruplos por medio de un ciclo while y los ejecuta.
@@ -263,7 +261,4 @@ class VirtualMachine:
         """
         if self.terminal:
             print(value)
-            self.global_output_variable += str(value) + "\n"
-        else:
-            self.output += str(value) + "\n"
-            self.global_output_variable += str(value) + "\n"
+        self.output += str(value) + "\n"
