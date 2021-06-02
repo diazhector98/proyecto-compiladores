@@ -224,6 +224,9 @@ class SemanticHandler:
         base_address = var.address
         index_address = index_operand[0]
         index_type = index_operand[1]
+
+        if index_type != VarType.INT:
+            raise Exception('Compilation Error: array index is not of type int!')
         # Verificar que el indice este en rango
         rows_address = self.constants_table.get(var.dimensions[0])
         verify_quadruple = Quadruple(Operator.VERIFY, index_address, None, rows_address)
@@ -260,6 +263,17 @@ class SemanticHandler:
         # matrix_first_index_address y matrix_second_index_address Obtienen solamente la direccion
         matrix_first_index_address = matrix_first_index[0]
         matrix_second_index_address = matrix_second_index[0]
+
+        # matrix_first_index_type y matrix_second_index_type Obtienen el tipo de variable
+        # que son los índices (deben ser ints)
+        matrix_first_index_type = matrix_first_index[1]
+        matrix_second_index_type = matrix_second_index[1]
+
+        if matrix_first_index_type != VarType.INT:
+            raise Exception("Compilation error: Matrix ",matrix_name, " first index is not an int")
+        if matrix_second_index_type != VarType.INT:
+            raise Exception("Compilation error: Matrix ",matrix_name, " second index is not an int")
+
         matrix_type = var.type
 
         # Agregando Verify de la primera dimension
