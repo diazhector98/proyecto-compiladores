@@ -74,7 +74,7 @@ class SemanticHandler:
             type = var_type,
             address = address
         )
-        self.add_current_function_local_var_size(var_type, 1, 'global')
+        self.add_function_local_var_size(var_type, 1, 'global')
 
     def set_init_func(self, func_name, t):
         """
@@ -101,7 +101,7 @@ class SemanticHandler:
                 type = param_var_type,
                 address = address
                 )
-            self.add_current_function_local_var_size(param_var_type, 1)
+            self.add_function_local_var_size(param_var_type, 1)
             
 
     def set_variable(self, var_name, var_type, rows=1, columns=1):
@@ -116,7 +116,7 @@ class SemanticHandler:
             address = address,
             dimensions = (rows, columns)
             )
-        self.add_current_function_local_var_size(var_type, rows * columns)
+        self.add_function_local_var_size(var_type, rows * columns)
         self.create_constant(rows, VarType.INT)
         self.create_constant(columns, VarType.INT)
 
@@ -506,17 +506,26 @@ class SemanticHandler:
             else:
                 raise Exception("Compilation error: Both matrix indexes types must be integers. Can not assign a variable to this matrix.")
 
-
-    def set_initial_if(self):
-        self.set_conditional_block()
-
     def set_initial_while(self):
+        """
+            Función que maneja las acciones semánticas al inicio de un estatuto while.
+            Agrega a la pila de saltos la ubicación del while y
+            luego hace acciones para establecer un bloque condicional.
+        """
         # Jump index para regresar a evaluar la condicion del while (al cuádruplo de la condición)
         jump_index = len(self.quadruples) - 1
         self.jumps_stack.append(jump_index)
         self.set_conditional_block()
 
     def set_conditional_block(self):
+        """
+            Función que hace acciones semánticas para 
+            empezar un bloque condicional (if, while).
+
+            Checa de la pila de operandos si el último
+            es de tipo booleano, si lo es, agrega un cuádruplo con
+            operador GOTOF y agrega a la pila de saltos su ubicación.
+        """
         if self.stack.operands:
             result = self.stack.operands.pop()
             if self.stack.types.pop() == VarType.BOOL:
@@ -530,6 +539,12 @@ class SemanticHandler:
             raise Exception("Compilation error: Not enough operands to resolve the conditional operation.")
 
     def set_end_of_if(self):
+        """
+            Función ejecutada al terminar el bloque del
+            estatuto IF.
+
+            Saca la ubicación del GOTOF del IF de la pila de saltos.
+        """
         if self.jumps_stack:
             quadruple_index_to_set = self.jumps_stack.pop()
             final_jump_index = len(self.quadruples)
@@ -537,17 +552,13 @@ class SemanticHandler:
         else:
             raise Exception("Compilation error: Jump stack is empty. Can not set the end of IF.")
 
-    def set_end_of_while(self):
-        end_jump_index = self.jumps_stack.pop()
-        condition_jump_index = self.jumps_stack.pop()
-        quadruple = Quadruple(Operator.GOTO, None, None, condition_jump_index)
-        self.quadruples.append(quadruple)        
-        self.set_final_jump(end_jump_index, len(self.quadruples))
-
-    def set_final_jump(self, quadruple_index_to_set, final_jump_index):
-        self.quadruples[quadruple_index_to_set].temp_result = final_jump_index
-
     def set_else(self):
+        """
+            Función ejecutada al inicio de un bloque ELSE.
+            Se agrega un cuádruplo con operador GOTO
+            y se asigna la ubicación actual
+            al GOTOF de la condición del IF.
+        """
         quadruple = Quadruple(Operator.GOTO, None, None, None)
         self.quadruples.append(quadruple)
 
@@ -558,7 +569,39 @@ class SemanticHandler:
         else:
             raise Exception("Compilation error: Jump stack is empty. Can not set the end of ELSE.")
 
+    def set_end_of_while(self):
+        """
+            Función ejecutada al final del bloque del WHILE.
+            Se obtiene la ubicación de cuádruplos en donde
+            se evalua la expresión booleana y en donde
+            esta el GOTOF.
+
+            Se agrega un operador GOTO para regresar a evaluar la condición.
+        """
+        end_jump_index = self.jumps_stack.pop()
+        condition_jump_index = self.jumps_stack.pop()
+        quadruple = Quadruple(Operator.GOTO, None, None, condition_jump_index)
+        self.quadruples.append(quadruple)        
+        self.set_final_jump(end_jump_index, len(self.quadruples))
+
+    def set_final_jump(self, quadruple_index_to_set, final_jump_index):
+        """
+            Función que establece el resultado de un
+            cuádruplo con operador de salto, es decir,
+            a donde va a saltar.
+
+            param quadruple_index_to_set: cuádruplo que se modifica
+            param final_jump_index: destino de salto
+        """
+        self.quadruples[quadruple_index_to_set].temp_result = final_jump_index
+
     def set_function_call(self, func_name, arguments):
+        """
+            Función ejecutada cada vez que se llama una función en PPC.
+
+            param func_name: nombre de la función para ser buscada en el directorio.
+            param arguments: lista de argumentos, siendo cada uno una tupla (direcciónDeArgumento, tipoDeArgumento)
+        """
         function = self.functions_directory[func_name]
         function_params_types = []
         arguments_types = []
@@ -633,6 +676,13 @@ class SemanticHandler:
                     arguments_types.clear()
                     
     def handle_return(self):
+        """
+            Función ejecutada cuando se encuentra con un estatuto RETURN.
+            Valida primero que el tipo de función en donde
+            se encuentra espera un RETURN.
+
+            Si es asi, guarda su resultado en la variable global de la función.
+        """
         function = self.functions_directory[self.current_function]
         operand = self.stack.operands.pop()
         operand_type = self.stack.types.pop()
@@ -643,8 +693,76 @@ class SemanticHandler:
             self.quadruples.append(quad)
         else:
             raise Exception("Compilation error: The return type the function requires is incorrect. Can not return this type of value.")
-        
-    # Método de debugging
+
+    def add_function_local_var_size(self, var_type, size, func_name=None):
+        """
+            Función que incrementa el número de variables locales
+            que requiere la función actual (o la función que se especifíca).
+
+            param var_type: tipo de variable local que se quiere incrementar
+            param size: cantidad que se quiere inncrementar.
+            param func_name: nombre de la función que se quiere modificar, si se omite, se usa 
+                la función actual en el proceso de compilación.
+        """
+        function_name = func_name if func_name != None else self.current_function
+        function = self.functions_directory[function_name]
+        if var_type == VarType.INT:
+            function.local_var_int_size += size
+        elif var_type == VarType.FLOAT:
+            function.local_var_float_size += size
+        elif var_type == VarType.CHAR:
+            function.local_var_char_size += size
+        elif var_type == VarType.BOOL:
+            function.local_var_bool_size += size
+
+    def increment_current_function_temp_size(self, temp_type):
+        """
+            Similar a la función add_function_local_var_size,
+            sin embargo, esta solo incrementa por uno
+            el número de variables temporales que requiere
+            la función actual.
+
+            param temp_type: tipo de variable temporal que necesita la función
+        """
+        function = self.functions_directory[self.current_function]
+        if temp_type == VarType.INT:
+            function.temp_var_int_size += 1
+        elif temp_type == VarType.FLOAT:
+            function.temp_var_float_size += 1
+        elif temp_type == VarType.CHAR:
+            function.temp_var_char_size += 1
+        elif temp_type == VarType.BOOL:
+            function.temp_var_bool_size += 1
+
+    def end_func(self):
+        """
+            Función que se ejecuta al terminar el bloque de una función.
+            Se agrega un cuádruplo con operador ENDFUNC y
+            se resetea la memoria local y temporal (empezarlas de 0)
+        """
+        function = self.functions_directory[self.current_function]
+        if function is None:
+            print("The function is not declared. Have reached the end of the function and can not continue compiling.")
+        quadruple = Quadruple(Operator.ENDFUNC, None, None, None)
+        self.quadruples.append(quadruple)
+        self.memory.reset_local_and_temp_memory()
+        self.current_var_table = dict()
+
+    def get_number_of_pointers_used(self):
+        """
+            Función utilizada al hacer el archivo de compilación
+            que obtiene el número de apuntadores usados a lo largo
+            de todo el archivo PPC
+        """
+        return self.memory.get_pointers_block_size()
+
+    """
+        Los siguientes métodos son usados para
+        imprimir de forma legible los cuádruplos,
+        la tabla de constantes, y la tabla de globales.
+
+        Utilizado para debugging.
+    """
     def print_quadruples(self):
         for index, quad in enumerate(self.quadruples):
             print(index, str(quad))
@@ -658,37 +776,3 @@ class SemanticHandler:
         for key in self.global_var_table:
             address = self.global_var_table[key].address
             print ("{:<7} {:<12}".format(address, key))
-
-    def add_current_function_local_var_size(self, var_type, size, func_name=None):
-        function_name = func_name if func_name != None else self.current_function
-        function = self.functions_directory[function_name]
-        if var_type == VarType.INT:
-            function.local_var_int_size += size
-        elif var_type == VarType.FLOAT:
-            function.local_var_float_size += size
-        elif var_type == VarType.CHAR:
-            function.local_var_char_size += size
-        elif var_type == VarType.BOOL:
-            function.local_var_bool_size += size
-
-    def increment_current_function_temp_size(self, temp_type):
-        if temp_type == VarType.INT:
-            self.functions_directory[self.current_function].temp_var_int_size += 1
-        elif temp_type == VarType.FLOAT:
-            self.functions_directory[self.current_function].temp_var_float_size += 1
-        elif temp_type == VarType.CHAR:
-            self.functions_directory[self.current_function].temp_var_char_size += 1
-        elif temp_type == VarType.BOOL:
-            self.functions_directory[self.current_function].temp_var_bool_size += 1
-
-    def end_func(self):
-        function = self.functions_directory[self.current_function]
-        if function is None:
-            print("The function is not declared. Have reached the end of the function and can not continue compiling.")
-        quadruple = Quadruple(Operator.ENDFUNC, None, None, None)
-        self.quadruples.append(quadruple)
-        self.memory.reset_local_and_temp_memory()
-        self.current_var_table = dict()
-
-    def get_number_of_pointers_used(self):
-        return self.memory.get_pointers_block_size()
