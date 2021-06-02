@@ -42,8 +42,6 @@ class PlusPlusCLexer(Lexer):
         WHILE,
 
         # Operadores condicionales
-        AND,
-        OR,
         EQUAL,
         ASSIGN,
         NOTEQUAL,
@@ -79,8 +77,6 @@ class PlusPlusCLexer(Lexer):
     ID['return'] = RETURN
     ID['void'] = VOID
 
-    AND = r'&&'
-    OR = r'\|\|'
     EQUAL = r'=='
     ASSIGN = r'='
     NOTEQUAL = r'!='

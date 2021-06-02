@@ -70,10 +70,6 @@ def handle_boolean_operator(quadruple, memory):
         operation_outcome = left_operand_value == right_operand_value
     if operator == Operator.NE:
         operation_outcome = left_operand_value != right_operand_value
-    if operator == Operator.AND:
-        operation_outcome = left_operand_value and right_operand_value
-    if operator == Operator.OR:
-        operation_outcome = left_operand_value or right_operand_value
         
     memory.write(result, operation_outcome)
 

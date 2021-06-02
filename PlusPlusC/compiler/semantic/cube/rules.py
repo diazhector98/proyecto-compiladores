@@ -20,8 +20,6 @@ INTEGER_RULES = {
         Operator.GTE: VarType.BOOL,
         Operator.EQUAL: VarType.BOOL,
         Operator.NE: VarType.BOOL,
-        Operator.AND: ERROR,
-        Operator.OR: ERROR,
         Operator.ASSIGN: VarType.INT
     },
     VarType.FLOAT: {
@@ -35,8 +33,6 @@ INTEGER_RULES = {
         Operator.GTE: VarType.BOOL,
         Operator.EQUAL: VarType.BOOL,
         Operator.NE: VarType.BOOL,
-        Operator.AND: ERROR,
-        Operator.OR: ERROR,
         Operator.ASSIGN: VarType.INT
     },
     VarType.CHAR: {
@@ -50,8 +46,6 @@ INTEGER_RULES = {
         Operator.GTE: ERROR,
         Operator.EQUAL: ERROR,
         Operator.NE: ERROR,
-        Operator.AND: ERROR,
-        Operator.OR: ERROR,
         Operator.ASSIGN: ERROR
     },
     VarType.BOOL: {
@@ -65,8 +59,6 @@ INTEGER_RULES = {
         Operator.GTE: ERROR,
         Operator.EQUAL: ERROR,
         Operator.NE: ERROR,
-        Operator.AND: ERROR,
-        Operator.OR: ERROR,
         Operator.ASSIGN: ERROR
     },
 }
@@ -83,8 +75,6 @@ FLOAT_RULES = {
         Operator.GTE: VarType.BOOL,
         Operator.EQUAL: VarType.BOOL,
         Operator.NE: VarType.BOOL,
-        Operator.AND: ERROR,
-        Operator.OR: ERROR,
         Operator.ASSIGN: VarType.FLOAT
     },
     VarType.FLOAT: {
@@ -98,8 +88,6 @@ FLOAT_RULES = {
         Operator.GTE: VarType.BOOL,
         Operator.EQUAL: VarType.BOOL,
         Operator.NE: VarType.BOOL,
-        Operator.AND: ERROR,
-        Operator.OR: ERROR,
         Operator.ASSIGN: VarType.FLOAT
     },
     VarType.CHAR: {
@@ -113,8 +101,6 @@ FLOAT_RULES = {
         Operator.GTE: ERROR,
         Operator.EQUAL: ERROR,
         Operator.NE: ERROR,
-        Operator.AND: ERROR,
-        Operator.OR: ERROR,
         Operator.ASSIGN: ERROR
     },
     VarType.BOOL: {
@@ -128,8 +114,6 @@ FLOAT_RULES = {
         Operator.GTE: ERROR,
         Operator.EQUAL: ERROR,
         Operator.NE: ERROR,
-        Operator.AND: ERROR,
-        Operator.OR: ERROR, 
         Operator.ASSIGN: ERROR
     },
 }
@@ -146,8 +130,6 @@ CHAR_RULES = {
         Operator.GTE: ERROR,
         Operator.EQUAL: ERROR,
         Operator.NE: ERROR,
-        Operator.AND: ERROR,
-        Operator.OR: ERROR,
         Operator.ASSIGN: ERROR
     },
     VarType.FLOAT: {
@@ -161,8 +143,6 @@ CHAR_RULES = {
         Operator.GTE: ERROR,
         Operator.EQUAL: ERROR,
         Operator.NE: ERROR,
-        Operator.AND: ERROR,
-        Operator.OR: ERROR,
         Operator.ASSIGN: ERROR
     },
     VarType.CHAR: {
@@ -176,8 +156,6 @@ CHAR_RULES = {
         Operator.GTE: ERROR,
         Operator.EQUAL: VarType.BOOL,
         Operator.NE: VarType.BOOL,
-        Operator.AND: ERROR,
-        Operator.OR: ERROR, 
         Operator.ASSIGN: VarType.CHAR
     },
     VarType.BOOL: {
@@ -191,8 +169,6 @@ CHAR_RULES = {
         Operator.GTE: ERROR,
         Operator.EQUAL: ERROR,
         Operator.NE: ERROR,
-        Operator.AND: ERROR,
-        Operator.OR: ERROR,
         Operator.ASSIGN: ERROR
     },
 }
@@ -209,8 +185,6 @@ BOOL_RULES = {
         Operator.GTE: ERROR,
         Operator.EQUAL: ERROR,
         Operator.NE: ERROR,
-        Operator.AND: ERROR,
-        Operator.OR: ERROR,
         Operator.ASSIGN: ERROR
     },
     VarType.FLOAT: {
@@ -224,8 +198,6 @@ BOOL_RULES = {
         Operator.GTE: ERROR,
         Operator.EQUAL: ERROR,
         Operator.NE: ERROR,
-        Operator.AND: ERROR,
-        Operator.OR: ERROR,
         Operator.ASSIGN: ERROR
     },
     VarType.CHAR: {
@@ -239,8 +211,6 @@ BOOL_RULES = {
         Operator.GTE: ERROR,
         Operator.EQUAL: ERROR,
         Operator.NE: ERROR,
-        Operator.AND: ERROR,
-        Operator.OR: ERROR,
         Operator.ASSIGN: ERROR
     },
     VarType.BOOL: {
@@ -254,8 +224,6 @@ BOOL_RULES = {
         Operator.GTE: ERROR,
         Operator.EQUAL: VarType.BOOL,
         Operator.NE: VarType.BOOL,
-        Operator.AND: VarType.BOOL,
-        Operator.OR: VarType.BOOL,
         Operator.ASSIGN: VarType.BOOL
     },
 }

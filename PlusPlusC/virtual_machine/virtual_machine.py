@@ -99,8 +99,6 @@ class VirtualMachine:
             Operator.GTE,
             Operator.EQUAL,
             Operator.NE,
-            Operator.AND,
-            Operator.OR
         ]
 
     def is_function_operator(self, operator):

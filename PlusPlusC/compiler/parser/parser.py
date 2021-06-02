@@ -279,7 +279,7 @@ class PlusPlusCParser(Parser):
         self.semantic_actions.set_end_of_if()
         pass
 
-    @_('IF condiciones')
+    @_('IF expresion')
     def if_inicial(self, p):
         self.semantic_actions.set_conditional_block()
         pass
@@ -298,17 +298,9 @@ class PlusPlusCParser(Parser):
     def ciclo_while(self, p):
         self.semantic_actions.set_end_of_while()
 
-    @_('WHILE condiciones')
+    @_('WHILE expresion')
     def while_inicial(self, p):
         self.semantic_actions.set_initial_while()
-
-    @_('expresion', 'expresion operador_condicional condiciones')
-    def condiciones(self, p):
-        pass
-
-    @_('AND', 'OR')
-    def operador_condicional(self, p):
-        pass
 
     #Llamadas a funciones
     @_('ID "(" argumentos_funcion ")"')

@@ -15,8 +15,6 @@ class Operator(Enum):
     GTE = ">="
     EQUAL = "=="
     NE = "!="
-    AND = "&&"
-    OR = "||"
     READ = "read"
     PRINT = "print" 
     ASSIGN = "="
