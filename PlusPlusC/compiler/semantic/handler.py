@@ -218,6 +218,7 @@ class SemanticHandler:
             para index_operand: tupla con informácion del índice que se pide del arreglo
                 con forma (dirección de memoria del índice, tipo de variable del índice)         
         """
+        # Se verifica que el arreglo exista ya declarado
         var = self.var_lookup(array_name)
         if var is None:
             raise Exception("Compilation error: Array: ",array_name ," does not exist. Can not be assign to a variable.")
@@ -225,20 +226,22 @@ class SemanticHandler:
         index_address = index_operand[0]
         index_type = index_operand[1]
 
+        # Se verifica que el índice del arreglo sea de tipo entero
         if index_type != VarType.INT:
             raise Exception('Compilation Error: array index is not of type int!')
-        # Verificar que el indice este en rango
+        
+        # Agregar operador VERIFY para verificar que el indice este en rango
         rows_address = self.constants_table.get(var.dimensions[0])
         verify_quadruple = Quadruple(Operator.VERIFY, index_address, None, rows_address)
         self.quadruples.append(verify_quadruple)
 
-        # Haciendo suma de direccion base
+        # Se hace la suma de la direccion base
         constant_address = self.get_constant(base_address)
         pointer_to_temp_address = self.memory.create_pointer_address(var.type)
         add_array_base_quadruple = Quadruple(Operator.SUM, index_address, constant_address, pointer_to_temp_address)
         self.quadruples.append(add_array_base_quadruple)
 
-        # Push pointer a stack de operandos
+        # Push pointer de arreglo a stack de operandos
         self.stack.push_operand(pointer_to_temp_address, var.type)
 
     def consume_matrix_usage(self, matrix_name, index_operand):
@@ -250,25 +253,24 @@ class SemanticHandler:
             param index_operando: tupla conteniendo el operando del índice de
                 la fila y la columna de la matriz.  
         """
+        # Se verifica que la matriz exista
         var = self.var_lookup(matrix_name)
-
         if var is None:
             raise Exception("Compilation error: Matrix: ",matrix_name, " does not exist. Can not be assign to a variable")
        
         matrix_base_address = var.address
-
         matrix_first_index = index_operand[0]
         matrix_second_index = index_operand[1]
 
-        # matrix_first_index_address y matrix_second_index_address Obtienen solamente la direccion
+        # Se obtiene la dirección de ambos índices de la matriz
         matrix_first_index_address = matrix_first_index[0]
         matrix_second_index_address = matrix_second_index[0]
 
-        # matrix_first_index_type y matrix_second_index_type Obtienen el tipo de variable
-        # que son los índices (deben ser ints)
+        # Se obtiene el tipo de variable de ambos índices de la matriz
         matrix_first_index_type = matrix_first_index[1]
         matrix_second_index_type = matrix_second_index[1]
 
+        # Se verifica que los índices sean de tipo entero
         if matrix_first_index_type != VarType.INT:
             raise Exception("Compilation error: Matrix ",matrix_name, " first index is not an int")
         if matrix_second_index_type != VarType.INT:
@@ -276,17 +278,19 @@ class SemanticHandler:
 
         matrix_type = var.type
 
-        # Agregando Verify de la primera dimension
+        # Agregando VERIFY de la primera dimension para 
+        # verificar que el índice este en el rango
         matrix_row_address = self.constants_table.get(var.dimensions[0])
         verify_quadruple = Quadruple(Operator.VERIFY, matrix_first_index_address, None, matrix_row_address)
         self.quadruples.append(verify_quadruple)
 
-        # Agregando Multiply s1*m1
+        # Generando el valor M1 y creando un valor constante de ello
         matrix_m_one = int(((var.dimensions[0]) * (var.dimensions[1])) / (var.dimensions[0]))
         matrix_m_one_constant_address = self.get_constant(matrix_m_one)
+        
+        # Generando el cuádruplo MULTIPLY de s1 * m1
         matrix_temp_multiply = self.create_temp_var(VarType.INT)
         self.increment_current_function_temp_size(VarType.INT)
-
         matrix_temp_multiply_address = self.current_var_table[matrix_temp_multiply].address
         multiply_m_one_quadruple = Quadruple(Operator.MULTIPLY, matrix_first_index_address, matrix_m_one_constant_address, matrix_temp_multiply_address)
         self.quadruples.append(multiply_m_one_quadruple)
