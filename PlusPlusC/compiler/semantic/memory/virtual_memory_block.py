@@ -15,6 +15,14 @@ class VirtualMemoryBlock:
         self.bool_partition = VirtualMemoryBlockPartition(start_address+ partition_size * 3, partition_size - 1)
 
     def create_address(self, t, size=1):
+        """
+            Función para crear un dirección de una particionn
+            dependiendo su tipo. 
+
+            param address: tipo de variable 
+            return: direccion creada segun su tipo
+        """
+    
         if t == VarType.INT:
             return self.create_int_address(size)
         if t == VarType.FLOAT:
