@@ -8,7 +8,15 @@ operacion entre dos variables
 
 ERROR = "err"
 
-INTEGER_RULES = {
+"""
+    En cada una de las reglas, dependiendo del tipo de la
+    segunda variable (INT, FLOAT, CHAR, BOOL), se toma en
+    cuenta ahora el tipo de operador (SUM, MINUS, MULTIPLY...),
+    dependiendo de éste tipo, se determina el resultado del
+    cubo semántico. 
+"""
+INTEGER_RULES = {        
+    
     VarType.INT: {
         Operator.SUM: VarType.INT,
         Operator.MINUS: VarType.INT,

@@ -16,6 +16,10 @@ print(cube_result) # VarType.FLOAT
 
 """
 class SemanticCube:
+    """
+        El cubo toma en cuenta el tipo de la primer variable
+        dependiendo de éste, se determinar las reglas a utilizar
+    """
     cube = {
         VarType.INT: INTEGER_RULES,
         VarType.FLOAT: FLOAT_RULES,

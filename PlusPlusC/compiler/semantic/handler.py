@@ -375,15 +375,22 @@ class SemanticHandler:
             lista de cuadruplos
         """
         if len(self.stack.operands) >= 2 and len(self.stack.operators) >= 1:
+
+            # Se obtiene el operando derecho e izquierdo de la
+            # pila de operandos al igual que los tipos de ambos
             right_operand = self.stack.operands.pop()
             left_operand = self.stack.operands.pop()
             operator = Operator(self.stack.operators.pop())
             right_operand_type = self.stack.types.pop()
             left_operand_type = self.stack.types.pop()
+
+            # Se obtiene el resultado del cubo semántico
             cube_result = self.cube[right_operand_type][left_operand_type][operator]
 
             # Si el resultado del cubo semantico no es error, crea el cuadruplo
             if cube_result != "err":
+
+                # Se crea una variable temporal y se obtiene su dirección y su tipo
                 temp = self.create_temp_var(cube_result)
                 temp_address = self.current_var_table[temp].address
                 temp_type = self.current_var_table[temp].type
@@ -391,8 +398,12 @@ class SemanticHandler:
                 # Actualiza el count de temporales dependiendo el tipo
                 self.increment_current_function_temp_size(temp_type)
                 
+                # Se crea el cuadruplo y se añade a la lista de cuadruplos
                 quadruple = Quadruple(Operator(operator), left_operand, right_operand, temp_address)
                 self.quadruples.append(quadruple)
+
+                # Se agrega la variable temporal a la pila de operandos
+                # y se agrega su tipo a la pila de tipos
                 self.consume_operand(temp, cube_result)
             else:
                 raise Exception("Compilation error: Setting quadruple: type mismatch between operand", left_operand, "and", right_operand)
@@ -412,24 +423,36 @@ class SemanticHandler:
 
             param var_name: nombre de la variable
         """
+        # Se revisa la existencia de la variable en la tabla de variables
         var = self.current_var_table[var_name]
         if var is None:
             raise Exception("Compilation error: The variable is not declared. Can not assign a value to this variable.")
         else:
+
+            # Se agrega la variable a la pila de operandos
+            # y se agrega su tipo a la pila de tipos
             self.consume_operand(var.name, var.type)
+
+            # Se agrega el operador ASSIGN a la pila de operadores
             self.stack.operators.append(Operator.ASSIGN)
 
             self.stack.operands.reverse()
             self.stack.operators.reverse()
             self.stack.types.reverse()
 
+            # Se obtiene el operando derecho e izquierdo de la
+            # pila de operandos al igual que los tipos de ambos
             right_operand = self.stack.operands.pop()
             left_operand = self.stack.operands.pop()
             operator = Operator(self.stack.operators.pop())
             right_operand_type = self.stack.types.pop()
             left_operand_type = self.stack.types.pop()
+
+            # Se obtiene el resultado del cubo semántico
             cube_result = self.cube[right_operand_type][left_operand_type][operator]
-            # Si el resultado del cubo semantico no es error, crea el cuadruplo
+
+            # Si el resultado del cubo semantico no es error, crea el cuadruplo y
+            # se agrega a lista de cuadruplos
             if cube_result != "err":
                 quadruple = Quadruple(Operator(operator), right_operand, None, left_operand)
                 self.quadruples.append(quadruple)
@@ -442,22 +465,32 @@ class SemanticHandler:
 
             param var_name: nombre del arreglo
         """
+
+        # Se revisa la existencia de la variable en la tabla de variables
         var = self.current_var_table[var_name]
         if var is None:
             raise Exception("Compilation error: The array named: " ,var_name, " is not declared. Can not assign a variable this array.")
         else:
+
+            # Se agrega la variable a la pila de operandos
+            # y se agrega su tipo a la pila de tipos
             self.consume_operand(var.name, var.type)
+
+            # Se agrega el operador ASSIGN a la pila de operadores
             self.stack.operators.append(Operator.ASSIGN)
 
             self.stack.operands.reverse()
             self.stack.operators.reverse()
             self.stack.types.reverse()
 
+            # Se obtiene el operando del índice del arreglo, el 
+            # operando derecho y la dirección base del arreglo
             array_index_operand = self.stack.operands.pop()
             right_operand = self.stack.operands.pop()
             array_base_address = self.stack.operands.pop()
 
-
+            # Se obtiene el tipo del índice del arreglo, el tipo
+            # del operando derecho y el tipo del arreglo
             array_index_type = self.stack.types.pop()
             right_operand_type = self.stack.types.pop()
             array_type = self.stack.types.pop()
@@ -465,7 +498,10 @@ class SemanticHandler:
             # Agregando direccion base a tabla de constantes
             self.create_constant(array_base_address, array_type)
 
+            # Se obtiene el operador de la pila de operadores
             operator = Operator(self.stack.operators.pop())
+
+             # Se obtiene el resultado del cubo semántico
             cube_result = self.cube[right_operand_type][array_type][operator]
 
             # Validando que array_index_type sea int
@@ -496,32 +532,49 @@ class SemanticHandler:
 
             param var_name: nombre de la matriz
         """
+
+        # Se revisa la existencia de la variable en la tabla de variables
         var = self.current_var_table[var_name]
         if var is None:
             raise Exception("Compilation error: The matrix named: " ,var_name, " is not declared. Can not assign a variable this matrix.")
         else:
+
+            # Se agrega la variable a la pila de operandos
+            # y se agrega su tipo a la pila de tipos
             self.consume_operand(var.name, var.type)
+
+            # Se agrega el operador ASSIGN a la pila de operadores
             self.stack.operators.append(Operator.ASSIGN)
 
             self.stack.operands.reverse()
             self.stack.operators.reverse()
             self.stack.types.reverse()
 
+            # Se obtiene el operando del primer índice de la matriz, el 
+            # operando del segundo índice de la matriz, el operando derecho, y
+            # la dirección base del arreglo
             matrix_first_index_operand = self.stack.operands.pop()
             matrix_second_index_operand = self.stack.operands.pop()
             right_operand = self.stack.operands.pop()
             matrix_base_address = self.stack.operands.pop()
 
+            # Se obtiene el tipo del primer índice de la matriz, el tipo
+            # del segundo índice de la matriz, el tipo del operando derecho y 
+            # el tipo de la matriz
             matrix_first_index_type = self.stack.types.pop()
             matrix_second_index_type = self.stack.types.pop()
             right_operand_type = self.stack.types.pop()
             matrix_type = self.stack.types.pop()
 
-            # Agregando direccion base a tabla de constantes
+            # Agregando direccion base de la matriz a tabla de constantes
             self.create_constant(matrix_base_address, matrix_type)
+
+            # Se obtiene el operador de la pila de operadores y se obtiene el 
+            # resultado del cubo semántico
             operator = Operator(self.stack.operators.pop())
             cube_result = self.cube[right_operand_type][matrix_type][operator]
 
+            # Se validan los tipos de los índices de la matriz
             if matrix_first_index_type == VarType.INT and matrix_second_index_type == VarType.INT:
                 
                 if cube_result != "err":
@@ -667,46 +720,54 @@ class SemanticHandler:
         function_params_types = []
         arguments_types = []
 
-        #Revisar funcion en el directorio de funciones
+        # Se valida la existencia de la funcion en el directorio de funciones
         if function is None:
             raise Exception("Compilation error: The function ", func_name ," is not declared. Can not use it.")
         else:
-            #Revisar numero de parametros
+            # Se valida el numero de parametros
             if len(arguments) != len(function.params):
                 raise Exception("Compilation error: The number of parameters the function ", function.name, " requires is incorrect.")
             else:
-                #Revisar el tipo de parametros
+                # Se valida el tipo de parametros
                 for param in (function.params):
                     function_params_types.append(param[1])
 
                 for argument in arguments:
                     arguments_types.append(argument[1])
 
-                #TODO revisar más casos que no cause problemas por este reverse
                 arguments_types.reverse()
 
+                # Se valida el tipo de parametros utilizados en la llamada a la funcion
+                # con el tipo de los parametros declarados de la función 
                 if function_params_types != arguments_types:
                     raise Exception("Compilation error: The type of parameters the function ", function.name ," requires is incorrect.")
                 else:
-                    #Si todas las restricciones se cumplen
+                    # Si todas las restricciones se cumplen se crea el cuadruplo ERA
+                    # y se agrega a la lista de cuádruplos
                     quadruple = Quadruple(Operator.ERA, None, None, func_name)
                     self.quadruples.append(quadruple)
         
                     arguments.reverse()
+
+                    # Se crean los cuádruplos con operador PARAMETER necesarios
                     for index, (argument, argument_type) in enumerate(arguments):
                         param_address = function.params[index][2]
                         param_quad = Quadruple(Operator.PARAMETER, argument, None, param_address)
                         self.quadruples.append(param_quad)
 
+                    # Se crea el guadruplo GOSUB y se agrega a la lista de cuádruplos
                     gosub_quad = Quadruple(Operator.GOSUB, None, None, func_name)
                     self.quadruples.append(gosub_quad)
                     
-                    #Si el tipo de retorno de la funcion no es void,
-                    #guardar temp en direccion de funcion
+                    # Si el tipo de retorno de la funcion a llamar no es void, se guarda
+                    # el resultado en una variable temporal y la direccion de memoria de 
+                    # la variable temporal se asigna a la dirección de memoria de la funcion
                     if function.return_type != FuncReturnType.VOID:
 
                         if function.return_type == FuncReturnType.INT:
                             temp = self.create_temp_var(VarType.INT)
+                            # Dependiendo del tipo de retorno de la función se
+                            # aumenta el numero de variables temporales de la función
                             self.functions_directory[self.current_function].temp_var_int_size += 1
 
                         if function.return_type == FuncReturnType.FLOAT:
@@ -724,15 +785,19 @@ class SemanticHandler:
                         temp_address = self.current_var_table[temp].address
                         temp_type = self.current_var_table[temp].type
 
-                        #Obtener address global de func de la tabla de vars globales
+                        # Obtener dirección de memoria global de la funcion de la tabla 
+                        # de variables globales
                         function_address = self.global_var_table[function.name].address
 
+                        # Se agrega el cuádruplo con el operador ASSIGN y se agrega a lista de cuádruplos
                         quadruple = Quadruple(Operator.ASSIGN, function_address, None, temp_address)
                         self.quadruples.append(quadruple)
+
+                        # Se agrega el temporal a la pila de operandos y su tipo a la pila de tipos
                         self.consume_operand(temp, temp_type)
 
-                    #Reset a listas para comparar de nuevo parametros 
-                    #de funcion con los parametros que se mandaron con la func a llamar
+                    # Reset a listas para comparar de nuevo parametros de la función
+                    # con los parametros que se mandan con la función a llamar
                     function_params_types.clear()
                     arguments_types.clear()
                     
