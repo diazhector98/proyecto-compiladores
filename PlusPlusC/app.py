@@ -14,6 +14,11 @@ cors = CORS(app)
 
 file_text = ""
 
+"""
+Este archivo contiene los endpoints que la app móvil utiliza para realizar
+los procesos de compilación y ejecución de código
+"""
+
 @app.route('/', methods=['GET'])
 def hello_world():
     return {"value": "Hello, World!"}
