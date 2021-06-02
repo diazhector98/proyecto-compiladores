@@ -281,17 +281,29 @@ class SemanticHandler:
         self.stack.push_operand(constant_address, var_type)
 
     def handle_read(self, id):
+        """
+        Función que agrega el cuadruplo con el operador READ a la 
+        lista de cuadruplos
+        """
         var = self.var_lookup(id)
         quadruple = Quadruple(Operator.READ, None, None, var.address)
         self.quadruples.append(quadruple)
 
     def handle_print(self):
+        """
+        Función que agrega el cuadruplo el operador PRINT a la 
+        lista de cuadruplos
+        """
         if self.stack.operands:
             var_name = self.stack.operands.pop()
             quadruple = Quadruple(Operator.PRINT, None, None, var_name)
             self.quadruples.append(quadruple)
 
     def create_temp_var(self, vtype):
+        """
+        Función que crea una variable temporal y la agrega
+        a la tabla de variables locales 
+        """
         name = "temp_" + str(self.temp_index)
         address = self.memory.create_temporal_address(vtype)
         self.current_var_table[name] = VariableTableRecord(
@@ -303,6 +315,10 @@ class SemanticHandler:
         return name
 
     def set_quadruple(self):
+        """
+        Función que crea una cuadruplo y lo añade a la 
+        lista de cuadruplos
+        """
         if len(self.stack.operands) >= 2 and len(self.stack.operators) >= 1:
             right_operand = self.stack.operands.pop()
             left_operand = self.stack.operands.pop()
@@ -310,12 +326,14 @@ class SemanticHandler:
             right_operand_type = self.stack.types.pop()
             left_operand_type = self.stack.types.pop()
             cube_result = self.cube[right_operand_type][left_operand_type][operator]
+
+            # Si el resultado del cubo semantico no es error, crea el cuadruplo
             if cube_result != "err":
                 temp = self.create_temp_var(cube_result)
                 temp_address = self.current_var_table[temp].address
                 temp_type = self.current_var_table[temp].type
 
-                #set el count de temporales dependiendo el tipo
+                # Actualiza el count de temporales dependiendo el tipo
                 self.increment_current_function_temp_size(temp_type)
                 
                 quadruple = Quadruple(Operator(operator), left_operand, right_operand, temp_address)
@@ -334,6 +352,9 @@ class SemanticHandler:
 
 
     def add_var_operand(self, var_name):
+        """
+        Función que asigna un valor a una variable
+        """
         var = self.current_var_table[var_name]
         if var is None:
             raise Exception("Compilation error: The variable is not declared. Can not assign a value to this variable.")
@@ -351,6 +372,7 @@ class SemanticHandler:
             right_operand_type = self.stack.types.pop()
             left_operand_type = self.stack.types.pop()
             cube_result = self.cube[right_operand_type][left_operand_type][operator]
+            # Si el resultado del cubo semantico no es error, crea el cuadruplo
             if cube_result != "err":
                 quadruple = Quadruple(Operator(operator), right_operand, None, left_operand)
                 self.quadruples.append(quadruple)
@@ -358,6 +380,9 @@ class SemanticHandler:
                 raise Exception("Compilation error: Setting variable a value: type mismatch between operand ", left_operand, " type ", left_operand_type,  " and operand ", right_operand, " type ", right_operand_type)
 
     def handle_array_assign(self, var_name):
+        """
+        Función que asigna un valor a un índice de un arreglo
+        """
         var = self.current_var_table[var_name]
         if var is None:
             raise Exception("Compilation error: The array named: " ,var_name, " is not declared. Can not assign a variable this array.")
@@ -407,6 +432,9 @@ class SemanticHandler:
                 raise Exception("Compilation error: The array index type must be an integer. Can not assign a variable to this array.")
 
     def handle_matrix_assign(self, var_name):
+        """
+        Función que asigna un valor a una casilla de una matriz
+        """
         var = self.current_var_table[var_name]
         if var is None:
             raise Exception("Compilation error: The matrix named: " ,var_name, " is not declared. Can not assign a variable this matrix.")
