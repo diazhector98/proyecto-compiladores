@@ -22,7 +22,6 @@ class VirtualMachineMemory:
         memory_size = 25000
         self.block_size = memory_size // 5        
         self.gloabl_block: VirtualMachineMemoryBlock = VirtualMachineMemoryBlock(
-                0, 
                 self.block_size,
                 ints=global_function.local_var_int_size,
                 floats=global_function.local_var_float_size,
@@ -31,7 +30,6 @@ class VirtualMachineMemory:
         )
 
         self.constants_block = VirtualMachineMemoryBlock(
-                self.block_size * 3, 
                 self.block_size,
                 ints=constants_sizes[0],
                 floats=constants_sizes[1],
@@ -39,7 +37,6 @@ class VirtualMachineMemory:
                 bools=constants_sizes[3]
         )
         self.pointers_block = VirtualMachineMemoryBlock(
-                self.block_size * 4, 
                 self.block_size, 
                 ints=pointers, 
                 floats=0,

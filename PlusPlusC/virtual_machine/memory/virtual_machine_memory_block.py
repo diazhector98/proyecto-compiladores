@@ -1,10 +1,25 @@
 from virtual_machine.memory.block_type import BlockType
 from virtual_machine.common.var_type import VarType
 
+"""
+
+Clase que representa un bloque de memoria real (por ejemplo, bloque de memoria global)
+Esta clase contiene cuatro arreglos representando cada uno de los primitivos de PPC (ints, floats, chars y bools)
+
+"""
+
 class VirtualMachineMemoryBlock:
-    def __init__(self, start_address, size, ints=None, floats=None, chars=None, bools=None):
+    def __init__(self, size, ints=None, floats=None, chars=None, bools=None):
+        """
+            En la inicialización se crean los arreglos en donde se almacenarán los valores de la memoria.
+
+            param size: tamaños del bloque. Utilizado para obtener el tamaño default de cada partición
+            param ints: número de espacios para enteros requeridos
+            param floats: número de espacios para flotantes requeridos
+            param chars: número de espacios para chars requeridos
+            param bools: número de espacios para booleanos requeridos
+        """
         partition_size = size // 4
-        self.start_address = start_address
         
         ints_size = ints if ints != None else partition_size
         floats_size = floats if floats != None else partition_size
@@ -17,6 +32,14 @@ class VirtualMachineMemoryBlock:
         self.bool_partition = [None] * bools_size
 
     def write(self, address, value, block_type):
+        """
+            Función que escribe en la memoria del bloque. Primero obtiene la 
+            dirección real (índice de los arreglos) y el tipo de variable.
+
+            param address: dirección virtual en donde se quiere escribir un valor
+            param value: valor que se quiere escribir
+            block_type: tipo de bloque que es este objeto, para facilitar la asignación del tipo de partición
+        """
         (real_address, var_type) = self.get_real_address_and_type(address, block_type)
         if var_type == VarType.INT:
             self.write_int_address(real_address, value)
@@ -30,6 +53,13 @@ class VirtualMachineMemoryBlock:
             raise Exception("Execution error: The memory address ", address, " trying to access in order to modify it in a memory block partition is invalid.")
     
     def read(self, address, block_type):
+        """
+            Función que lee en la memoria del bloque, despuñes de obtener la 
+            dirección real (índice de los arreglos) y el tipo de variable
+
+            param address: dirección virtual que se quiere leer
+            param block_type: tipo de bloque que es este objeto, para facilitar la asignación del tipo de partición
+        """
         (real_address, var_type) = self.get_real_address_and_type(address, block_type)
         if var_type == VarType.INT:
             return self.read_int_address(real_address)
@@ -42,48 +72,16 @@ class VirtualMachineMemoryBlock:
         else:
             raise Exception("Execution error: The memory address ", address, " trying to access in order to read it in the memory block is invalid.")
 
-    def write_int_address(self, address, value):
-        try:
-            value = int(value)
-            self.int_partition[address] = value
-        except Exception:
-            raise Exception("Execution error: The integer value ", value, " trying to save in address ", address, " which corresponds to the integers memory block, can't be converted to integer.")
-
-    def write_float_address(self, address, value):
-        try:
-            value = float(value)
-            self.float_partition[address] = value
-        except Exception:
-            raise Exception("Execution error: The integer value ", value, " trying to save in address ", address, " which corresponds to the integers memory block, can't be converted to float.")
-
-    def write_char_address(self, address, value):
-        try:
-            value = str(value)
-            assert len(value) == 1
-            self.char_partition[address] = value
-        except Exception:
-            raise Exception("Execution error: The integer value ", value, " trying to save in address ", address, " which corresponds to the integers memory block, can't be converted to char.")
-
-    def write_bool_address(self, address, value):
-        try:
-            value = bool(value)
-            self.bool_partition[address] = value
-        except Exception:
-            raise Exception("Execution error: The integer value ", value, " trying to save in address ", address, " which corresponds to the integers memory block, can't be converted to bool.")
-
-    def read_int_address(self, address):
-        return self.int_partition[address]
-
-    def read_float_address(self, address):
-        return self.float_partition[address]
-
-    def read_char_address(self, address):
-        return self.char_partition[address]
-
-    def read_bool_address(self, address):
-        return self.bool_partition[address]
-
     def get_real_address_and_type(self, address, block_type):
+        """
+            Función que traduce la memoria virtual a un índice de los
+            arreglos de la memoria.
+
+            param address: dirección de la memoria virtual
+            param block_type: tipo de bloque que es este objeto, para facilitar encontrar el tipo de variable
+
+            return: (dirección real o índice de arreglo, tipo de variable)
+        """
         if block_type == BlockType.GLOBAL:
             if address >= 0 and address < 1250:
                 return address, VarType.INT
@@ -139,11 +137,49 @@ class VirtualMachineMemoryBlock:
                 raise Exception("Execution error: The memory address ", address, " trying to access in order to modify it in the pointers memory block is invalid.") 
         else:
             raise Exception("Execution error: The memory address ", address, " trying to access in order to read it in a memory block partition is invalid.")
+    
+    """
+        Las siguientes funciones sirven para escribir o leer de 
+        particiones específicas del bloque de memoria.
+    """
 
-    def print_sizes(self):
-        print(
-            "Ints:", len(self.int_partition), 
-            "Floats", len(self.float_partition),
-            "Chars", len(self.char_partition),
-            "Bools", len(self.bool_partition)
-        )
+    def write_int_address(self, address, value):
+        try:
+            value = int(value)
+            self.int_partition[address] = value
+        except Exception:
+            raise Exception("Execution error: The integer value ", value, " trying to save in address ", address, " which corresponds to the integers memory block, can't be converted to integer.")
+
+    def write_float_address(self, address, value):
+        try:
+            value = float(value)
+            self.float_partition[address] = value
+        except Exception:
+            raise Exception("Execution error: The integer value ", value, " trying to save in address ", address, " which corresponds to the integers memory block, can't be converted to float.")
+
+    def write_char_address(self, address, value):
+        try:
+            value = str(value)
+            assert len(value) == 1
+            self.char_partition[address] = value
+        except Exception:
+            raise Exception("Execution error: The integer value ", value, " trying to save in address ", address, " which corresponds to the integers memory block, can't be converted to char.")
+
+    def write_bool_address(self, address, value):
+        try:
+            value = bool(value)
+            self.bool_partition[address] = value
+        except Exception:
+            raise Exception("Execution error: The integer value ", value, " trying to save in address ", address, " which corresponds to the integers memory block, can't be converted to bool.")
+
+    def read_int_address(self, address):
+        return self.int_partition[address]
+
+    def read_float_address(self, address):
+        return self.float_partition[address]
+
+    def read_char_address(self, address):
+        return self.char_partition[address]
+
+    def read_bool_address(self, address):
+        return self.bool_partition[address]
