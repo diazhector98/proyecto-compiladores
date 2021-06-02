@@ -40,24 +40,31 @@ class VirtualMachine:
             Esta función pasa por todos los cuádruplos por medio de un ciclo while y los ejecuta.
             Checa el tipo de operador es y luego los ejecuta apropiadamente.
         """
+
+        # Obtiene el cuádruplo actual, que se obtiene del ActivationRecord al tope
+        # del call_stack
         while self.get_quad_index() < len(self.quadruples):
             quad_index = self.get_quad_index()
             quadruple = self.quadruples[quad_index]
             operator = quadruple.operator
-            left_operand = quadruple.left_operand
             result = quadruple.result
 
+            # Checa si el operador del cuádruplo es una operación aritmética
             if self.is_arithmetic_operator(operator):
                 handle_arithmetic_operator(quadruple, self.memory)
                 self.go_to_next_quadruple()
-
+            
+            # Checa si el operador del cuádruplo es una operación condicional (>, <, !=, etc.)
             elif self.is_conditional_operator(operator):
                 handle_boolean_operator(quadruple, self.memory)
                 self.go_to_next_quadruple()
 
+            # Checa si el operador del cuádruplo es una operación de salto (GOTO, GOTOF)
             elif self.is_jump_operator(operator):
                 self.handle_jump_operator(quadruple)
-
+            
+            # Checa si el operador del cuádruplo 
+            # maneja lo relacionado a funciones (ERA, GOSUB, etc.)
             elif self.is_function_operator(operator):
                 self.handle_function_operator(quadruple)
 
