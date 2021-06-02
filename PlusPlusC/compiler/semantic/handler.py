@@ -5,6 +5,8 @@ from compiler.semantic.stack import SemanticStack
 from compiler.semantic.common.quadruple import Quadruple
 from compiler.semantic.memory.virtual_memory import VirtualMemory
 
+
+
 class SemanticHandler:
     temp_index = 0
     global_var_table = dict()   
@@ -114,7 +116,6 @@ class SemanticHandler:
             pass
         try:
             var = self.var_lookup(operand)
-            # TODO: En el futuro, todas deberían tener direcciones
             if var.address:
                 self.stack.push_operand(var.address, var.type)
             else:
@@ -458,7 +459,6 @@ class SemanticHandler:
         if self.jumps_stack:
             quadruple_index_to_set = self.jumps_stack.pop()
             self.jumps_stack.append(len(self.quadruples) - 1)
-            print("set_else", "jump:", len(self.quadruples) + 1)
             self.set_final_jump(quadruple_index_to_set, len(self.quadruples))
         else:
             raise Exception("Compilation error: Jump stack is empty. Can not set the end of ELSE.")
