@@ -163,26 +163,38 @@ class VirtualMachine:
         operator = quadruple.operator
         left_operand = quadruple.left_operand
         result = quadruple.result
+
         if operator == Operator.ERA:
+            # Se crea un nuevo ActivationRecord 
+            # (creando la nueva memoria temporal y local).
+            # Se agrega a ina pila de esperando.
             function = self.functions[result]
             activation_record = ActivationRecord(function, function.start_quadruple_index)
             self.activation_records_waiting.append(activation_record)
             self.go_to_next_quadruple()
         elif operator == Operator.PARAMETER:
+            # Se escribe el valor del parámetro de la función
+            # en la memoria local del ActivationRecord
+            # esperando.
             next_activation_record = self.get_next_activation_record()
             value = self.memory.read(left_operand)
             next_activation_record.write(result, value)
             self.go_to_next_quadruple()
         elif operator == Operator.GOSUB:
+            # Se manda a llamar una función que cambia
+            # el ActivationRecord actual en la pila de ejecución
             self.go_to_next_quadruple()
             self.handle_gosub()
         elif operator == Operator.ENDFUNC:
-            s = self.call_stack.pop()
+            # Se quita el ActivationRecord del tope
+            # de la pila de ejecución y se actualiza
+            # la memoria con el AR actual.
+            self.call_stack.pop()
             self.memory.activation_record = self.get_current_activation_record()
         elif operator == Operator.RETURN:
             value = self.memory.read(left_operand)
             self.memory.write(result, value)
-            f = self.call_stack.pop()
+            self.call_stack.pop()
             self.memory.activation_record = self.get_current_activation_record()
 
     def get_current_activation_record(self):
