@@ -18,19 +18,19 @@ Clase para manejar los puntos neurálgicos en las acciones semánticas.
     durante el proceso de compilaciónn,
 """
 class SemanticHandler:
-    temp_index = 0
-    global_var_table = dict()   
-    current_var_table = dict()
-    constants_table = dict()
-    quadruples: [Quadruple] = []
-    jumps_stack = []
-    current_function = None
 
     def __init__(self):
         self.cube = SemanticCube()
         self.stack = SemanticStack()
         self.memory = VirtualMemory()
         self.functions_directory = dict()
+        self.temp_index = 0
+        self.global_var_table = dict()   
+        self.current_var_table = dict()
+        self.constants_table = dict()
+        self.quadruples: [Quadruple] = []
+        self.jumps_stack = []
+        self.current_function = None
 
     def initialize_program(self):
         """
