@@ -1,5 +1,9 @@
 from enum import Enum
 
+"""
+    Clase Enum que contiene los tipos de operadores que manejan los cuádruplos
+    del archivo generado en compilación.
+"""
 class Operator(Enum):
     SUM = "SUM"
     MINUS = "MINUS"
