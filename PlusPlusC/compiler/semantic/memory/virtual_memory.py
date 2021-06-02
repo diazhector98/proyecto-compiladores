@@ -15,6 +15,13 @@ class VirtualMemory:
         self.constants_block = VirtualMemoryBlock(self.block_size * 3, self.block_size)
         self.pointers_block = VirtualMemoryBlock(self.block_size * 4, self.block_size)
 
+    """
+        Funciones para crear un dirección dependiendo 
+        su tipo
+            
+        param address: tipo de variable 
+        return: direccion creada segun su tipo
+    """
     def create_global_address(self, type):
         return self.gloabl_block.create_address(type)
 
@@ -29,10 +36,17 @@ class VirtualMemory:
     
     def create_pointer_address(self, type):
         return self.pointers_block.create_address(type)
-
+    
+    """
+        Funcion para dar reset a la memoria local y temporal
+        al terminar de procesar una funcion
+    """
     def reset_local_and_temp_memory(self):
         self.local_block = VirtualMemoryBlock(self.block_size, self.block_size)
         self.temp_block = VirtualMemoryBlock(self.block_size * 2, self.block_size)
 
+    """
+        Funcion para obtener el tamaño del bloque para los apuntadores
+    """
     def get_pointers_block_size(self):
         return self.pointers_block.int_partition.get_size()
