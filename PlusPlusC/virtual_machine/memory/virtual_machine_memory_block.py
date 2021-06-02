@@ -1,4 +1,5 @@
 from virtual_machine.memory.block_type import BlockType
+from virtual_machine.common.var_type import VarType
 
 class VirtualMachineMemoryBlock:
     def __init__(self, start_address, size, ints=None, floats=None, chars=None, bools=None):
@@ -16,134 +17,30 @@ class VirtualMachineMemoryBlock:
         self.bool_partition = [None] * bools_size
 
     def write(self, address, value, block_type):
-        if block_type == BlockType.GLOBAL:
-            if address >= 0 and address < 1250:
-                self.write_int_address(address, value)
-            elif address >= 1250 and address < 2500:
-                self.write_float_address(address - 1250, value)  
-            elif address >= 2500 and address < 3750:
-                self.write_char_address(address - 2500, value)
-            elif address >= 3750 and address < 5000:
-                self.write_bool_address(address - 3750, value)
-            else: 
-                raise Exception("Execution error: The memory address ", address, " trying to access to in order to modify in the global memory block is invalid.")
-
-        elif block_type == BlockType.LOCAL:
-            if address >= 5000 and address < 6250:
-                self.write_int_address(address - 5000, value)
-            elif address >= 6250 and address < 7500:
-                self.write_float_address(address - 6250, value)  
-            elif address >= 7500 and address < 8750:
-                self.write_char_address(address - 7500, value)
-            elif address >= 8750 and address < 10000:
-                self.write_bool_address(address - 8750, value) 
-            else: 
-                raise Exception("Execution error: The memory address ", address, " trying to access in order to modify it in the local memory block is invalid.")
-
-        elif block_type == BlockType.TEMP:
-            if address >= 10000 and address < 11250:
-                self.write_int_address(address - 10000, value)
-            elif address >= 11250 and address < 12500:
-                self.write_float_address(address - 11250, value)  
-            elif address >= 12500 and address < 13750:
-                self.write_char_address(address - 12500, value)
-            elif address >= 13750 and address < 15000:
-                self.write_bool_address(address - 13750, value)  
-            else: 
-                raise Exception("Execution error: The memory address ", address, " trying to access in order to modify it in the temporay memory block is invalid.")
-            
-        elif block_type == BlockType.CONSTANTS:
-            if address >= 15000 and address < 16250:
-                self.write_int_address(address - 15000, value)
-            elif address >= 16250 and address < 17500:
-                self.write_float_address(address - 16250, value)  
-            elif address >= 17500 and address < 18750:
-                self.write_char_address(address - 17500, value)
-            elif address >= 18750 and address <= 20000:
-                self.write_bool_address(address - 18750, value)
-            else: 
-                raise Exception("Execution error: The memory address ", address, " trying to access in order to modify it in the constants memory block is invalid.") 
-        
-        elif block_type == BlockType.POINTER:
-            if address >= 20000 and address < 21250:
-                self.write_int_address(address - 20000, value)
-            elif address >= 21250 and address < 22500:
-                self.write_float_address(address - 21250, value)  
-            elif address >= 22500 and address < 23750:
-                self.write_char_address(address - 22500, value)
-            elif address >= 23750 and address <= 25000:
-                self.write_bool_address(address - 23750, value)
-            else: 
-                raise Exception("Execution error: The memory address ", address, " trying to access in order to modify it in the pointer memory block is invalid.") 
-
+        (real_address, var_type) = self.get_real_address_and_type(address, block_type)
+        if var_type == VarType.INT:
+            self.write_int_address(real_address, value)
+        elif var_type == VarType.FLOAT:
+            self.write_float_address(real_address, value)  
+        elif var_type == VarType.CHAR:
+            self.write_char_address(real_address , value)
+        elif var_type == VarType.BOOL:
+            self.write_bool_address(real_address, value)
         else:
             raise Exception("Execution error: The memory address ", address, " trying to access in order to modify it in a memory block partition is invalid.")
-
     
     def read(self, address, block_type):
-        if block_type == BlockType.GLOBAL:
-            if address >= 0 and address < 1250:
-                return self.read_int_address(address)
-            elif address >= 1250 and address < 2500:
-                return self.read_float_address(address - 1250)  
-            elif address >= 2500 and address < 3750:
-                return self.read_char_address(address - 2500)
-            elif address >= 3750 and address < 5000:
-                return self.read_bool_address(address - 3750)
-            else: 
-                raise Exception("Execution error: The memory address ", address, " trying to access in order to read it in the global memory block is invalid.")
-
-        elif block_type == BlockType.LOCAL:
-            if address >= 5000 and address < 6250:
-                return self.read_int_address(address - 5000)
-            elif address >= 6250 and address < 7500:
-                return self.read_float_address(address - 6250)  
-            elif address >= 7500 and address < 8750:
-                return self.read_char_address(address - 7500)
-            elif address >= 8750 and address < 10000:
-                return self.read_bool_address(address - 8750) 
-            else: 
-                raise Exception("Execution error: The memory address ", address, " trying to access in order to read it in the local memory block is invalid.") 
-
-        elif block_type == BlockType.TEMP:
-            if address >= 10000 and address < 11250:
-                return self.read_int_address(address - 10000)
-            elif address >= 11250 and address < 12500:
-                return self.read_float_address(address - 11250)  
-            elif address >= 12500 and address < 13750:
-                return self.read_char_address(address - 12500)
-            elif address >= 13750 and address < 15000:
-                return self.read_bool_address(address - 13750)  
-            else: 
-                raise Exception("Execution error: The memory address ", address, " trying to access in order to read it in the temporary memory block is invalid.")
-            
-        elif block_type == BlockType.CONSTANTS:
-            if address >= 15000 and address < 16250:
-                return self.read_int_address(address - 15000)
-            elif address >= 16250 and address < 17500:
-                return self.read_float_address(address - 16250)  
-            elif address >= 17500 and address < 18750:
-                return self.read_char_address(address - 17500)
-            elif address >= 18750 and address <= 20000:
-                return self.read_bool_address(address - 18750)
-            else: 
-                raise Exception("Execution error: The memory address ", address, " trying to access in order to read it in the constants memory block is invalid.") 
-            
-        elif block_type == BlockType.POINTER:
-            if address >= 20000 and address < 21250:
-                return self.read_int_address(address - 20000)
-            elif address >= 21250 and address < 22500:
-                return self.read_float_address(address - 21250)  
-            elif address >= 22500 and address < 23750:
-                return self.read_char_address(address - 22500)
-            elif address >= 23750 and address <= 25000:
-                return self.read_bool_address(address - 23750)
-            else: 
-                raise Exception("Execution error: The memory address ", address, " trying to access in order to read it in the pointers memory block is invalid.") 
-        
+        (real_address, var_type) = self.get_real_address_and_type(address, block_type)
+        if var_type == VarType.INT:
+            return self.read_int_address(real_address)
+        elif var_type == VarType.FLOAT:
+            return self.read_float_address(real_address)
+        elif var_type == VarType.CHAR:
+            return self.read_char_address(real_address)
+        elif var_type == VarType.BOOL:
+            return self.read_bool_address(real_address)
         else:
-            raise Exception("Execution error: The memory address ", address, " trying to access in order to read it in a memory block partition is invalid.")
-
+            raise Exception("Execution error: The memory address ", address, " trying to access in order to read it in the memory block is invalid.")
 
     def write_int_address(self, address, value):
         try:
@@ -185,6 +82,63 @@ class VirtualMachineMemoryBlock:
 
     def read_bool_address(self, address):
         return self.bool_partition[address]
+
+    def get_real_address_and_type(self, address, block_type):
+        if block_type == BlockType.GLOBAL:
+            if address >= 0 and address < 1250:
+                return address, VarType.INT
+            elif address >= 1250 and address < 2500:
+                return address - 1250 , VarType.FLOAT
+            elif address >= 2500 and address < 3750:
+                return address - 2500, VarType.CHAR
+            elif address >= 3750 and address < 5000:
+                return address - 3750, VarType.BOOL
+            else: 
+                raise Exception("Execution error: The memory address ", address, " trying to access to in order to modify in the global memory block is invalid.")
+
+        elif block_type == BlockType.LOCAL:
+            if address >= 5000 and address < 6250:
+                return address - 5000, VarType.INT
+            elif address >= 6250 and address < 7500:
+                return address - 6250, VarType.FLOAT
+            elif address >= 7500 and address < 8750:
+                return address - 7500, VarType.CHAR
+            elif address >= 8750 and address < 10000:
+                return address - 8750, VarType.BOOL
+            else: 
+                raise Exception("Execution error: The memory address ", address, " trying to access in order to modify it in the local memory block is invalid.")
+
+        elif block_type == BlockType.TEMP:
+            if address >= 10000 and address < 11250:
+                return address - 10000, VarType.INT
+            elif address >= 11250 and address < 12500:
+                return address - 11250, VarType.FLOAT
+            elif address >= 12500 and address < 13750:
+                return address - 12500, VarType.CHAR
+            elif address >= 13750 and address < 15000:
+                return address - 13750, VarType.BOOL
+            else: 
+                raise Exception("Execution error: The memory address ", address, " trying to access in order to modify it in the temporay memory block is invalid.")
+            
+        elif block_type == BlockType.CONSTANTS:
+            if address >= 15000 and address < 16250:
+                return address - 15000, VarType.INT
+            elif address >= 16250 and address < 17500:
+                return address - 16250, VarType.FLOAT
+            elif address >= 17500 and address < 18750:
+                return address - 17500, VarType.CHAR
+            elif address >= 18750 and address <= 20000:
+                return address - 18750, VarType.BOOL
+            else: 
+                raise Exception("Execution error: The memory address ", address, " trying to access in order to modify it in the constants memory block is invalid.") 
+        
+        elif block_type == BlockType.POINTER:
+            if address >= 20000 and address < 25000:
+                return address - 20000, VarType.INT
+            else:
+                raise Exception("Execution error: The memory address ", address, " trying to access in order to modify it in the pointers memory block is invalid.") 
+        else:
+            raise Exception("Execution error: The memory address ", address, " trying to access in order to read it in a memory block partition is invalid.")
 
     def print_sizes(self):
         print(
