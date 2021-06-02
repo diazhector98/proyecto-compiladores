@@ -9,15 +9,19 @@ La memoria local y temporal se guarda en un objeto de tipo ActivationRecord
 class VirtualMachineMemory:
     def __init__(self, pointers, global_function, constants,constants_sizes, activation_record):
         """
-                En la inicialización se especifíca el tamaño de memoria y el tamaño de cada bloque.
-                Estos valores son utilizados para proveer un default. En realidad, el tamaño de los bloques
+                En la inicialización se especifíca el tamaño de memoria y 
+                el tamaño de cada bloque.Estos valores son utilizados 
+                para proveer un default. En realidad, el tamaño de los bloques
                 es determinado en compilación.
 
                 param pointers: número de apuntadores requeridos
-                param global_function: objeto tipo Function para especificar el tamaño requerido de la memoria global
+                param global_function: objeto tipo Function para 
+                        especificar el tamaño requerido de la memoria global
                 param constants: diccionario de constantes
-                param constants_sizes: cantidad de constantes para especificar el tamaño requerido de la memoria constante
-                param activation_record: objeto tipo ActivationRecord que guarda la memoria local y temporal.
+                param constants_sizes: cantidad de constantes para 
+                        especificar el tamaño requerido de la memoria constante
+                param activation_record: objeto tipo ActivationRecord que 
+                        guarda la memoria local y temporal.
         """
         memory_size = 25000
         self.block_size = memory_size // 5        
@@ -43,7 +47,7 @@ class VirtualMachineMemory:
                 chars=0,
                 bools=0
         )
-        # Guarda memoria local y temporal
+        # El activation record dado guarda la memoria local y temporal
         self.activation_record = activation_record
         # Escribiendo constantes a bloque de constantes
         for address in constants:
