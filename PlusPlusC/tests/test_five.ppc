@@ -3,15 +3,12 @@ program Main;
 global G1 int;
 global G2 float;
 
-func foo(C int, D float, A float) -> float {
-    var A int;
-    var B[6] int;
-    var C[4][10] int;
-    A = 1 * B[9];
-    A = 43.8 * C[3][4];
-    return 5 * G2;
+func foo(C float, D float, A float) -> float {
+    return C * D * A;
 }
 
 main () {
-    foo(10, 10.1, 10.2);
+    var f float;
+    f = foo(10.1, 10.1, 10.2);
+    print(f);
 }
