@@ -12,7 +12,7 @@ func factorial(A int) -> int {
 
 main () {
     var i int;
-    input(i);
+    i = 10;
     var fact int;
 
     fact = factorial(i);
