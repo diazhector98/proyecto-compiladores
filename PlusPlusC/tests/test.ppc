@@ -1,51 +1,61 @@
 program Main;
 
-globals global1 float;
-globals global2 int;
+global global1 float;
+global global2 int;
 
-
-func foo(cat int, dog float) -> int {
-    if x == 7 {
-        print(2);
-    } else {
-        print(3);
-    }
-
+func foo(cat int, dog int) -> int {
     var varLocal1 int;
-    x = 19 + 10;
+    varLocal1 = 19 + 10;
+    return varLocal1;
 }
 
 func bar() -> void {
+    var x int;
     x = 9;
-    while x < 20 || x > 15 {
+    while x < 20 {
+        print(x);
         x = x + 1;
     }
 }
 
 func bar(g1 int, g2 int) -> float {
-    return 10;
+    var y float;
+    y = g1 * g2;
+    return y;
 }
 
 main () {
+
+    var x int;
+    var b int;
+    var c int;
+    var d int;
+    var f int;
+    var k int;
+
     x = 5;
     b = 6 + 10;
+
     c = foo(x, b);
+    print(c);
+
     d = (70 + 10) * 90 + 60 + (80);
-    z = c;
+    print(d);
+
     f = b * c + d;
-    print(3);
-    input(adios);
-    if 2 < 5 { }
-    if 2 < 5 && d > 10 {
+    print(f);
 
-    } else {
+    k = 100000000;
 
+    if 2 < 5 { 
+        print(k);
     }
 
-    while 2 < 5 { }
+    x = foo(5,7);
+    print(x);
 
-    foo(5,7);
-    bar();
-    bar(b, foo(7,8));
+    var y float;
+    y = bar(b, foo(7,8));
+    print(y);
 }
 
