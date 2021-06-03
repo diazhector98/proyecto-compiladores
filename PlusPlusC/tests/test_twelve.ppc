@@ -1,0 +1,12 @@
+program Main;
+
+global g1 float;
+global g2 float;
+
+main () {
+    g1 = 10.1;
+    g2 = 10.2;
+    var f float;
+    f = g1 * g2;
+    print(f);
+}
