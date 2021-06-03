@@ -1,0 +1,25 @@
+program Main;
+
+global global1 float;
+global global2 int;
+
+func foo() -> int {
+    var varLocal1 int;
+    varLocal1 = 19 + 10;
+    return varLocal1;
+}
+
+func bar(g1 int, g2 int) -> float {
+    var y float;
+    y = g1 * g2;
+    return y;
+}
+
+main () {
+    var b int;
+    var y float;
+
+    b = 9;
+    y = bar(b, foo());
+    print(y);
+}
