@@ -423,8 +423,9 @@ class SemanticHandler:
 
             param var_name: nombre de la variable
         """
+        
         # Se revisa la existencia de la variable en la tabla de variables
-        var = self.current_var_table[var_name]
+        var = self.var_lookup(var_name)
         if var is None:
             raise Exception("Compilation error: The variable is not declared. Can not assign a value to this variable.")
         else:
