@@ -2,7 +2,6 @@ program Main;
 
 
 func foo(C int, D float) -> int {
-
     while 1 < 2 {
         var A int;
         A = 1;
@@ -11,10 +10,11 @@ func foo(C int, D float) -> int {
 }
 
 main () {
-    while 8 < 10 {
-        var C int;
-        C = 0;
-    }
 
-    foo(8, 9.50);
+    var x int;
+    x = 1;
+    while x < 5 {
+        print(x);
+        x = x + 1;
+    }
 }
